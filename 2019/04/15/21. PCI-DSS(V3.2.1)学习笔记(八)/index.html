@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+    <meta name="description" content="龅牙晴在 Github 上的个人博客">
+    <meta name="keyword" content="安全，漏洞挖掘，漏洞复现">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="折戟" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        PCI-DSS(V3.2)学习笔记(八)｜R_song&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://rliyuqing.github.io/2019/04/15/21. PCI-DSS(V3.2.1)学习笔记(八)/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    折戟
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/categories/">categories</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>PCI-DSS(V3.2)学习笔记(八)</h1>
+                    
+                    <span class="meta">
+                         作者 折戟
+                        <span>
+                          日期 2019-04-15
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#安全知识" title="安全知识">安全知识</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            PCI-DSS(V3.2)学习笔记(八)
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <hr>
+<h1 id="PCI-DSS-V3-2-学习笔记-八"><a href="#PCI-DSS-V3-2-学习笔记-八" class="headerlink" title="PCI-DSS(V3.2)学习笔记(八)"></a>PCI-DSS(V3.2)学习笔记(八)</h1><hr>
+<h1 id="四、实施强效的访问控制"><a href="#四、实施强效的访问控制" class="headerlink" title="四、实施强效的访问控制"></a>四、实施强效的访问控制</h1><h2 id="要求8：识别并验证对系统组件的访问"><a href="#要求8：识别并验证对系统组件的访问" class="headerlink" title="要求8：识别并验证对系统组件的访问"></a>要求8：识别并验证对系统组件的访问</h2><p>实施强效的访问控制，我们在要求7中已经针对用户对持卡人的访问进行限制了，对于一个强效的访问控制，我们不但要有明确的访问权限控制，同时我们也要确保每一个访问时授权的，是通过我们的验证的，防止有绕过我们访问限制机制来进行访问，所以我们对用户的访问还是要经过识别和验证的。<br>只有通过对访问请求的识别的验证，我们才能通过这个对系统组件的访问或者操作请求。<br>为了达到上面的要求，我们通过为所有有访问权限的角色分配唯一的id标识符，这样能让每个人对自己的操作负责，同时也为后面的通过用户id来识别提供标志。</p>
+<h3 id="8-1-规定并实施政策和程序，确保对所有系统组件中的非消费者用户和管理员执行以下适当的用户识别管理"><a href="#8-1-规定并实施政策和程序，确保对所有系统组件中的非消费者用户和管理员执行以下适当的用户识别管理" class="headerlink" title="8.1 规定并实施政策和程序，确保对所有系统组件中的非消费者用户和管理员执行以下适当的用户识别管理"></a>8.1 规定并实施政策和程序，确保对所有系统组件中的非消费者用户和管理员执行以下适当的用户识别管理</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-6921dfb030e7c6bb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.1"><br>对于非消费者用户，比如我们公司的员工，对于这些用户，在他们对系统组件进行访问或者操作请求是要有身份识别。对于消费者用户是完全没有权限访问的，所有不在我们前面说的白名单里面，是被默认拒绝所有给拒绝了的。<br>这里可能会有一点歧义，这里的意思是所有的非消费者用户和管理员用户都得必须经过这个用户识别的过程，就是管理员用户也得经过这个审核。</p>
+<h4 id="8-1-1-允许用户访问系统组件或持卡人数据之前，为期分配唯一ID"><a href="#8-1-1-允许用户访问系统组件或持卡人数据之前，为期分配唯一ID" class="headerlink" title="8.1.1 允许用户访问系统组件或持卡人数据之前，为期分配唯一ID"></a>8.1.1 允许用户访问系统组件或持卡人数据之前，为期分配唯一ID</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-f6b199b708bec201.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.1.1"><br>首先就是确保我们的用户在访问系统组件的时候有已经分配好的唯一识别的ID，这样确保在后期审核检查的时候可以根据ID找到对应的员工用户，明确每一个操作的责任。</p>
+<h5 id="8-1-2-控制添加、删除和修改用户ID、凭证和其他标识符对象"><a href="#8-1-2-控制添加、删除和修改用户ID、凭证和其他标识符对象" class="headerlink" title="8.1.2 控制添加、删除和修改用户ID、凭证和其他标识符对象"></a>8.1.2 控制添加、删除和修改用户ID、凭证和其他标识符对象</h5><p><img src="https://upload-images.jianshu.io/upload_images/6269327-caa7a1d737fd02ec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.1.2"><br>我们前面一个说了根据标识符来明确每一个操作的责任，所以对于这个标识符来说我们要确保他是正确的，没有被恶意删改过得。<br>对于这个标识符的删改我们应该有强有力的控制手段，确保每一个删改都是有效的。攻击者很可能更改标识符ID来隐藏自己的痕迹，使我们更难找到漏洞。</p>
+<h4 id="8-1-3-立即撤销到期用户的访问权"><a href="#8-1-3-立即撤销到期用户的访问权" class="headerlink" title="8.1.3 立即撤销到期用户的访问权"></a>8.1.3 立即撤销到期用户的访问权</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-bf5fa2dca2b5379d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.1.3"><br>对于有期限的用户，或者说离职员工的用户等，我们要在第一时间撤销他们的访问权限。有些时候就会出现，我删除了某个用户，但是他对某些系统组件的访问权限还在，所以我们不仅要确保用户被安全删除并且撤销了用户的所有访问权限。<br>同时残留的员工数据可能不会受到足够安全的保护，这些信息会很容易泄露，若果没有妥善的处理这些账号遗留的权限，会带来不必要的麻烦。</p>
+<h4 id="8-1-4-在90天内删除-禁用非活动的用户账户"><a href="#8-1-4-在90天内删除-禁用非活动的用户账户" class="headerlink" title="8.1.4 在90天内删除/禁用非活动的用户账户"></a>8.1.4 在90天内删除/禁用非活动的用户账户</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-c411d7ed57b3e667.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.1.4"><br>对于非活动用户的清理这在各种论坛网站上是很常见的，比如自己学校的bt站，pt站。定期删除这些不活动的账户也是很有必要的，首先这些可能是被攻击者恶意注册的账号，同时也减轻了我们服务器的压力，为需要的用户更好的提供服务。其次，对于注册条件困难的系统，不活跃的用户，更容易被攻击者攻击，从而获取用户数据或者进行进一步的攻击。</p>
+<h4 id="8-1-5-通过如下远程访问管理第三方用于访问、支持或维护系统组件的ID"><a href="#8-1-5-通过如下远程访问管理第三方用于访问、支持或维护系统组件的ID" class="headerlink" title="8.1.5 通过如下远程访问管理第三方用于访问、支持或维护系统组件的ID"></a>8.1.5 通过如下远程访问管理第三方用于访问、支持或维护系统组件的ID</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-d5cd1b6459842f3a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.1.5"><br> 1、仅在需要的时间段启用并在不用时禁用<br> 2、使用时进行监控<br>因为一些业务或者其他的需要，我们经常会让第三方来访问我们的系统组件，我们可能会为他们分配指定的远程账户，或者公开，这样就增加了攻击者进入我们网络进行攻击行为的可能性。<br>比如我们在使用某个组件，需要服务商定期进行检测，这个时候就会对他们开放某个链接进行访问，如果攻击者发现这个链接，很有可能就利用这个进行攻击。<br>所以我们对于对第三方的访问，我们需要定时开放，需要的时候允许访问，不需要的时候则要禁止其的访问，其次在第三方访问的时候我们也要进行监控，及时发现攻击者的恶意访问。</p>
+<h4 id="8-1-6-在不超过6次尝试后锁定用户ID，从而限制反复的访问尝试"><a href="#8-1-6-在不超过6次尝试后锁定用户ID，从而限制反复的访问尝试" class="headerlink" title="8.1.6 在不超过6次尝试后锁定用户ID，从而限制反复的访问尝试"></a>8.1.6 在不超过6次尝试后锁定用户ID，从而限制反复的访问尝试</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-cec85de3d91de47e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.1.6"><br>嗯，确实很需要，但是对于错误次数要有一定的控制，因为这里我们是需要牺牲一部分的用户体验来换取更安全的环境。<br>但是这部分牺牲我觉得是十分值得的，对于密码的爆破现在已经被无数黑产做成了易建华攻击工具，网络上数不胜数。所以对于密码错误而锁定ID的要求是很有必要的，但是也有很多厂商更改成其他的比如错误一定次数后限制时间尝试，并且限制的时间依次上升，就比如iphone，这也是一样的效果，抵御了密码的爆破。</p>
+<h4 id="8-1-7-将锁定时间设为最少30分钟或直到管理员启用用户ID"><a href="#8-1-7-将锁定时间设为最少30分钟或直到管理员启用用户ID" class="headerlink" title="8.1.7 将锁定时间设为最少30分钟或直到管理员启用用户ID"></a>8.1.7 将锁定时间设为最少30分钟或直到管理员启用用户ID</h4><p>好吧，这里所说的锁定用户和我上面说的是一个意思。我们可以根据系统的重要程度来确定锁定时间，如果是及其重要的系统，可以直接锁定，知道管理员启用用户ID。<br>但是到这里大家就会发现，这里面其实也是有漏洞的，记得之前有一个网上竞拍的例子，用户B为了以最低价格购买商品，在竞拍快结束时，恶意登录用户A的账户，直至被锁定，然后以较低价格购买商品。<br>在这里我们会发现，我们使用的安全策略有可能影响用户体验，甚至出现BUG，被人恶意利用获利。<br>所以每一项安全策略都不是完美的，牺牲某些东西来换取系统的安全。</p>
+<h4 id="8-1-8-如果某会话空闲超过15分钟，则需要重新验证用户来重新激活终端或会话"><a href="#8-1-8-如果某会话空闲超过15分钟，则需要重新验证用户来重新激活终端或会话" class="headerlink" title="8.1.8 如果某会话空闲超过15分钟，则需要重新验证用户来重新激活终端或会话"></a>8.1.8 如果某会话空闲超过15分钟，则需要重新验证用户来重新激活终端或会话</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-a908378b58d41701.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.1.8"><br>如果用户在离开设备后没有安全退出系统，攻击者很有可能窃用了用户的身份，导致信息的泄露。所以对于一定时间未进行任何操作的用户我们需要对其进行注销，比如设置无动作不能超过15分钟。</p>
+<h3 id="8-2-处理分配唯一ID以外，至少采用以下一种方法来验证所有用户，确保对所有系统组件中的非消费者用户和管理员执行恰当的用户验证管理"><a href="#8-2-处理分配唯一ID以外，至少采用以下一种方法来验证所有用户，确保对所有系统组件中的非消费者用户和管理员执行恰当的用户验证管理" class="headerlink" title="8.2 处理分配唯一ID以外，至少采用以下一种方法来验证所有用户，确保对所有系统组件中的非消费者用户和管理员执行恰当的用户验证管理"></a>8.2 处理分配唯一ID以外，至少采用以下一种方法来验证所有用户，确保对所有系统组件中的非消费者用户和管理员执行恰当的用户验证管理</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-11dc522932b1fe2a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.2"><br>1、所知，如密码或口令<br>2、所有，如令牌设备或智能卡等<br>3、个人特征，如生物特征<br>我们除了分配唯一的标识符之外还得用其他的方法来验证用户身份，这里提到三个方法，基本业内使用的也都是这三种方法。首先是，口令或密码，我觉得这是远远不够的，所以可能还需要其他的方法，物理设备，令牌或者智能卡。以及第三种，个人特征，比如指纹或者虹膜等。<br>唯一的ID识别很容易被窃取，所以我们还需要其他的方法来验证用户身份。</p>
+<h4 id="8-2-1-使用强效加密法使所有验证凭证（例如密码-口令）在所有系统组件中传输和存储时均不可读"><a href="#8-2-1-使用强效加密法使所有验证凭证（例如密码-口令）在所有系统组件中传输和存储时均不可读" class="headerlink" title="8.2.1 使用强效加密法使所有验证凭证（例如密码/口令）在所有系统组件中传输和存储时均不可读"></a>8.2.1 使用强效加密法使所有验证凭证（例如密码/口令）在所有系统组件中传输和存储时均不可读</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-c28e3530fdbcb51a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.2.1"><br>对于我们前面使用的验证凭证，我们需要确保其安全的存储，不会被删改，就和前面的ID标识符一样。我们使用强效的加密手段，确保这些验证凭证在传输和存储的时候都不可读，不会泄露。如果未被加密，很有可能就会被攻击者嗅探获取，盗用身份。</p>
+<h4 id="8-2-2-在修改任何验证凭证（例如，执行密码重置、提供新令牌或生成新密钥）前验证用户身份"><a href="#8-2-2-在修改任何验证凭证（例如，执行密码重置、提供新令牌或生成新密钥）前验证用户身份" class="headerlink" title="8.2.2 在修改任何验证凭证（例如，执行密码重置、提供新令牌或生成新密钥）前验证用户身份"></a>8.2.2 在修改任何验证凭证（例如，执行密码重置、提供新令牌或生成新密钥）前验证用户身份</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-9626eb6da424bba0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.2.2"><br>就是我们在修改用户的身份验证凭证的时候，我们要确保是我在修改我的密码，而不是别人在修改我的密码。这里系统需要确认的是提交修改人的身份，我们就通过之前的验证凭证来验证用户的身份。<br>这里第一次提到了社交工程蓄，就说说吧。就算我们安全措施做的很多，攻击者的手段层出不穷，道高一尺，魔高一丈。<br>一个叫“社交工程学”的攻击手段在国内外十分的流行，让我来形容“社工”，就是四个字，坑蒙拐骗。通过各种渠道，骗取你的密码，已经不是对一个系统来寻找漏洞，而是对一个人来寻找漏洞。钓鱼邮件就是典型的社工的一种，对于不同性格的人使用不同的钓鱼邮件链接，记得英国有一个著名的黑客攻击事件，就是利用领养猫的钓鱼邮件获取密码的。</p>
+<h4 id="8-2-3-密码-口令必须符合以下要求："><a href="#8-2-3-密码-口令必须符合以下要求：" class="headerlink" title="8.2.3 密码/口令必须符合以下要求："></a>8.2.3 密码/口令必须符合以下要求：</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-678f2d7286a0ce55.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.2.3"><br>1、要求长度至少为7个字符<br>2、同时包含数字和字母字符<br>或者，密码/口令必须具有至少与上面指定参数相当的复杂度和强度<br>密码强度也是一个很愁人的问题，毕竟现在密码负担也是一个大难题。我们对于密码强度的要求，必须在一个合适的范围内，密码强度要求低了密码很容易会被攻击者猜到，密码强度高了同样不行，有的人就会很奇怪，密码强度难道不是越高越好吗，很多调查显示不是这样的。<br>比如我们现在要求密码10位以上要有字母，数字，特殊符号，这就会有很多姓名拼音+生日+符号的组合，或者类似于qwer1234！@#￥这样的有规律的密码出现。所以合适的密码强度也很重要。<br>同时不要使用默认密码！！！进过很多公司，在注册时还会显示默认密码123456，很奇葩，怕攻击者找不到方法。还有在变更密码强度策略时，比如之前没有密码强度校验，现在增加密码强度校验，必须对已经注册的没有达到标准的用户先提示，在强制性的更改成达到标准的密码。<br>对于这个密码强度，行业内也有标准，比如： NIST SP 800-63。</p>
+<h4 id="8-2-4-至少每90天变更一次用户密码-口令"><a href="#8-2-4-至少每90天变更一次用户密码-口令" class="headerlink" title="8.2.4 至少每90天变更一次用户密码/口令"></a>8.2.4 至少每90天变更一次用户密码/口令</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-36d5fb9a6dbfc85c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.2.4"><br>医生也推荐我们每3个月换一次牙刷，因为一个牙刷用久了，很多这个牙刷清理不到的地方会有很多残留的污渍。因为我们的牙刷不是完美的。我们的密码也是一样的，我们的密码不可能是别人永远无法猜到的，所以我们需要定时的更新密码。但是当有严重的泄露风险时要及时更换。</p>
+<h4 id="8-2-5-不允许个人提交与最近使用的4个密码-口令中任何一个相同的新密码-口令"><a href="#8-2-5-不允许个人提交与最近使用的4个密码-口令中任何一个相同的新密码-口令" class="headerlink" title="8.2.5 不允许个人提交与最近使用的4个密码/口令中任何一个相同的新密码/口令"></a>8.2.5 不允许个人提交与最近使用的4个密码/口令中任何一个相同的新密码/口令</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-a3ca12a9f25a0182.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.2.5-1"><br><img src="https://upload-images.jianshu.io/upload_images/6269327-d7bf20db45f120fc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.2.5-2"><br>的确有为了自己方便的用户，为了应对服务商的3个月变更密码的要求就只有两个密码，轮着换，虽然方便，但是很不安全。所有我们也不能允许新密码与之前四次的密码相同，至于为什么是四次，这个应该就是大数据调查吧，低了容易泄露，高了容易让用户每次设置有规律的密码。</p>
+<h4 id="8-2-6-将每个用户首次使用的密码-口令和重置密码-口令设为唯一值，并在首次使用后立即变更"><a href="#8-2-6-将每个用户首次使用的密码-口令和重置密码-口令设为唯一值，并在首次使用后立即变更" class="headerlink" title="8.2.6 将每个用户首次使用的密码/口令和重置密码/口令设为唯一值，并在首次使用后立即变更"></a>8.2.6 将每个用户首次使用的密码/口令和重置密码/口令设为唯一值，并在首次使用后立即变更</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-d52f0322ab1e7ba5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.2.6"><br>就是确保用户注册时的第一个密码的唯一，不能和其他用户重复，如果每个新用户比如IBM公司的员工都用IBM2018.这样的密码，那就很容易被发现。这个在公司内部很多都是很常见的。因为个人的密码负担，很多人会将密码和所属系统联系在一些，比如公司名等。所有密码的唯一性也很重要。</p>
+<h3 id="8-3-使用多因素验证保护对CDE的所有单独飞控制台管理访问和所有远程访问"><a href="#8-3-使用多因素验证保护对CDE的所有单独飞控制台管理访问和所有远程访问" class="headerlink" title="8.3 使用多因素验证保护对CDE的所有单独飞控制台管理访问和所有远程访问"></a>8.3 使用多因素验证保护对CDE的所有单独飞控制台管理访问和所有远程访问</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-56c9d37c6a644fcd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.3"><br>对与持卡人数据环境的远程访问，或者非控制台访问，我们要使用多因素验证。这里的多因素就是说的前面的三种验证手段中的两种或两种以上，不包括一种方法使用两次，那样安全性的提升并不是很大。</p>
+<h3 id="8-3-1-将针对所有非控制台访问的多因素验证融入针对具有管理访问权限的工作人员的CDE"><a href="#8-3-1-将针对所有非控制台访问的多因素验证融入针对具有管理访问权限的工作人员的CDE" class="headerlink" title="8.3.1 将针对所有非控制台访问的多因素验证融入针对具有管理访问权限的工作人员的CDE"></a>8.3.1 将针对所有非控制台访问的多因素验证融入针对具有管理访问权限的工作人员的CDE</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-72a263462a7c684f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.3.1"><br>这是针对所有有权限访问持卡人数据环境的工作人员。<br>这里按照指南可以看到如果持卡人数据环境和其他网络环境没有隔离，那就在具有访问权的工作人员进入这个网络的时候要执行多因素认证。<br>如果持卡人数据环境和其他网络分离了，那就在拥有访问权限的工作人员从其他网络环境进入持卡人数据环境的时候进行多因素验证。</p>
+<h3 id="8-3-2-针对来自实体网络外部的所有远程网络访问（针对用户和管理员，并包括出于支持和维护目的的第三方访问）加入多因素验证"><a href="#8-3-2-针对来自实体网络外部的所有远程网络访问（针对用户和管理员，并包括出于支持和维护目的的第三方访问）加入多因素验证" class="headerlink" title="8.3.2 针对来自实体网络外部的所有远程网络访问（针对用户和管理员，并包括出于支持和维护目的的第三方访问）加入多因素验证"></a>8.3.2 针对来自实体网络外部的所有远程网络访问（针对用户和管理员，并包括出于支持和维护目的的第三方访问）加入多因素验证</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-e7ff72a8fad72118.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.3.2"><br>对于来自外部互联网的对公司内部网络的所有远程访问都要用多因素认证。<br>多因素认证在外网远程访问公司内网的情况下，主要是针对员工用户和管理员或者因其他需求导致的第三方访问。</p>
+<h3 id="8-4-为所有用户编写并传达验证政策和程序"><a href="#8-4-为所有用户编写并传达验证政策和程序" class="headerlink" title="8.4 为所有用户编写并传达验证政策和程序"></a>8.4 为所有用户编写并传达验证政策和程序</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-6fe848d535c2da9b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.4"><br>包括：<br>1、选择强效验证凭证的指南<br>2、关于用户应如何保护其验证凭证的指南<br>3、关于不重用之前用过的密码的说明<br>4、在怀疑密码可能受到威胁的情况下更改密码的相关说明<br>这个相当于对前面要求的一个总结，对于前面的这些要求，很多是针对用户来说的，我们要有相应的方法，指导用户按着我们的要求执行，所有我们要有相关的指南。<br>比如选择强效验证凭证的指南，告诉用户密码强度的要求，以及不要使用有规律的密码等。<br>向所有的用户传达这些要求和指南他们保证他们了解并遵守。</p>
+<h3 id="8-5-不要使用群组、共享或常规的ID、密码或其他验证方法"><a href="#8-5-不要使用群组、共享或常规的ID、密码或其他验证方法" class="headerlink" title="8.5 不要使用群组、共享或常规的ID、密码或其他验证方法"></a>8.5 不要使用群组、共享或常规的ID、密码或其他验证方法</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-c8f6f1846e24a132.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.5"><br>具体如下：<br>1、常规用户ID已禁用或删除<br>2、用于系统管理和其他重要功能的共享用户ID不存在<br>3、不使用共享和常规用户ID管理任何系统组件<br>之前已经说过ID标识符是对应个人的，不能一个ID对应多个人员，这样无法追究到具体操作到具体人员。以及删除那些不必要的常规ID或者共享ID等多余功能。</p>
+<h4 id="8-5-1-可远程访问客户所在地的服务提供商（例如，为支持POS系统或服务器）须针对每个客户使用唯一的验证凭证（例如密码-口令）（仅针对服务商的额外要求）"><a href="#8-5-1-可远程访问客户所在地的服务提供商（例如，为支持POS系统或服务器）须针对每个客户使用唯一的验证凭证（例如密码-口令）（仅针对服务商的额外要求）" class="headerlink" title="8.5.1 可远程访问客户所在地的服务提供商（例如，为支持POS系统或服务器）须针对每个客户使用唯一的验证凭证（例如密码/口令）（仅针对服务商的额外要求）"></a>8.5.1 可远程访问客户所在地的服务提供商（例如，为支持POS系统或服务器）须针对每个客户使用唯一的验证凭证（例如密码/口令）（仅针对服务商的额外要求）</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-c3548ea5ffc46d08.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.5.1"><br>服务商要确保为每一个客户提供唯一的不同的验证凭证。多个客户使用同一个验证凭证，对于每个客户来说都是很危险的。</p>
+<h3 id="8-6-在使用其他验证机制（例如物理或逻辑安全令牌、智能卡、证书等）的情形下，须按照下述要求分配这些机制的用法："><a href="#8-6-在使用其他验证机制（例如物理或逻辑安全令牌、智能卡、证书等）的情形下，须按照下述要求分配这些机制的用法：" class="headerlink" title="8.6 在使用其他验证机制（例如物理或逻辑安全令牌、智能卡、证书等）的情形下，须按照下述要求分配这些机制的用法："></a>8.6 在使用其他验证机制（例如物理或逻辑安全令牌、智能卡、证书等）的情形下，须按照下述要求分配这些机制的用法：</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-1896cb33d059fabc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.6-1"><br><img src="https://upload-images.jianshu.io/upload_images/6269327-a1de791f3520f820.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.6-2"><br>1、验证机制必须分配到单个账户，不得在多个账户之间共享<br>2、必须要有物理和/或逻辑控制，以确保仅既定账户可使用该机制获得访问权限<br>对于前面说的验证机制的除了第一个密码的其他两个，令牌设备或智能卡和个人特征，我们也要有和ID一样，每一个验证数据仅对应一个账号，不能多人共享！<br>通过物理或逻辑控制（比如指纹，虹膜）我们可以防止非授权用户通过共享的方法或的访问权。因为这些是可以唯一识别用户的。</p>
+<h3 id="8-7-已按照下述要求限制了对任何包含持卡人数据的数据库的所有访问（包括应用程序、管理员和其他所有用户的访问）"><a href="#8-7-已按照下述要求限制了对任何包含持卡人数据的数据库的所有访问（包括应用程序、管理员和其他所有用户的访问）" class="headerlink" title="8.7 已按照下述要求限制了对任何包含持卡人数据的数据库的所有访问（包括应用程序、管理员和其他所有用户的访问）"></a>8.7 已按照下述要求限制了对任何包含持卡人数据的数据库的所有访问（包括应用程序、管理员和其他所有用户的访问）</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-b1bf2f95e07827ef.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.8"><br>1、用户对数据库的所有访问、查询和操作均通过编程方法完成<br>2、仅数据库管理员能直接访问或查询数据库<br>3、数据库应用程序的应用程序ID仅可由这些应用程序使用（个人用户或其他非应用程序流程不能使用）<br>针对持卡人数据所在数据库来说，我们对每一个用户对这个数据库的访问都必须进行验证。同时验证完身份之后我们要保证所有的数据库操作都是通过存储代码或程序执行的，而不是用户自己执行的，不是用户访问数据库执行的。<br>权限方面，只有数据库的管理员可以直接访问和查询数据库。且对于那些访问了数据库的应用程序我们确认这个应用程序的ID仅仅可他自己使用，不会被其他流程或个人调用。<br>感觉这一条包含的信息还是很多的，但是经验不足，体会不出里面的精髓。之后会补上。</p>
+<h3 id="8-8-确保已记录，正在使用且所有相关方了解用于身份是被和验证的安全政策与操作程序"><a href="#8-8-确保已记录，正在使用且所有相关方了解用于身份是被和验证的安全政策与操作程序" class="headerlink" title="8.8 确保已记录，正在使用且所有相关方了解用于身份是被和验证的安全政策与操作程序"></a>8.8 确保已记录，正在使用且所有相关方了解用于身份是被和验证的安全政策与操作程序</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-cd09c4e84da75b2a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.8"><br>对于用于身份识别和验证的安全政策与操作程序我们按照要求指定了相应的政策，我们要有详细的记录，并确保相关人员以及进行学习并严格遵守。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>实施强效的访问控制，识别并验证对系统组件的访问。要求8的这些都是围绕对系统组件访问的识别和验证。识别和验证就会涉及到验证数据，所以里面也说到了密码策略，以及三个眼政方案。<br>很全面的，唯一想说的是密码策略中的安全策略很多都是牺牲了其他的来换取安全，可能我们牺牲了用户体验，或者工作人员的便利但是换取的安全是十分值得的。但是在公司制定安全策略的时候还是得因地制宜，根据不同的需求制定不同的策略。</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/04/15/4. Struts2-052漏洞学习及反弹shell试验/" data-toggle="tooltip" data-placement="top" title="Struts2-052漏洞学习及反弹shell试验">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2019/04/15/19. PCI-DSS(V3.2.1)学习笔记(六)/" data-toggle="tooltip" data-placement="top" title="PCI-DSS(V3.2)学习笔记(六)">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#PCI-DSS-V3-2-学习笔记-八"><span class="toc-text">PCI-DSS(V3.2)学习笔记(八)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#四、实施强效的访问控制"><span class="toc-text">四、实施强效的访问控制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#要求8：识别并验证对系统组件的访问"><span class="toc-text">要求8：识别并验证对系统组件的访问</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-规定并实施政策和程序，确保对所有系统组件中的非消费者用户和管理员执行以下适当的用户识别管理"><span class="toc-text">8.1 规定并实施政策和程序，确保对所有系统组件中的非消费者用户和管理员执行以下适当的用户识别管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#8-1-1-允许用户访问系统组件或持卡人数据之前，为期分配唯一ID"><span class="toc-text">8.1.1 允许用户访问系统组件或持卡人数据之前，为期分配唯一ID</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#8-1-2-控制添加、删除和修改用户ID、凭证和其他标识符对象"><span class="toc-text">8.1.2 控制添加、删除和修改用户ID、凭证和其他标识符对象</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-1-3-立即撤销到期用户的访问权"><span class="toc-text">8.1.3 立即撤销到期用户的访问权</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-1-4-在90天内删除-禁用非活动的用户账户"><span class="toc-text">8.1.4 在90天内删除/禁用非活动的用户账户</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-1-5-通过如下远程访问管理第三方用于访问、支持或维护系统组件的ID"><span class="toc-text">8.1.5 通过如下远程访问管理第三方用于访问、支持或维护系统组件的ID</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-1-6-在不超过6次尝试后锁定用户ID，从而限制反复的访问尝试"><span class="toc-text">8.1.6 在不超过6次尝试后锁定用户ID，从而限制反复的访问尝试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-1-7-将锁定时间设为最少30分钟或直到管理员启用用户ID"><span class="toc-text">8.1.7 将锁定时间设为最少30分钟或直到管理员启用用户ID</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-1-8-如果某会话空闲超过15分钟，则需要重新验证用户来重新激活终端或会话"><span class="toc-text">8.1.8 如果某会话空闲超过15分钟，则需要重新验证用户来重新激活终端或会话</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-处理分配唯一ID以外，至少采用以下一种方法来验证所有用户，确保对所有系统组件中的非消费者用户和管理员执行恰当的用户验证管理"><span class="toc-text">8.2 处理分配唯一ID以外，至少采用以下一种方法来验证所有用户，确保对所有系统组件中的非消费者用户和管理员执行恰当的用户验证管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#8-2-1-使用强效加密法使所有验证凭证（例如密码-口令）在所有系统组件中传输和存储时均不可读"><span class="toc-text">8.2.1 使用强效加密法使所有验证凭证（例如密码/口令）在所有系统组件中传输和存储时均不可读</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-2-2-在修改任何验证凭证（例如，执行密码重置、提供新令牌或生成新密钥）前验证用户身份"><span class="toc-text">8.2.2 在修改任何验证凭证（例如，执行密码重置、提供新令牌或生成新密钥）前验证用户身份</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-2-3-密码-口令必须符合以下要求："><span class="toc-text">8.2.3 密码/口令必须符合以下要求：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-2-4-至少每90天变更一次用户密码-口令"><span class="toc-text">8.2.4 至少每90天变更一次用户密码/口令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-2-5-不允许个人提交与最近使用的4个密码-口令中任何一个相同的新密码-口令"><span class="toc-text">8.2.5 不允许个人提交与最近使用的4个密码/口令中任何一个相同的新密码/口令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-2-6-将每个用户首次使用的密码-口令和重置密码-口令设为唯一值，并在首次使用后立即变更"><span class="toc-text">8.2.6 将每个用户首次使用的密码/口令和重置密码/口令设为唯一值，并在首次使用后立即变更</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-使用多因素验证保护对CDE的所有单独飞控制台管理访问和所有远程访问"><span class="toc-text">8.3 使用多因素验证保护对CDE的所有单独飞控制台管理访问和所有远程访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-1-将针对所有非控制台访问的多因素验证融入针对具有管理访问权限的工作人员的CDE"><span class="toc-text">8.3.1 将针对所有非控制台访问的多因素验证融入针对具有管理访问权限的工作人员的CDE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-2-针对来自实体网络外部的所有远程网络访问（针对用户和管理员，并包括出于支持和维护目的的第三方访问）加入多因素验证"><span class="toc-text">8.3.2 针对来自实体网络外部的所有远程网络访问（针对用户和管理员，并包括出于支持和维护目的的第三方访问）加入多因素验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4-为所有用户编写并传达验证政策和程序"><span class="toc-text">8.4 为所有用户编写并传达验证政策和程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-5-不要使用群组、共享或常规的ID、密码或其他验证方法"><span class="toc-text">8.5 不要使用群组、共享或常规的ID、密码或其他验证方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#8-5-1-可远程访问客户所在地的服务提供商（例如，为支持POS系统或服务器）须针对每个客户使用唯一的验证凭证（例如密码-口令）（仅针对服务商的额外要求）"><span class="toc-text">8.5.1 可远程访问客户所在地的服务提供商（例如，为支持POS系统或服务器）须针对每个客户使用唯一的验证凭证（例如密码/口令）（仅针对服务商的额外要求）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-6-在使用其他验证机制（例如物理或逻辑安全令牌、智能卡、证书等）的情形下，须按照下述要求分配这些机制的用法："><span class="toc-text">8.6 在使用其他验证机制（例如物理或逻辑安全令牌、智能卡、证书等）的情形下，须按照下述要求分配这些机制的用法：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-7-已按照下述要求限制了对任何包含持卡人数据的数据库的所有访问（包括应用程序、管理员和其他所有用户的访问）"><span class="toc-text">8.7 已按照下述要求限制了对任何包含持卡人数据的数据库的所有访问（包括应用程序、管理员和其他所有用户的访问）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-8-确保已记录，正在使用且所有相关方了解用于身份是被和验证的安全政策与操作程序"><span class="toc-text">8.8 确保已记录，正在使用且所有相关方了解用于身份是被和验证的安全政策与操作程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#安全知识" title="安全知识">安全知识</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="https://teazmh.github.io/">Tea_Mh</a></li>
+                        
+                        <li><a href="https://zheng19970225.github.io/">让子弹飞一会</a></li>
+                        
+                        <li><a href="https://luckyjq.github.io/">LuckyQ</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/IIGHJH5O4mvbeF9?s=09">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/rao-song-63?utm_source=qq&amp;utm_medium=social">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/u/3870422953?refer_flag=1001030001_&amp;nick=RS丶从徒手开碧根果开始">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://github.com/rliyuqing">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 折戟 2019
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                     Theme by Haojen Ma
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://rliyuqing.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://upload-images.jianshu.io/upload_images/6269327-4c7992ea7ad8aea9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+<script type="text/javascript"
+color="0,0,0" opacity='0.4' zIndex="-2" count="66" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+	
+
+
+</body>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+</html>

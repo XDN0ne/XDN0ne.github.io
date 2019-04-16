@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+    <meta name="description" content="龅牙晴在 Github 上的个人博客">
+    <meta name="keyword" content="安全，漏洞挖掘，漏洞复现">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="折戟" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        PCI-DSS(V3.2)学习笔记(六)｜R_song&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://rliyuqing.github.io/2019/04/15/19. PCI-DSS(V3.2.1)学习笔记(六)/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    折戟
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/categories/">categories</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>PCI-DSS(V3.2)学习笔记(六)</h1>
+                    
+                    <span class="meta">
+                         作者 折戟
+                        <span>
+                          日期 2019-04-15
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#安全知识" title="安全知识">安全知识</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            PCI-DSS(V3.2)学习笔记(六)
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <hr>
+<h1 id="PCI-DSS-V3-2-学习笔记-六"><a href="#PCI-DSS-V3-2-学习笔记-六" class="headerlink" title="PCI-DSS(V3.2)学习笔记(六)"></a>PCI-DSS(V3.2)学习笔记(六)</h1><hr>
+<h1 id="三、维护漏洞管理计划"><a href="#三、维护漏洞管理计划" class="headerlink" title="三、维护漏洞管理计划"></a>三、维护漏洞管理计划</h1><h2 id="要求6-：开发并维护安全的系统和应用程序"><a href="#要求6-：开发并维护安全的系统和应用程序" class="headerlink" title="要求6 ：开发并维护安全的系统和应用程序"></a>要求6 ：开发并维护安全的系统和应用程序</h2><p>windows的各种升级以及补丁大家肯定很熟悉了，为了防止各种漏洞的攻击微软经常要求我们更新，给系统打补丁。在我们的企业中，攻击者经常会使用我们的系统或者应用程序出现的漏洞进行攻击，所以我们要对我们的系统和应用程序进行实时的关注和维护，在漏洞被发现的时候第一时间响应。</p>
+<h3 id="6-1-制定相关流程，通过使用良好的外部信源获取安全楼栋信息来识别安全漏洞，并未新发现的安全漏洞指定风险等级（例如“高”、“中”或“低”）"><a href="#6-1-制定相关流程，通过使用良好的外部信源获取安全楼栋信息来识别安全漏洞，并未新发现的安全漏洞指定风险等级（例如“高”、“中”或“低”）" class="headerlink" title="6.1 制定相关流程，通过使用良好的外部信源获取安全楼栋信息来识别安全漏洞，并未新发现的安全漏洞指定风险等级（例如“高”、“中”或“低”）"></a>6.1 制定相关流程，通过使用良好的外部信源获取安全楼栋信息来识别安全漏洞，并未新发现的安全漏洞指定风险等级（例如“高”、“中”或“低”）</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-53027f8ecda7c971.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.1"><br>对于我们正在使用的系统或者应用程序我们必须时刻关注和他相关的漏洞的出现。我们得有一定的信息收集渠道在漏洞出现的第一时间获取，并响应。比如CVE，国内的CNNVD或者国内一些著名的安全公司。<br>我们在第一时间获取这个漏洞情况的时候，第三方或者通报方肯定会有自己的风险等级分析的方案并给出漏洞的风险等级。我们详细了解这个漏洞之后，根据自己公司的情况以及公司自己的风险等级分析方案给出这个漏洞对于自己公司的风险等级，然后根据风险等级进行处理。<br>我们不是一次性就能扫描出所有的漏洞的，这个需要持续化的跟进，维护我们系统或应用程序的安全。<br>同时在处理漏洞的时候应该根据不同的风险等级有不用的优先级。对于被视为没有影响或者风险等级很低的漏洞，我们可能忽略，没有采取措施，但是一定要有记录，并持续对他进行风险分析，保证业务或者其他变动导致漏洞风险等级变高带来的威胁可以被及时发现。</p>
+<h3 id="6-2-通过安装供应商提供的适用安全补丁，确保所有系统组件和软件杜绝已知漏洞。在发布后一个月内安装关键补丁"><a href="#6-2-通过安装供应商提供的适用安全补丁，确保所有系统组件和软件杜绝已知漏洞。在发布后一个月内安装关键补丁" class="headerlink" title="6.2 通过安装供应商提供的适用安全补丁，确保所有系统组件和软件杜绝已知漏洞。在发布后一个月内安装关键补丁"></a>6.2 通过安装供应商提供的适用安全补丁，确保所有系统组件和软件杜绝已知漏洞。在发布后一个月内安装关键补丁</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-bd0b0ea42851213f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.2-1"><br><img src="https://upload-images.jianshu.io/upload_images/6269327-fa3209bc286b4f80.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.2-2"><br>在出现新的漏洞的时候我们及时安装供应商提供的补丁。可能因为打补丁会对业务或者其他产生不必要的损失，但是我们必须协调好，在一定的时间内安装好供应商提供的补丁。比如这里说的一个月内安装关键补丁。在没有安装的这段时间内也要有相应的应对攻击的策略，减少漏洞给我们带来的损失。</p>
+<h3 id="6-3-遵照如下要求安全地开发内部和外部软件应用程序"><a href="#6-3-遵照如下要求安全地开发内部和外部软件应用程序" class="headerlink" title="6.3 遵照如下要求安全地开发内部和外部软件应用程序"></a>6.3 遵照如下要求安全地开发内部和外部软件应用程序</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-7ea1ef3133b88eb1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.3"><br>包括基于WEB的应用程序管理访问：<br>1、按照PCI DSS（例如安全验证和记录）<br>2、基于行业标准或最优方法<br>3、信息安全并入整个软件开发生命周期<br>这里从开发的角度直接从源头上尽量杜绝漏洞的产生。开发安全的系统或者应用程序，就得有安全的开发标准，代码标准等。<br>我们需要制定安全开发的标准，在软件或者应用程序的整个开发周期考虑到漏洞的可能产生。比如php安全开发手册，我们公司可能会有自己的标准，或者按照行业的标准或者按照PCI DSS的标准等。</p>
+<h4 id="6-3-1-为识别任何潜在的编码漏洞（采用人工或自动流程），请在投入生产或向客户发布前审核自定义代码"><a href="#6-3-1-为识别任何潜在的编码漏洞（采用人工或自动流程），请在投入生产或向客户发布前审核自定义代码" class="headerlink" title="6.3.1 为识别任何潜在的编码漏洞（采用人工或自动流程），请在投入生产或向客户发布前审核自定义代码"></a>6.3.1 为识别任何潜在的编码漏洞（采用人工或自动流程），请在投入生产或向客户发布前审核自定义代码</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-0d5fbeec5dea259b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.3.1-1"><br><img src="https://upload-images.jianshu.io/upload_images/6269327-a241f2b4950bac80.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.3.1-2"><br>在安全开发的过程中我们可能是有了已经通过安全编码审核的框架（或者之前已经经过审核的代码），但是这里面根据不同的环境不同的需求我们会将代码进行更改，这部分就属于自定义代码片段。<br>对于自定义代码片段，虽然我们的开发人员按照安全的编码标准去开发，但是难免也会有漏洞，所以在代码项目发布或者交给客户之前我们需要对其进行代码审计，白盒测试。需要在除项目开发人员以外的有安全代码审计经验的开发人员进行代码审计，并修正。<br>我们在项目投入使用之后发现了编码漏洞这个时候要修复付出的代价是很大的，所以一定要有上线前的代码审计，最好也可以在测试环境上线并进行其他测试，比如黑盒测试。</p>
+<h3 id="6-4-系统组件的所有变更均须遵守变更控制流程和程序。"><a href="#6-4-系统组件的所有变更均须遵守变更控制流程和程序。" class="headerlink" title="6.4 系统组件的所有变更均须遵守变更控制流程和程序。"></a>6.4 系统组件的所有变更均须遵守变更控制流程和程序。</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-38bf260562727f07.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.4"><br>该流程必须包括如下内容（6.4.1-6.4.6）。<br>对于系统组件的操作和更改我们必须有规定的流程和程序，并严格执行。我们对系统组件的变更也要有一定的控制和记录，防止系统组件变更带来的安全隐患。第一眼看着这个要求，可能是翻译也可能是自己的学识不够所以不是很理解，所以我们先简单的理解一下字面上的意思，我们详细的看看6.4里面的具体流程都有哪些要求。</p>
+<h4 id="6-4-1-开发-测试环境独立于生产环境，并借助访问控制确保两者分离"><a href="#6-4-1-开发-测试环境独立于生产环境，并借助访问控制确保两者分离" class="headerlink" title="6.4.1 开发/测试环境独立于生产环境，并借助访问控制确保两者分离"></a>6.4.1 开发/测试环境独立于生产环境，并借助访问控制确保两者分离</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-7683ea05f0933367.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>测试环境和线上环境的分离是十分重要的，直接将线上环境当测试环境那如果一个不小心的操作很可能带来巨大的经济损失。这让我想起了前几个礼拜很多ofo用户都收到几个test消息，一看就是开发人员在线上进行测试了，所幸没有带来其他的影响。<br>对于测试环境我们也要通过访问控制将他与线上环境进行分离，因为我们的测试环境不断地变更，产生漏洞的可能性是很大的，如果没有将他和线上环境进行隔离的话，可能测试环境的漏洞直接给线上环境带来严重的威胁。</p>
+<h4 id="6-4-2-开发-测试环境与生产环境中的职责分离"><a href="#6-4-2-开发-测试环境与生产环境中的职责分离" class="headerlink" title="6.4.2 开发/测试环境与生产环境中的职责分离"></a>6.4.2 开发/测试环境与生产环境中的职责分离</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-445fd2da5d87515e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.4.2"><br>这个其实让我联想到了最小权限的原则，对于不同的用户和场景我们只授予必要的权限，其他权限都默认禁止。对于测试环境和生产（线上）环境的职责和权限要分离。<br>比如开发者在测试环境可以有超管的权限，但是在生产环境就不一定，有可能只有用户最低的权限。对生产环境只有管理线上的工作人员才有权限。如果ofo对开发和测试人员进行职责的分离，就不会出现之前提到的情况了，开发或测试人员就不会有在线上环境直接测试的权限了。</p>
+<h4 id="6-4-3-在测试或开发过程中不使用生产数据（真实的PAN）"><a href="#6-4-3-在测试或开发过程中不使用生产数据（真实的PAN）" class="headerlink" title="6.4.3 在测试或开发过程中不使用生产数据（真实的PAN）"></a>6.4.3 在测试或开发过程中不使用生产数据（真实的PAN）</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-c55c7503a88e57fa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.4.3"><br>我们在测试环境测试一个系统或者应用程序的时候和实际线上环境还是有差别的，因为我们没有线上实际的用户数据，所有为了完整的安全测试或其他测试来说我们可能需要自己生成这样的数据。<br>一定确保在测试环境不用使用生产环境中用户或者其他的真实数据（比如用户身份信息或者管理员账号密码等），我们的测试样本必须是自己生成的。因为开发测试的环境是经常变动且不安全的，存在很多安全隐患可能会造成数据的泄露。</p>
+<h4 id="6-4-4-在机会系统-系统投入生产之前、删除系统组件中的测试数据和账号"><a href="#6-4-4-在机会系统-系统投入生产之前、删除系统组件中的测试数据和账号" class="headerlink" title="6.4.4 在机会系统/系统投入生产之前、删除系统组件中的测试数据和账号"></a>6.4.4 在机会系统/系统投入生产之前、删除系统组件中的测试数据和账号</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-aac673ecfe1a9866.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.4.4"><br>在测试环境经过一系列测试之后我们的系统或者应用程序即将发布，但是因为我们测试系统时使用了很多我们自己编造的数据或者测试的账号，在系统投入使用之前，我们需要将这些我们留下的测试痕迹清除，防止攻击者利用我们留下的数据进行攻击。<br>我们在测试环境测试的时候肯定会图方便，留下一些不安全的隐患，比如弱密码的test测试账号等，如果没有清除这些测试数据和账号，攻击者可能就会利用这些来了解我们的系统，发起攻击。</p>
+<h4 id="6-4-5-变更控制程序包含（6-4-5-1-6-4-5-4）"><a href="#6-4-5-变更控制程序包含（6-4-5-1-6-4-5-4）" class="headerlink" title="6.4.5 变更控制程序包含（6.4.5.1-6.4.5.4）"></a>6.4.5 变更控制程序包含（6.4.5.1-6.4.5.4）</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-9238a4db5048bbc8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.4.5"><br>对于软件或者系统的变更我们必须要有一个控制他的程序，方案。因为我们软件在更新或者打补丁的时候可能会对整个环境产生影响，或者产生一些很玄学的影响，所以我们在软件变更的时候一定要有一个控制的方案，程序来控制和处理这个变更带来的影响。具体这个变更控制程序的基本要求我们看一下6.4.5.1-6.4.5.4</p>
+<h5 id="6-4-5-1-影响记录"><a href="#6-4-5-1-影响记录" class="headerlink" title="6.4.5.1 影响记录"></a>6.4.5.1 影响记录</h5><p><img src="https://upload-images.jianshu.io/upload_images/6269327-781aa55e419d81a1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.4.5.1"><br>对于每次软件变更带来的影响我们都需要进行记录，这样可以为下一次的变更有一个参照，更好的分析变更产生影响的原因，更好的制定对变更之后影响的解决方案。</p>
+<h5 id="6-4-5-2-被授权方的变更审批记录"><a href="#6-4-5-2-被授权方的变更审批记录" class="headerlink" title="6.4.5.2 被授权方的变更审批记录"></a>6.4.5.2 被授权方的变更审批记录</h5><p><img src="https://upload-images.jianshu.io/upload_images/6269327-a5e808d672ffbe83.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.4.5.2"><br>我们进行测试变更时，需要保证这个测试的样本的变更是被授权的。比如说测试给一个软件打补丁的影响的时候，我们需要确认这个补丁是供应方官方发布的，并且这个补丁在供应方以及有通过审核的详细记录了，我们才能进行安装补丁的带来的影响的测试。</p>
+<h5 id="6-4-5-3-功能测试，以确认该变更未对系统安全性造成不利影响"><a href="#6-4-5-3-功能测试，以确认该变更未对系统安全性造成不利影响" class="headerlink" title="6.4.5.3 功能测试，以确认该变更未对系统安全性造成不利影响"></a>6.4.5.3 功能测试，以确认该变更未对系统安全性造成不利影响</h5><p><img src="https://upload-images.jianshu.io/upload_images/6269327-8db4e2a02c0753d8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.4.5.3"><br>在对一个系统进行变更，比如升级之后，我们需要进行功能测试，就是对系统的各功能进行测试，确保系统变更之后还在我们的安全体系保障之内，不会产生新的安全问题。<br>通过全面的测试我们要确认在变更之后这个系统仍让受我们安全策略的保护。</p>
+<h5 id="6-4-5-4-取消程序"><a href="#6-4-5-4-取消程序" class="headerlink" title="6.4.5.4 取消程序"></a>6.4.5.4 取消程序</h5><p><img src="https://upload-images.jianshu.io/upload_images/6269327-f4e123c480853f3e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.4.5.4"><br>就算我们提前经过变更测试，并记录了测试带来的影响。但是在实际的变更过程中还是有可能会有其他影响发生的，所以我们一定要确保这个变更有取消的程序，我们可以降级或者卸载补丁恢复到之前的环境。<br>环境问题有时候还是很玄学的，取消程序也是必不可少的挽回损失的关键一步。</p>
+<h4 id="6-4-6-完成重要变更后，须对所有新的或变更的系统和网络实施所有相关的PCI-DSS要求，并在适当情况下更新文档记录"><a href="#6-4-6-完成重要变更后，须对所有新的或变更的系统和网络实施所有相关的PCI-DSS要求，并在适当情况下更新文档记录" class="headerlink" title="6.4.6 完成重要变更后，须对所有新的或变更的系统和网络实施所有相关的PCI DSS要求，并在适当情况下更新文档记录"></a>6.4.6 完成重要变更后，须对所有新的或变更的系统和网络实施所有相关的PCI DSS要求，并在适当情况下更新文档记录</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-7f512550431ce970.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.4.6"><br>我们前面说到要保证变更之后系统或应用程序仍在我们的安全策略保护之内，这里同时要求我们变更后，受变更影响的系统或者网络我们必须重新验证，并保证其仍然符合PCI DSS的要求。<br>比如重置新系统的默认密码，删除新系统的默认账号，以及新的网络图等等。这是很关键的要求，这样才能保证我们所有的重要系统或者网络在PCI DSS的要求内，不会出现重要的系统或网络没有受到安全保护。<br>这就相当于写了一个死循环，开始是我在PCI DSS的标准内，因为系统或者程序的变更，发生了变化，在继续按照PCI DSS的标准重新规范我们的新系统。这样就保证我们的系统或网络始终在PCI DSS的标准范围内。</p>
+<h3 id="6-5-按照以下方式处理软件流程中常见的编码漏洞"><a href="#6-5-按照以下方式处理软件流程中常见的编码漏洞" class="headerlink" title="6.5 按照以下方式处理软件流程中常见的编码漏洞"></a>6.5 按照以下方式处理软件流程中常见的编码漏洞</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-5d154e8613687097.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.5-1"><br><img src="https://upload-images.jianshu.io/upload_images/6269327-7cb6076895ef1a55.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.5-2"><br>方式：<br>1、至少每年对开发人员进行一次最新安全编码技术方面的培训，包括如何避免常见的编码漏洞<br>2、根据安全编码指南开发应用程序<br>上面都说了在开发过程中清理排除编码漏洞，但是总会有漏网之鱼，我们也要有万全之策，如果出现了编码漏洞我们也得有应对策略。<br>我们要有适当的流程保证开发过程中避免编码漏洞的产生（定期安全编码培训，安全编码指南），以及漏洞产生之后的应对措施。对于编码漏洞我们尽力做到最好，如果有不足的地方我们也要有弥补的方法，这里的6.5.1-6.5.10是我们至少要能应对的编码漏洞，都是一些著名的高危漏洞。</p>
+<h4 id="6-5-1-注入攻击"><a href="#6-5-1-注入攻击" class="headerlink" title="6.5.1 注入攻击"></a>6.5.1 注入攻击</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-0adcffbe269327be.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.5.1"><br>特别是SQL注入，同时还需考虑OS命令注入、LDAP、Xpath等其他注入攻击。<br>我们关注OWASP  top ten就会发现历年来，注入蝉联榜首已经很多年了，灰产内利用注入批量攻击的工具更是数不胜数。由此可见注入带来的危害有多大，范围有多广；我们安全开发人员也得有多重视。<br>有过经验的安全从业者都知道，数据与代码分离的原则是解决注入漏洞的关键。所有的注入类型的漏洞都是因为服务器将用户输入的数据当成代码执行了，混淆了数据和代码的边界。<br>对于用户的输入我们都认为是数据，杜绝他变成代码并执行时解决注入问题的关键。所以要合理处理，验证用户的输入，确保其不会变成代码执行。或者利用参数化查询。<br>同时我们也要确保输入的验证不会影响用户的体验，要合理的处理用户的输入数据。</p>
+<h4 id="6-5-2-缓冲区溢出"><a href="#6-5-2-缓冲区溢出" class="headerlink" title="6.5.2 缓冲区溢出"></a>6.5.2 缓冲区溢出</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-107901fdcf1908a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.5.2"><br>其实缓冲区溢出和注入的原理差不多，都是因为服务器将数据当做代码来执行了。程序在栈或者堆中，将用户数据当做代码执行，混淆了数据和代码的边界。<br>对于缓冲区溢出的问题，我们可以通过验证缓冲区边界，截取输入字符串来解决。<br>简单的说在进程地址中有数据段和代码段，因为数据段受空间大小的限制，当我们输入的数据超过这个数据段的空间时，数据就会被挤到下面的代码段，并当成代码执行。<br>详细的缓冲区溢出可以上网看看各种原理分析。</p>
+<h4 id="6-5-4-非安全加密存储"><a href="#6-5-4-非安全加密存储" class="headerlink" title="6.5.4 非安全加密存储"></a>6.5.4 非安全加密存储</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-b2c142188b41dbdb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.5.3"><br>使用了容易破解的加密方法加密存储数据或者甚至没有加密就存储数据，攻击者就很容易便可以得到数据的明文。<br>我们可以使用强效的加密算法加密我们数据或者很多其他强效的加密手段。</p>
+<h4 id="6-5-4-非安全通信"><a href="#6-5-4-非安全通信" class="headerlink" title="6.5.4 非安全通信"></a>6.5.4 非安全通信</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-04834e401994b570.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.5.4"><br>同样，我们使用费非安全信道进行通信也是极其危险的，对于非安全的通信我们得有加密的手段来保证其是安全的。比如使用https等。</p>
+<h4 id="6-5-5-不正确的错误处理"><a href="#6-5-5-不正确的错误处理" class="headerlink" title="6.5.5  不正确的错误处理"></a>6.5.5  不正确的错误处理</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-804f66e7733a7309.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.5.5"><br>这一点很多公司的安全上都没有注意到。我感觉注意是两个方面，一个是对于代码上的错误没有进行正确的处理导致敏感信息泄露，比如我们访问一些网站的错误请求时会有报错提示，这里可能会泄露网站的物理路径等信息。<br>第二个就是业务方面了，比如用户登录的时候，对于错误的登录请求时，服务器对密码错误和用户名错误进行了自以为贴心的区别处理，用户名存在，密码错误就提示：“密码错误”，用户名和密码都不对就提示：“用户名错误”，虽然提高了一些用户体验，但是带来的更多还是安全隐患。攻击者可以根据这不同的提示爆破用户的密码。</p>
+<h4 id="6-5-6-漏洞识别流程中确认的所有“高风险”漏洞"><a href="#6-5-6-漏洞识别流程中确认的所有“高风险”漏洞" class="headerlink" title="6.5.6 漏洞识别流程中确认的所有“高风险”漏洞"></a>6.5.6 漏洞识别流程中确认的所有“高风险”漏洞</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-42eab9b4322a6ed3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.5.6"><br>还有很多其他的漏洞，有一些可能其他方威胁分析为低的对于我们所处的公司实际为高风险，所以我们在前面说过公司要自己根据不同情况分析漏洞的风险等级，然后进行处理。我们对这“高风险”的漏洞也要有应对的措施。确保发现这样的漏洞后能及时相应，最大化减少损失。</p>
+<h4 id="6-5-7-跨站脚本"><a href="#6-5-7-跨站脚本" class="headerlink" title="6.5.7 跨站脚本"></a>6.5.7 跨站脚本</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-010e638c48b00a3d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.5.7"><br>6.5.1到6.5.6都是适用所有的应用程序来说，6.5.7到6.5.10则是适用于网络应用程序和应用程序的接口。<br>XSS就是利用“HTML注入”的方式，给网页嵌入了恶意脚本，从而在用户浏览网页的时候，执行恶意脚本进行攻击。<br>但是其实XSS的场景很复杂，很难解决，场景不同我们的处理方式也不同。这里说道对参数在应用前进行验证，是否合法以及利用上下文相关的转义。<br>涉及到用户输入的数据被当做代码执行的情况，都是混淆的数据和代码的边界，最重要的方法就是输入的检测。</p>
+<h4 id="6-5-8-不正确的访问控制"><a href="#6-5-8-不正确的访问控制" class="headerlink" title="6.5.8 不正确的访问控制"></a>6.5.8 不正确的访问控制</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-d336bb3f467a7502.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.5.8"><br>例如不安全的直接对象引用、未能限制网址访问、目录遍历和未能限制用户的功能访问。<br>损坏的访问控制在OWASP 2017中排在了第五的位置，甚至超过了第七的XSS。<br>不正确的访问控制十分的危险，没有一个完善的访问控制机制，攻击者可以轻松的伪造成某些用户进行访问。或者其他的访问控制缺失，导致url上显示了具体的文件名，导致用户可以未授权的更改文件名进行访问。<br>这里包括很多情况，但是最主要的就是访问控制机制的不完善，导致攻击者可以在未授权的情况访问不该被访问的敏感内容（如数据，文件等）。博主校园网内部的财务系统就曾出现了类似的的问题，因为使用的是校园统一认证，用学生的身份经过统一认证之后，跳转的时候更改访问的id就可以用不同的学生或教师身份登录。这就是典型的访问控制机制的缺失，不完善。<br>我们要根据具体出现的情况进行漏洞的修复，比如这里提到的正确的验证用户的身份，确保不会被伪造，以及对未授权的功能不允许用户访问，还有不想用户暴力内部对象引用也很重要，攻击者就更难构造这样的伪造访问。</p>
+<h4 id="6-5-9-跨站请求伪造（CSRF）"><a href="#6-5-9-跨站请求伪造（CSRF）" class="headerlink" title="6.5.9 跨站请求伪造（CSRF）"></a>6.5.9 跨站请求伪造（CSRF）</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-1b5b034e83150c8d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.5.9"><br>跨站请求伪造也是典型的高危漏洞之一。简而言之就是攻击者盗用用户的身份并发送恶意请求。我们窃取了用户的会话令牌，也就是到浏览器的Cookies。比如说我们诱使目标访问淘宝，使他淘宝用户的session cookies有效，然后实施csrf，让他访问一个购买商品的链接或者其他我们想要的动作对应的链接。<br>这就是因为我们会话管理和验证失效了，应对措施这里有不暴露会话id以及添加超时和轮换id等等。还有一些比如验证码手段，强制用户和应用进行交互才能完成请求。</p>
+<h3 id="6-6-对于面向公众的网络应用程序，应不断解决新的威胁和漏洞，并通过一下任一方法确保这些应用程序不会受到攻击"><a href="#6-6-对于面向公众的网络应用程序，应不断解决新的威胁和漏洞，并通过一下任一方法确保这些应用程序不会受到攻击" class="headerlink" title="6.6 对于面向公众的网络应用程序，应不断解决新的威胁和漏洞，并通过一下任一方法确保这些应用程序不会受到攻击"></a>6.6 对于面向公众的网络应用程序，应不断解决新的威胁和漏洞，并通过一下任一方法确保这些应用程序不会受到攻击</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-b38cd81bf796a59e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.6"><br>1、利用手动或自动应用程序漏洞安全评估工具或方法审核面向公众网络应用程序，至少每年一次并在有任何变更后进行<br>2、在面向公众的web应用程序前安装可检查和防范网页式攻击的自动化技术解决方案（例如web应用程序防火墙），泳衣不断检查所有流量<br>说一句，企业的src还是挺有必要的。对于面向公众的网络应用，就是对外提供服务的那些网络应用，我们要持续不断地解决新的威胁和漏洞。既然对外开放，就会面临不断地攻击，我们要通过一定的手段，确保他不受这些攻击的威胁。我们可以通过上面说的两个方法。<br>一个是定期手动或者自动对这个网络应用进行漏洞安全评估。我们需要定期执行，但是在某些情况发生导致系统环境产生变化我们也都进行检测评估，并在发现漏洞后及时修复，记录并重新评估。<br>二是在这个网络应用和外部网络之间增加加一个防止攻击的自动化解决方案，比如web防火墙，安全狗之类的。在使用之后我们也得确保我们的防火墙处于工作状态以及有详细的抵御攻击的日志。</p>
+<h3 id="6-7-确保已记录、正在使用且所有相关方了解用于开发和维护安全系统和应用程序的安全政策和错做程序"><a href="#6-7-确保已记录、正在使用且所有相关方了解用于开发和维护安全系统和应用程序的安全政策和错做程序" class="headerlink" title="6.7 确保已记录、正在使用且所有相关方了解用于开发和维护安全系统和应用程序的安全政策和错做程序"></a>6.7 确保已记录、正在使用且所有相关方了解用于开发和维护安全系统和应用程序的安全政策和错做程序</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-24ed308b23819cae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.7"><br>确保我们开发并维护安全的系统和应用程序的措施被详细记录，并且相关人员以及学习并严格遵守。落实到每个人。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>第三个区域维护漏洞管理计划也就结束了。回头看看，主要就是有实时更新的杀毒软件和开发并维护安全的系统和网络应用程序流程。这个区域主要就是对漏洞产生时候我们最快修补漏洞，最大化减少漏洞对我们产生的不利影响。我们虽然可以尽全力把防御体系做到最好，但是不可能杜绝漏洞的而产生，所有做好对漏洞的及时响应也是企业安全中的一个重要环节。</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/04/15/21. PCI-DSS(V3.2.1)学习笔记(八)/" data-toggle="tooltip" data-placement="top" title="PCI-DSS(V3.2)学习笔记(八)">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2019/04/15/17. PCI-DSS(V3.2.1)学习笔记(四)/" data-toggle="tooltip" data-placement="top" title="PCI-DSS(V3.2)学习笔记(四)">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#PCI-DSS-V3-2-学习笔记-六"><span class="toc-text">PCI-DSS(V3.2)学习笔记(六)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三、维护漏洞管理计划"><span class="toc-text">三、维护漏洞管理计划</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#要求6-：开发并维护安全的系统和应用程序"><span class="toc-text">要求6 ：开发并维护安全的系统和应用程序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-制定相关流程，通过使用良好的外部信源获取安全楼栋信息来识别安全漏洞，并未新发现的安全漏洞指定风险等级（例如“高”、“中”或“低”）"><span class="toc-text">6.1 制定相关流程，通过使用良好的外部信源获取安全楼栋信息来识别安全漏洞，并未新发现的安全漏洞指定风险等级（例如“高”、“中”或“低”）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-通过安装供应商提供的适用安全补丁，确保所有系统组件和软件杜绝已知漏洞。在发布后一个月内安装关键补丁"><span class="toc-text">6.2 通过安装供应商提供的适用安全补丁，确保所有系统组件和软件杜绝已知漏洞。在发布后一个月内安装关键补丁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-遵照如下要求安全地开发内部和外部软件应用程序"><span class="toc-text">6.3 遵照如下要求安全地开发内部和外部软件应用程序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-3-1-为识别任何潜在的编码漏洞（采用人工或自动流程），请在投入生产或向客户发布前审核自定义代码"><span class="toc-text">6.3.1 为识别任何潜在的编码漏洞（采用人工或自动流程），请在投入生产或向客户发布前审核自定义代码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4-系统组件的所有变更均须遵守变更控制流程和程序。"><span class="toc-text">6.4 系统组件的所有变更均须遵守变更控制流程和程序。</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-4-1-开发-测试环境独立于生产环境，并借助访问控制确保两者分离"><span class="toc-text">6.4.1 开发/测试环境独立于生产环境，并借助访问控制确保两者分离</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-4-2-开发-测试环境与生产环境中的职责分离"><span class="toc-text">6.4.2 开发/测试环境与生产环境中的职责分离</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-4-3-在测试或开发过程中不使用生产数据（真实的PAN）"><span class="toc-text">6.4.3 在测试或开发过程中不使用生产数据（真实的PAN）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-4-4-在机会系统-系统投入生产之前、删除系统组件中的测试数据和账号"><span class="toc-text">6.4.4 在机会系统/系统投入生产之前、删除系统组件中的测试数据和账号</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-4-5-变更控制程序包含（6-4-5-1-6-4-5-4）"><span class="toc-text">6.4.5 变更控制程序包含（6.4.5.1-6.4.5.4）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#6-4-5-1-影响记录"><span class="toc-text">6.4.5.1 影响记录</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-4-5-2-被授权方的变更审批记录"><span class="toc-text">6.4.5.2 被授权方的变更审批记录</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-4-5-3-功能测试，以确认该变更未对系统安全性造成不利影响"><span class="toc-text">6.4.5.3 功能测试，以确认该变更未对系统安全性造成不利影响</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-4-5-4-取消程序"><span class="toc-text">6.4.5.4 取消程序</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-4-6-完成重要变更后，须对所有新的或变更的系统和网络实施所有相关的PCI-DSS要求，并在适当情况下更新文档记录"><span class="toc-text">6.4.6 完成重要变更后，须对所有新的或变更的系统和网络实施所有相关的PCI DSS要求，并在适当情况下更新文档记录</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-5-按照以下方式处理软件流程中常见的编码漏洞"><span class="toc-text">6.5 按照以下方式处理软件流程中常见的编码漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-5-1-注入攻击"><span class="toc-text">6.5.1 注入攻击</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-5-2-缓冲区溢出"><span class="toc-text">6.5.2 缓冲区溢出</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-5-4-非安全加密存储"><span class="toc-text">6.5.4 非安全加密存储</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-5-4-非安全通信"><span class="toc-text">6.5.4 非安全通信</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-5-5-不正确的错误处理"><span class="toc-text">6.5.5  不正确的错误处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-5-6-漏洞识别流程中确认的所有“高风险”漏洞"><span class="toc-text">6.5.6 漏洞识别流程中确认的所有“高风险”漏洞</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-5-7-跨站脚本"><span class="toc-text">6.5.7 跨站脚本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-5-8-不正确的访问控制"><span class="toc-text">6.5.8 不正确的访问控制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-5-9-跨站请求伪造（CSRF）"><span class="toc-text">6.5.9 跨站请求伪造（CSRF）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6-对于面向公众的网络应用程序，应不断解决新的威胁和漏洞，并通过一下任一方法确保这些应用程序不会受到攻击"><span class="toc-text">6.6 对于面向公众的网络应用程序，应不断解决新的威胁和漏洞，并通过一下任一方法确保这些应用程序不会受到攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-7-确保已记录、正在使用且所有相关方了解用于开发和维护安全系统和应用程序的安全政策和错做程序"><span class="toc-text">6.7 确保已记录、正在使用且所有相关方了解用于开发和维护安全系统和应用程序的安全政策和错做程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#安全知识" title="安全知识">安全知识</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="https://teazmh.github.io/">Tea_Mh</a></li>
+                        
+                        <li><a href="https://zheng19970225.github.io/">让子弹飞一会</a></li>
+                        
+                        <li><a href="https://luckyjq.github.io/">LuckyQ</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/IIGHJH5O4mvbeF9?s=09">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/rao-song-63?utm_source=qq&amp;utm_medium=social">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/u/3870422953?refer_flag=1001030001_&amp;nick=RS丶从徒手开碧根果开始">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://github.com/rliyuqing">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 折戟 2019
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                     Theme by Haojen Ma
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://rliyuqing.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://upload-images.jianshu.io/upload_images/6269327-4c7992ea7ad8aea9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+<script type="text/javascript"
+color="0,0,0" opacity='0.4' zIndex="-2" count="66" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+	
+
+
+</body>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+</html>

