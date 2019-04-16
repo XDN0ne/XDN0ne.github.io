@@ -186,7 +186,7 @@
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
                 <hr>
 <h1 id="Fckeditor漏洞Getshell"><a href="#Fckeditor漏洞Getshell" class="headerlink" title="Fckeditor漏洞Getshell"></a>Fckeditor漏洞Getshell</h1><hr>
-<h2 id="测试之前"><a href="#测试之前" class="headerlink" title="测试之前"></a>测试之前</h2><p>这是一个在朋友指导之下才成功的实战，慢慢的弄清具体原理。<br>仅供学习，勿做他用！</p>
+<h2 id="测试之前"><a href="#测试之前" class="headerlink" title="测试之前"></a>测试之前</h2><p>这是一个在朋友指导之下才成功的实战，慢慢的弄清具体原理。<br>仅供学习，勿做他用！！</p>
 <h2 id="测试开始"><a href="#测试开始" class="headerlink" title="测试开始"></a>测试开始</h2><p>首先是对目标站点进行了基本的测试然后发现了存在fckeditor，fckeditor的漏洞有很多，基本asp的都被通杀了，大家可以在网上看看。首先看看编辑器的版本：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://xxxxxxx.com/fckeditor/editor/dialog/fck_about.html</span><br></pre></td></tr></table></figure></p>
 <p>查看版本信息：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-57d2504d91de9852.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="版本信息"><br>可以看到是2.6.6的版本，那就对症下药。同时提一下，查看版本的url一般有以下两种：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://xxxxxxx.com/fckeditor/editor/dialog/fck_about.html</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://xxxxxxx.com/FCKeditor/_whatsnew.html</span><br></pre></td></tr></table></figure>
