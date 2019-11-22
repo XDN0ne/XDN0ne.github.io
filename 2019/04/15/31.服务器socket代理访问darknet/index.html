@@ -21,11 +21,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        PCI-DSS(V3.2)学习笔记(四)｜R_song&#39;s blog
+        服务器socket代理访问darknet｜R_song&#39;s blog
         
     </title>
 
-    <link rel="canonical" href="https://rliyuqing.github.io/2019/04/15/17. PCI-DSS(V3.2.1)学习笔记(四)/">
+    <link rel="canonical" href="https://rliyuqing.github.io/2019/04/15/31.服务器socket代理访问darknet/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -156,7 +156,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>PCI-DSS(V3.2)学习笔记(四)</h1>
+                    <h1>服务器socket代理访问darknet</h1>
                     
                     <span class="meta">
                          作者 折戟
@@ -166,7 +166,7 @@
                     </span>
                     <div class="tags text-center">
                         
-                        <a class="tag" href="/tags/#安全知识" title="安全知识">安全知识</a>
+                        <a class="tag" href="/tags/#其他" title="其他">其他</a>
                         
                     </div>
                 </div>
@@ -175,7 +175,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            PCI-DSS(V3.2)学习笔记(四)
+            服务器socket代理访问darknet
         </span>
     </div>
 </header>
@@ -186,13 +186,13 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h2 id><a href="#" class="headerlink" title></a><meta name="referrer" content="no-referrer"></h2><h1 id="PCI-DSS-V3-2-学习笔记-四"><a href="#PCI-DSS-V3-2-学习笔记-四" class="headerlink" title="PCI-DSS(V3.2)学习笔记(四)"></a>PCI-DSS(V3.2)学习笔记(四)</h1><hr>
-<h1 id="二、保护持卡人数据"><a href="#二、保护持卡人数据" class="headerlink" title="二、保护持卡人数据"></a>二、保护持卡人数据</h1><h2 id="要求4：加密持卡人数据在开放式公共网络中的传输"><a href="#要求4：加密持卡人数据在开放式公共网络中的传输" class="headerlink" title="要求4：加密持卡人数据在开放式公共网络中的传输"></a>要求4：加密持卡人数据在开放式公共网络中的传输</h2><p>要求3针对的是存储的持卡人数据的保护措施，要求4则是持卡人数据传输过程中的安全措施。<br>如何保护传输中的持卡人数据呢，在我看来主要有两个方向，一个是建立一个安全的传输信道，或者利用第三方安全的传输信道传输持卡人数据，另一个就是对持卡人数据进行强效加密，保证就算攻击者拿到持卡人数据也无法翻译成明文。<br>我们具体来看看要求4中说的都有哪些吧。</p>
-<h3 id="4-1-使用强效加密法和安全协议来保护经由公开、公共网络传输的敏感持卡人数据。"><a href="#4-1-使用强效加密法和安全协议来保护经由公开、公共网络传输的敏感持卡人数据。" class="headerlink" title="4.1 使用强效加密法和安全协议来保护经由公开、公共网络传输的敏感持卡人数据。"></a>4.1 使用强效加密法和安全协议来保护经由公开、公共网络传输的敏感持卡人数据。</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-816f73268922fb45.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.1-1"><br><img src="https://upload-images.jianshu.io/upload_images/6269327-83bb7ab2738254b5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.1-2"><br>包括：<br>1、只接受可信任的密钥和证书<br>2、使用的协议只支持安全的版本或配置<br>3、加密强度适合所有的加密方法<br>开放式网络就是不安全的网络，这里泛指互联网，GSM，GPRS等。<br>这里就是围绕安全的信道和持卡人数据的加密来说的。我们通过一系列的方法，例如安全的协议等来构造安全的通信通道，且确保我们的配置正确，安全以及所支持的版本没有问题。<br>我们也会通过提前测试通话传输，确保传输被强效加密。强效加密我们前面也说了很多次了，但是注意我们要选取最优的加密方式，并不是加密效果越强越好，我们必须根据具体业务需要进行选择，如果一个加解密耗费三四秒，在很多地方及其影响用户体验。<br>这里特别针对TLS来说了说，最近google chrome已经对所有未加密的网站都会在地址栏上明确标记为“Not Secure”（不安全）。也就是说，如果你的网站没有采用HTTPS协议，当使用谷歌新版浏览器的用户访问网站时就会出现不安全提示。<br>另一点我们使用https的时候也要注意SSL协议的版本的安全性，确保使用安全的SSL协议的版本，使用存在漏洞版本的SSL也是极不安全的。</p>
-<h4 id="4-1-1-确保传输持卡人数据或连接到持卡人数据环境的无线网络使用行业最优方法，以及验证和传输实施强效加密"><a href="#4-1-1-确保传输持卡人数据或连接到持卡人数据环境的无线网络使用行业最优方法，以及验证和传输实施强效加密" class="headerlink" title="4.1.1 确保传输持卡人数据或连接到持卡人数据环境的无线网络使用行业最优方法，以及验证和传输实施强效加密"></a>4.1.1 确保传输持卡人数据或连接到持卡人数据环境的无线网络使用行业最优方法，以及验证和传输实施强效加密</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-72a507c6349bc050.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.1.1"><br>针对持卡人数据可能流通的网络来说，尤其是无线网络，我们确保在这个无线环境内使用了传输的验证和强效加密。<br>为什么这里要特别说一下持卡人数据环境所连接的无线网络呢，前面已经针对在开放式网络中的安全传输的要求了。很多时候我们只注意了外部不安全网络的防护，却忽略了内部的无线网络的安全，这也是我们需要注意的。如果攻击者混入内网，或者办公网，则任科员嗅探捕获我们的持卡人数据。</p>
-<h3 id="4-2-不要使用终端用户通讯技术（例如，电子邮件、即使通讯、短信、聊天等）来传送不受保护的PAN"><a href="#4-2-不要使用终端用户通讯技术（例如，电子邮件、即使通讯、短信、聊天等）来传送不受保护的PAN" class="headerlink" title="4.2 不要使用终端用户通讯技术（例如，电子邮件、即使通讯、短信、聊天等）来传送不受保护的PAN"></a>4.2 不要使用终端用户通讯技术（例如，电子邮件、即使通讯、短信、聊天等）来传送不受保护的PAN</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-8d3c093e07bb9c9f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.2"><br>结合前面的我们知道，我们必须确保在开放式网络中通过安全的信道传输未加密，未受保护的敏感数据，我们如果通过终端用户通讯技术，我们无法保证我们通讯没有被监听，捕获。<br>如果我们使用这些终端用户通讯技术，我们确保我们传输的敏感数据，比如PAN是强效加密的，以及密钥是提前安全共享的，或确保他不可读。</p>
-<h3 id="4-3-确保已记录、正在使用且所有相关方了解用于加密持卡人数据传输的安全政策和操作程序"><a href="#4-3-确保已记录、正在使用且所有相关方了解用于加密持卡人数据传输的安全政策和操作程序" class="headerlink" title="4.3 确保已记录、正在使用且所有相关方了解用于加密持卡人数据传输的安全政策和操作程序"></a>4.3 确保已记录、正在使用且所有相关方了解用于加密持卡人数据传输的安全政策和操作程序</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-7bdc0fa98040fe6a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.3"><br>和之前的要求一样，我们有这样的保护策略，就得有详细的文件记录，并确保我们所实施的和文件的统一，以及更新保护策略时即使更新文件。并且确保和此相关的所有工作人员都已经理解并学习了整个安全政策和操作流程。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>第四点要求不是很多，但是总结来说我们就是要确保我们传输的敏感数据必须在安全的信道中传输（通过安全的服务或者协议比如https），如果不能确保信道的安全，则必须使用强效的加密措施。<br>具体的第二个区域（保护持卡人数据）的两个要点也就结束了。对已存储的持卡人数据进行保护，对传输中的持卡人数据进行保护，虽然只有两个重要的环节，但是需要做的工作有很多。</p>
+                <h2 id><a href="#" class="headerlink" title></a><meta name="referrer" content="no-referrer"></h2><h1 id="服务器socket代理访问darknet"><a href="#服务器socket代理访问darknet" class="headerlink" title="服务器socket代理访问darknet"></a>服务器socket代理访问darknet</h1><hr>
+<p>[转] <a href="https://www.zhangminghao.com/post/48.html" target="_blank" rel="noopener">原文</a><br>chrome挂tor代理从darknet上下载东西是十分的慢，而且动不动就会断，速度还慢，十分难受。决定在服务器上使用wget挂代理下载，但是wget是不支持socket5的代理的，所以不能直接使用wget指定代理参数进行代理下载darkweb的文件，最后想着直接使用Proxychains工具进行终端代理。</p>
+<h2 id="工具下载与安装"><a href="#工具下载与安装" class="headerlink" title="工具下载与安装"></a>工具下载与安装</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/rofl0r/proxychains-ng.git</span><br><span class="line"><span class="built_in">cd</span> proxychains-ng</span><br><span class="line">./configure --prefix=/usr --sysconfdir=/etc</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br><span class="line">sudo make install-config</span><br></pre></td></tr></table></figure>
+<h2 id="配置Proxychains"><a href="#配置Proxychains" class="headerlink" title="配置Proxychains"></a>配置Proxychains</h2><p>修改/etc/proxychains.conf文件<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[ProxyList]</span><br><span class="line"><span class="comment"># 将代理服务器添加到此处</span></span><br><span class="line"><span class="comment"># 格式:</span></span><br><span class="line"><span class="comment">#  socks5   192.168.67.78   1080  lamer   secret</span></span><br><span class="line"><span class="comment">#  http       192.168.89.3     8080  justu    hidden</span></span><br><span class="line"><span class="comment">#  socks4   192.168.1.49     1080</span></span><br><span class="line"><span class="comment">#  http       192.168.39.93   8080</span></span><br><span class="line"><span class="comment">#  支持的代理种类: http, socks4, socks5</span></span><br><span class="line"><span class="comment">#  支持的验证模式: "basic"-http  "user/pass"-socks</span></span><br><span class="line">socks5 127.0.0.1 1080</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/6269327-57d0b82c58dd93c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h2 id="使用Proxychains"><a href="#使用Proxychains" class="headerlink" title="使用Proxychains"></a>使用Proxychains</h2><p>当前Proxychains的版本是4.11，所以编译的二进制程序名是proxychains4，按以下格式使用<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">proxychains4  wget xxxxxxx.onion/1.txt</span><br></pre></td></tr></table></figure></p>
+<p>再配合screen挂后台就行啦，这样就不怕下大文件动不动就断了。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-53ade32da0d164f0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
 
                 <hr>
                 
@@ -200,12 +200,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2019/04/15/29.python3 windows校园网自动拨号/" data-toggle="tooltip" data-placement="top" title="python3 windows校园网自动拨号">&larr; Previous Post</a>
+                        <a href="/2019/04/15/23.校园提供给第三方的接口信息泄露/" data-toggle="tooltip" data-placement="top" title="校园提供给第三方的接口信息泄露">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2019/04/15/18. PCI-DSS(V3.2.1)学习笔记(五)/" data-toggle="tooltip" data-placement="top" title="PCI-DSS(V3.2)学习笔记(五)">Next Post &rarr;</a>
+                        <a href="/2019/04/15/30.简书文章图片外链403问题/" data-toggle="tooltip" data-placement="top" title="简书文章图片外链403问题">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -221,7 +221,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text"></span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#PCI-DSS-V3-2-学习笔记-四"><span class="toc-text">PCI-DSS(V3.2)学习笔记(四)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、保护持卡人数据"><span class="toc-text">二、保护持卡人数据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#要求4：加密持卡人数据在开放式公共网络中的传输"><span class="toc-text">要求4：加密持卡人数据在开放式公共网络中的传输</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-使用强效加密法和安全协议来保护经由公开、公共网络传输的敏感持卡人数据。"><span class="toc-text">4.1 使用强效加密法和安全协议来保护经由公开、公共网络传输的敏感持卡人数据。</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-1-确保传输持卡人数据或连接到持卡人数据环境的无线网络使用行业最优方法，以及验证和传输实施强效加密"><span class="toc-text">4.1.1 确保传输持卡人数据或连接到持卡人数据环境的无线网络使用行业最优方法，以及验证和传输实施强效加密</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-不要使用终端用户通讯技术（例如，电子邮件、即使通讯、短信、聊天等）来传送不受保护的PAN"><span class="toc-text">4.2 不要使用终端用户通讯技术（例如，电子邮件、即使通讯、短信、聊天等）来传送不受保护的PAN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-确保已记录、正在使用且所有相关方了解用于加密持卡人数据传输的安全政策和操作程序"><span class="toc-text">4.3 确保已记录、正在使用且所有相关方了解用于加密持卡人数据传输的安全政策和操作程序</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text"></span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#服务器socket代理访问darknet"><span class="toc-text">服务器socket代理访问darknet</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#工具下载与安装"><span class="toc-text">工具下载与安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置Proxychains"><span class="toc-text">配置Proxychains</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Proxychains"><span class="toc-text">使用Proxychains</span></a></li></ol>
                 </li></div>
             </div>
         </div>
@@ -243,7 +243,7 @@
                     </h5>
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#安全知识" title="安全知识">安全知识</a>
+                        <a class="tag" href="/tags/#其他" title="其他">其他</a>
                         
                     </div>
                 </section>
