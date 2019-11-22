@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta name="referrer" content="no-referrer">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+    <meta name="description" content="龅牙晴在 Github 上的个人博客">
+    <meta name="keyword" content="安全，漏洞挖掘，漏洞复现">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://upload-images.jianshu.io/upload_images/6269327-54939abc2f06655f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    <link rel="alternate" type="application/atom+xml" title="折戟" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        PCI-DSS(V3.2)学习笔记(三)｜R_song&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="https://rliyuqing.github.io/2018/05/08/16. PCI-DSS(V3.2.1)学习笔记(三)/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+
+<style>
+
+    header.intro-header {
+        background-image: url('https://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    折戟
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/categories/">categories</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+<meta name="referrer" content="no-referrer">
+<!--only post-->
+
+
+<img class="wechat-title-img" src="https://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('https://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>PCI-DSS(V3.2)学习笔记(三)</h1>
+                    
+                    <span class="meta">
+                         作者 折戟
+                        <span>
+                          日期 2018-05-08
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#安全知识" title="安全知识">安全知识</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            PCI-DSS(V3.2)学习笔记(三)
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h2 id><a href="#" class="headerlink" title></a><meta name="referrer" content="no-referrer"></h2><h1 id="PCI-DSS-V3-2-学习笔记-三"><a href="#PCI-DSS-V3-2-学习笔记-三" class="headerlink" title="PCI-DSS(V3.2)学习笔记(三)"></a>PCI-DSS(V3.2)学习笔记(三)</h1><hr>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p> 下面开始学习第二个区域的要求，将会和前面两个不太一样。主要的内容是具体如何保护持卡人的数据，将会分为两个要求和多个小点：<br>3、保护存储的持卡人数据<br>4、加密持卡人数据在开放式网络中的传输<br>可以看到第二个区域讲的保护持卡人数据主要是从持卡人数据的存储和传输过程中去保护。第一个区域主要讲的则是为了保护持卡人数据而如何建立并维护这样一个安全的网络和系统。下面我们具体去看看。</p>
+<h1 id="二、保护持卡人数据"><a href="#二、保护持卡人数据" class="headerlink" title="二、保护持卡人数据"></a>二、保护持卡人数据</h1><h2 id="要求3：保护存储的持卡人数据"><a href="#要求3：保护存储的持卡人数据" class="headerlink" title="要求3：保护存储的持卡人数据"></a>要求3：保护存储的持卡人数据</h2><p>这里主要针对的是已经存储的持卡人数据。对于这些数据我们可以通过加密或者hash的方法进行处理之后再存储。这里就涉及到很多真是的案例了，前几年爆出的很多大厂被脱裤，导致大量用户的信息或者账号密码泄露，更可怕的是很多的公司都是明文存储用户的密码。我们知道对于密码这样的个人隐私数据，应该是加密之后存储到数据库中，这样才能确保只有用户自己才知道这个密码。<br>还有很多其他措施，比如能不存储就不存储，因为每多一次存储就多一个可能被攻击的点。还有截词存储等。说起截词存储让我想起了大二做的一个项目，是一个密码记录的软件。当时因为很多原因碰到了密码负担导致的种种安全隐患，于是想做一款密码本的app，其中就用到了截词存储这样的想法。</p>
+<h3 id="3-1-通过实施数据保留和处理政策、程序和流程最大限度地减少持卡人数据存储。"><a href="#3-1-通过实施数据保留和处理政策、程序和流程最大限度地减少持卡人数据存储。" class="headerlink" title="3.1 通过实施数据保留和处理政策、程序和流程最大限度地减少持卡人数据存储。"></a>3.1 通过实施数据保留和处理政策、程序和流程最大限度地减少持卡人数据存储。</h3><p>对所有持卡人数据（CHD）存储而言，这些政策、程序和流程至少包含以下方面：<br>1、将数据存储量和保存时间限制在法律、法规或业务要求内<br>2、持卡人数据的具体保留要求<br>3、不在需要时安全删除数据的流程<br>4、按季度查找并安全删除所存储的超过规定保留期限的持卡人数据的流程<br><img src="https://upload-images.jianshu.io/upload_images/6269327-a78f94620512bdd7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.1-1"><br><img src="https://upload-images.jianshu.io/upload_images/6269327-93e7fe523358e229.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.1-2"><br>简而言之就是我们需要有一系列的流程来记录我们哪里存储了持卡人数据，存储了什么，存储多久。确保所有存储了这些数据的我们都有记录。其次就是定期按照记录的要求删除掉那些过期或者提前不被需要的持卡人数据，或者延长保存等。反正就是我们对于存储这些持卡人数据得有规定的处理和检查流程。然后就是上面也说到的能不存储就不存储！</p>
+<h3 id="3-2-授权之后，不要存储敏感验证数据（即使已加密）。如果收到敏感验证数据，在完成授权流程之后使所有数据不可恢复。"><a href="#3-2-授权之后，不要存储敏感验证数据（即使已加密）。如果收到敏感验证数据，在完成授权流程之后使所有数据不可恢复。" class="headerlink" title="3.2 授权之后，不要存储敏感验证数据（即使已加密）。如果收到敏感验证数据，在完成授权流程之后使所有数据不可恢复。"></a>3.2 授权之后，不要存储敏感验证数据（即使已加密）。如果收到敏感验证数据，在完成授权流程之后使所有数据不可恢复。</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-8a73382cf10c50c5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.2-1"><br><img src="https://upload-images.jianshu.io/upload_images/6269327-33ae2c06bd2aa987.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.2-2"><br>对于敏感的验证数据，攻击者通过获取这个数据便可以利用这个验证数据进行身份的伪造等，比如伪造发行公司发行的用户卡。所以我们经过授权之后获得了敏感验证数据，就算加密了（因为很多时候攻击者不需要解密，比如重新提交进行）我们也不能存储这些数据。授权之后应立马删除这些验证数据，授权之前收到就在完成授权之后立马删除，不可恢复。<br>如果我们存在保存了敏感验证数据的系统设备，我们必须要核实这里的确是被业务或其他不可避原因所要求，我们也要有相应的记录，且保证有相关的符合PCI DSS策略的安全保护措施。<br>我们千万不可因为图便利就随意存储这些敏感验证数据！敏感衍生数据的唯一性才能保证我们发卡行的权威性，如果这个数据可以被窃取，攻击者便可以随意伪造。</p>
+<h4 id="3-2-1-切勿在授权后存储卡片背面磁条上任何磁道的完整内容、芯片或其他地方那个上的等效数据。此类数据也可称未全磁道、磁道、磁道1、磁道2和磁条数据"><a href="#3-2-1-切勿在授权后存储卡片背面磁条上任何磁道的完整内容、芯片或其他地方那个上的等效数据。此类数据也可称未全磁道、磁道、磁道1、磁道2和磁条数据" class="headerlink" title="3.2.1 切勿在授权后存储卡片背面磁条上任何磁道的完整内容、芯片或其他地方那个上的等效数据。此类数据也可称未全磁道、磁道、磁道1、磁道2和磁条数据"></a>3.2.1 切勿在授权后存储卡片背面磁条上任何磁道的完整内容、芯片或其他地方那个上的等效数据。此类数据也可称未全磁道、磁道、磁道1、磁道2和磁条数据</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-8a393ecdd64e5238.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.2.1"><br>这里就是针对发行卡片的磁道数据来说的，我们不能存储磁道里面的完整内容，在业务需要的情况只能记录磁道数据中的某些内容，比如持卡人姓名，PAN等小部分数据。<br>如果我们记录了卡片所有的磁道数据，被攻击者获取之后，攻击着可以轻松的复制这张卡片进行伪造的欺骗性交易。</p>
+<h4 id="3-2-3-授权后，请勿存储个人识别码（PIN）或经过加密的PIN数据块"><a href="#3-2-3-授权后，请勿存储个人识别码（PIN）或经过加密的PIN数据块" class="headerlink" title="3.2.3 授权后，请勿存储个人识别码（PIN）或经过加密的PIN数据块"></a>3.2.3 授权后，请勿存储个人识别码（PIN）或经过加密的PIN数据块</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-d7789beebb21fc85.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.2.3"><br>包括sim卡或者电脑都有PIN码，这是个人识别码，机密等级应该很高，只有我们自己和发卡行所知道，如果这个密码被人窃取也很容易被攻击。所以我们在授权之后不能存储任何关于PIN的信息。就像我们的银行卡密码被人知道了，再知道你的卡号就可以取走你的钱款。</p>
+<h4 id="3-2-3-显示PAN时予以掩盖（最多显示前六位和后四位数字），以便仅限具有正当业务需要和工作人员查看除前六位和后四位以外的PAN"><a href="#3-2-3-显示PAN时予以掩盖（最多显示前六位和后四位数字），以便仅限具有正当业务需要和工作人员查看除前六位和后四位以外的PAN" class="headerlink" title="3.2.3 显示PAN时予以掩盖（最多显示前六位和后四位数字），以便仅限具有正当业务需要和工作人员查看除前六位和后四位以外的PAN"></a>3.2.3 显示PAN时予以掩盖（最多显示前六位和后四位数字），以便仅限具有正当业务需要和工作人员查看除前六位和后四位以外的PAN</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-363ddb952adab072.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.2.3"><br>这里通过截词的方式保护PAN码，这里根据PAN的长度等特性规定只显示前六位或者后四位，我们根据不同的数据可以更改要求。我们确保PAN的完整数据只有被明确授权的工作人员才可以查看，其他的默认显示的都是被截词之后的  PAN。</p>
+<h3 id="3-4-通过采取下列任一方法使所有位置（包括便携式数字媒介上，备份媒介上和日志中）存储的PAN均不可读："><a href="#3-4-通过采取下列任一方法使所有位置（包括便携式数字媒介上，备份媒介上和日志中）存储的PAN均不可读：" class="headerlink" title="3.4 通过采取下列任一方法使所有位置（包括便携式数字媒介上，备份媒介上和日志中）存储的PAN均不可读："></a>3.4 通过采取下列任一方法使所有位置（包括便携式数字媒介上，备份媒介上和日志中）存储的PAN均不可读：</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-9729cea402836c98.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.4-1"><br><img src="https://upload-images.jianshu.io/upload_images/6269327-a12e75f6a22caf7b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.4-2"><br>这里相当于上对上面的PAN截词方法的安全性强调了。除了截词这里也说了也可以用强效的加密方法，比如强效密码的hash等。但是如果我们的hash的算法比较简单，且可被攻击者获取，以及获取截词之后的 PAN，攻击者可以通过很多方法复原这个PAN。所以不仅仅是要在这个是PAN的显示或者存储上进行处理，我们还要对他的访问权限进行管理，比如默认不可读。还有就是对PAN的hash和截词版本不能有关联，防止被重建。</p>
+<h4 id="3-4-1-如使用磁盘加密（而不是文件级或列级数据库加密），则逻辑访问必须得到单独管理并独立于本地操作系统的验证和访问控制机制-（例如，不使用本地用户账户数据库或通用网络登录凭证）。解密密钥决不能与用户账户关联。"><a href="#3-4-1-如使用磁盘加密（而不是文件级或列级数据库加密），则逻辑访问必须得到单独管理并独立于本地操作系统的验证和访问控制机制-（例如，不使用本地用户账户数据库或通用网络登录凭证）。解密密钥决不能与用户账户关联。" class="headerlink" title="3.4.1 如使用磁盘加密（而不是文件级或列级数据库加密），则逻辑访问必须得到单独管理并独立于本地操作系统的验证和访问控制机制 （例如，不使用本地用户账户数据库或通用网络登录凭证）。解密密钥决不能与用户账户关联。"></a>3.4.1 如使用磁盘加密（而不是文件级或列级数据库加密），则逻辑访问必须得到单独管理并独立于本地操作系统的验证和访问控制机制 （例如，不使用本地用户账户数据库或通用网络登录凭证）。解密密钥决不能与用户账户关联。</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-4be199ce86fe4154.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.4.1"><br>这里的意思就是说，对于磁盘加密使用的验证机制不能和他所在的操作系统的验证机制一样。举个例子，比如我们对这个磁盘进行了加密，密钥的凭证就是服务器用户的凭证，这样就是违反了这条标准的。我们要确保磁盘加密的验证机制是独立于操作系统以及操作系统内部这些服务的验证机制之外的。<br>这个一般应用于可移动设备，防止硬件丢失被窃取数据信息。</p>
+<h3 id="3-5-记录并实施保护程序，以保护用于防止存储的持卡人数据被泄露和滥用的密钥："><a href="#3-5-记录并实施保护程序，以保护用于防止存储的持卡人数据被泄露和滥用的密钥：" class="headerlink" title="3.5 记录并实施保护程序，以保护用于防止存储的持卡人数据被泄露和滥用的密钥："></a>3.5 记录并实施保护程序，以保护用于防止存储的持卡人数据被泄露和滥用的密钥：</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-455b379c6b5eb4fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.5"><br>这里强调的是保护持卡人数据的加密等方式的密钥，就是我们已经用锁将我们的敏感信息锁起来了，那么我们拥有这个打开锁的钥匙，我们就要保护好这个钥匙了。我们要保证这个密钥的管理使用都是有规范程序的，有记录的确保不会被滥用。</p>
+<h4 id="3-5-1-仅针对服务商的额外要求：维护包含以下内容的加密架构文档描述："><a href="#3-5-1-仅针对服务商的额外要求：维护包含以下内容的加密架构文档描述：" class="headerlink" title="3.5.1 仅针对服务商的额外要求：维护包含以下内容的加密架构文档描述："></a>3.5.1 仅针对服务商的额外要求：维护包含以下内容的加密架构文档描述：</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-c35d5677b34d1e4e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.5.1"><br>维护包含以下内容的加密架构文档描述：<br>1、用于保护持卡人数据的所有算法、协议和密钥的详情，包括密钥强度和到期日<br>2、每个密钥只要用途的说明<br>3、用于进行密钥管理的任何HSM和其他SCD的清单<br>这里是对加密服务提供商来说的要求，必须有一个维护加密体系的一个文档，包括使用的算法，协议之类的内容，以及密钥的用途说明等，都得有详细的记录。这样方便使用这个加密服务的客户了解整个体系，并可根据不同业务情况去完善或者删减这个架构体系，以及后期的检测。</p>
+<h4 id="3-5-2-仅极少数必须的保管人有密钥的访问权"><a href="#3-5-2-仅极少数必须的保管人有密钥的访问权" class="headerlink" title="3.5.2 仅极少数必须的保管人有密钥的访问权"></a>3.5.2 仅极少数必须的保管人有密钥的访问权</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-a37c5374c80fb082.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.5.2"><br>这个很容易理解，越少人知道才是越安全的。越少人拥有着密钥的访问权，我们便可更加方便的保护这个密钥，也更方便监控和管理。这让我想起了之前的一个矿机公司的eth被盗的事件，当时考虑了很多情况，最后发现是内部人员将服务器的密码记录在了第三方的云笔记软件当中，最后被窃取，导致eth被窃取。这么多服务器密码在一个人手里，安全意识是一方面，最重要的是密码应该只掌握在少数重要的保管人手里，有时为了安全，甚至必须几人保管一个密码。</p>
+<h4 id="3-5-3-存储用于始终以下面的一种（或多种）形式加密-解密持卡人数据的机密密钥和私人密钥"><a href="#3-5-3-存储用于始终以下面的一种（或多种）形式加密-解密持卡人数据的机密密钥和私人密钥" class="headerlink" title="3.5.3 存储用于始终以下面的一种（或多种）形式加密/解密持卡人数据的机密密钥和私人密钥"></a>3.5.3 存储用于始终以下面的一种（或多种）形式加密/解密持卡人数据的机密密钥和私人密钥</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-4a3cf999fb7fda79.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.5.3"><br>1、使用至少与数据加密密钥一样强效且与数据加密密钥分开存储的密钥加密密钥进行加密<br>2、在安全加密设备（例如，硬件（主机）安全模块（HSM）或PTS批准的交互点设备）内<br>3、根据行业认可的方法，作为至少两个全长密钥组分或密钥共享<br>这里同样是一个持卡人数据机密密钥的安全存储要求。我们对于这个加密了持卡人数据的密钥也得用同一安全等级来保护。这里讲了几个方法，主要就是说同一安全等级，同时<br>两个密钥要分开存储，不然加密就没意义了，还有密钥组之类的方法。</p>
+<h4 id="3-5-4-尽量减少密钥存储的地方"><a href="#3-5-4-尽量减少密钥存储的地方" class="headerlink" title="3.5.4 尽量减少密钥存储的地方"></a>3.5.4 尽量减少密钥存储的地方</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-8fbc949c12244a22.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.5.4"><br>这个和前面的减少有密钥访问权的人一样，越少的地方存储着密钥，我就可以用更好的，更全面，更快速的措施去保护这个密钥。便于控制以及降低安全隐患。</p>
+<h3 id="3-6-充分记录并实施用于持卡人数据加密的所有秘钥管理流程和程序"><a href="#3-6-充分记录并实施用于持卡人数据加密的所有秘钥管理流程和程序" class="headerlink" title="3.6 充分记录并实施用于持卡人数据加密的所有秘钥管理流程和程序"></a>3.6 充分记录并实施用于持卡人数据加密的所有秘钥管理流程和程序</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-7d554415965b9e1b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.6"><br>简单概括就是把密钥的管理流程化，有记录有规定的流程。密钥的管理方式是确保我们加密方案持续安全的关键部分。进入密钥的管理漏洞百出，就算我们的加密方式再完善也只是形同虚设。</p>
+<h4 id="3-6-1-生成强效密钥"><a href="#3-6-1-生成强效密钥" class="headerlink" title="3.6.1 生成强效密钥"></a>3.6.1 生成强效密钥</h4><h4 id="3-6-2-安全的密钥分配"><a href="#3-6-2-安全的密钥分配" class="headerlink" title="3.6.2 安全的密钥分配"></a>3.6.2 安全的密钥分配</h4><h4 id="3-6-3-安全的密钥存储"><a href="#3-6-3-安全的密钥存储" class="headerlink" title="3.6.3 安全的密钥存储"></a>3.6.3 安全的密钥存储</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-e0099647bd3ebe8f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.6.1-3.6.3"><br>对于用于加密持卡人数据的密钥，我们需要做到这些流程，先说说上面这三个吧：<br>生成强效的密钥–&gt;安全的密钥分配–&gt;安全的密钥存储<br>对于密钥的管理程序来说我们首先按强效的算法生成强效的密钥，在密钥的分配中骂我们确保密钥通过安全的方式传送到密钥的保管人手中，最后在密钥的安全存储中，我们可通过在加密等方式进行安全加密存储。<br>这三个从生成，分配，存储来说明密钥的安全管理，之前说到的ETH公司被窃的事件，就是出在了密钥的存储环节，当然可能密钥的分配可能也有问题，但是最主要的还是密钥的存储。</p>
+<h4 id="3-6-4-根据相关应用程序供应商或密钥所有人的规定并基于行业最优方法和指南（例如《NIST特别出版物800-57》），在密钥周期结束时（例如，指定期限过后或给定密钥产生一定量的密文后）对面要进行变更"><a href="#3-6-4-根据相关应用程序供应商或密钥所有人的规定并基于行业最优方法和指南（例如《NIST特别出版物800-57》），在密钥周期结束时（例如，指定期限过后或给定密钥产生一定量的密文后）对面要进行变更" class="headerlink" title="3.6.4 根据相关应用程序供应商或密钥所有人的规定并基于行业最优方法和指南（例如《NIST特别出版物800-57》），在密钥周期结束时（例如，指定期限过后或给定密钥产生一定量的密文后）对面要进行变更"></a>3.6.4 根据相关应用程序供应商或密钥所有人的规定并基于行业最优方法和指南（例如《NIST特别出版物800-57》），在密钥周期结束时（例如，指定期限过后或给定密钥产生一定量的密文后）对面要进行变更</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-fc3fef199f156cbc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.6.4-1"><br><img src="https://upload-images.jianshu.io/upload_images/6269327-4815e82d1e5851ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.6.4-2"><br>这个要求的意思就是根据一些行业的最优指南，我们需要定期对密钥进行变更。不仅仅是当密钥周期到的时候还有很多时候，比如某些掌握密钥的员工离职或者某些密钥上的数学难题被攻破等等，这个时候我们也要根据相关文件的最优方法更新一个安全的密钥。</p>
+<h4 id="3-6-5-密钥的完整性变弱（列入，知道明文密钥部分的员工离职）或怀疑密码遭受威胁时，认为有必要注销或替换（例如，存档、销毁或撤销）密钥。"><a href="#3-6-5-密钥的完整性变弱（列入，知道明文密钥部分的员工离职）或怀疑密码遭受威胁时，认为有必要注销或替换（例如，存档、销毁或撤销）密钥。" class="headerlink" title="3.6.5 密钥的完整性变弱（列入，知道明文密钥部分的员工离职）或怀疑密码遭受威胁时，认为有必要注销或替换（例如，存档、销毁或撤销）密钥。"></a>3.6.5 密钥的完整性变弱（列入，知道明文密钥部分的员工离职）或怀疑密码遭受威胁时，认为有必要注销或替换（例如，存档、销毁或撤销）密钥。</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-63bbbfb4261957bc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.6.5"><br>这算是对上面一个要求的补充，当密钥的完整性变弱，比如使用密钥组的方案存储密钥时，如果某个部分被泄露，这时候虽然完整的密钥没有，但是风险上升了，总而言之就是我们密钥被窃取的风险上升的时候，就应该根据情况对密钥进行注销，更改等操作。</p>
+<h4 id="3-6-6-若使用手动明文密钥管理操作，则必须使用分割知识和双重控制来管理这些操作"><a href="#3-6-6-若使用手动明文密钥管理操作，则必须使用分割知识和双重控制来管理这些操作" class="headerlink" title="3.6.6 若使用手动明文密钥管理操作，则必须使用分割知识和双重控制来管理这些操作"></a>3.6.6 若使用手动明文密钥管理操作，则必须使用分割知识和双重控制来管理这些操作</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-a3bac505352a794e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.6.6-1"><br><img src="https://upload-images.jianshu.io/upload_images/6269327-87374bbb68610360.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.6.6-2"><br>这里主要说的就是密钥管理的分割和双重控制方法，前面也说过密钥组，对密钥进行分组的方法。但是这里讲的是对明文密钥的管理方法。明文密钥的泄露风险相对于密文来说肯定相对更大，这时候结合分割和双重控制的思想就可以更加安全的保护密钥。<br>分割和双重控制的方法也很好理解，分割密钥分给多人分别管理，同时保证双方无法访问对方的密钥。很多时候还会有多重控制的结合。</p>
+<h4 id="3-6-7-防止密钥的非授权替换"><a href="#3-6-7-防止密钥的非授权替换" class="headerlink" title="3.6.7 防止密钥的非授权替换"></a>3.6.7 防止密钥的非授权替换</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-47411dca96467df4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.6.7"><br>前面都说了怎么防止密钥的泄露等等，但是如果用户无法窃取我们的密钥，但是也会存在攻击者覆盖上传更改密钥的可能，这里就要保证我们的密钥的更改或者删减等有明确的授权，才能进行操作。覆盖上传，或者增加密钥在很多地方也是会出现得到，所以也是安全防护的一个重点。</p>
+<h4 id="3-6-8-有关密钥保管人正式确认理解并接受密钥保管责任的要求"><a href="#3-6-8-有关密钥保管人正式确认理解并接受密钥保管责任的要求" class="headerlink" title="3.6.8 有关密钥保管人正式确认理解并接受密钥保管责任的要求"></a>3.6.8 有关密钥保管人正式确认理解并接受密钥保管责任的要求</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-bbb940493367eac1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.6.8"><br>我们制定了密钥的体系流程，我们得实施到具体人员上面，确保每个密钥保管人已经学习，了解这个流程。</p>
+<h3 id="3-7-确保已记录、正在使用且所有相关方了解用于保护存储持卡人数据的安全政策和操作程序"><a href="#3-7-确保已记录、正在使用且所有相关方了解用于保护存储持卡人数据的安全政策和操作程序" class="headerlink" title="3.7 确保已记录、正在使用且所有相关方了解用于保护存储持卡人数据的安全政策和操作程序"></a>3.7 确保已记录、正在使用且所有相关方了解用于保护存储持卡人数据的安全政策和操作程序</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-d59ed3b142080bc0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3.7"><br>对这些保护持卡人数据的安全政策和操作程序，我们有具体的记录，并且让正在使用的相关方，工作人员理解，学习这个安全政策和操作程序。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>昨天因为体侧，回来看了一半就累的躺下了，所以今天才写完。这第三个要求讲的就是如何保护存储的持卡人数据，包括加密存储，以及加密过后密钥的管理体系等等。最重要的就是加密存储持卡人数据和密钥的管理两个方面了，很多其他公司都可以借鉴。</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2018/05/14/17. PCI-DSS(V3.2.1)学习笔记(四)/" data-toggle="tooltip" data-placement="top" title="PCI-DSS(V3.2)学习笔记(四)">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2018/04/27/15. PCI-DSS(V3.2.1)学习笔记(二)/" data-toggle="tooltip" data-placement="top" title="PCI-DSS(V3.2)学习笔记(二)">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text"></span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#PCI-DSS-V3-2-学习笔记-三"><span class="toc-text">PCI-DSS(V3.2)学习笔记(三)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、保护持卡人数据"><span class="toc-text">二、保护持卡人数据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#要求3：保护存储的持卡人数据"><span class="toc-text">要求3：保护存储的持卡人数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-通过实施数据保留和处理政策、程序和流程最大限度地减少持卡人数据存储。"><span class="toc-text">3.1 通过实施数据保留和处理政策、程序和流程最大限度地减少持卡人数据存储。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-授权之后，不要存储敏感验证数据（即使已加密）。如果收到敏感验证数据，在完成授权流程之后使所有数据不可恢复。"><span class="toc-text">3.2 授权之后，不要存储敏感验证数据（即使已加密）。如果收到敏感验证数据，在完成授权流程之后使所有数据不可恢复。</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-1-切勿在授权后存储卡片背面磁条上任何磁道的完整内容、芯片或其他地方那个上的等效数据。此类数据也可称未全磁道、磁道、磁道1、磁道2和磁条数据"><span class="toc-text">3.2.1 切勿在授权后存储卡片背面磁条上任何磁道的完整内容、芯片或其他地方那个上的等效数据。此类数据也可称未全磁道、磁道、磁道1、磁道2和磁条数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-3-授权后，请勿存储个人识别码（PIN）或经过加密的PIN数据块"><span class="toc-text">3.2.3 授权后，请勿存储个人识别码（PIN）或经过加密的PIN数据块</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-3-显示PAN时予以掩盖（最多显示前六位和后四位数字），以便仅限具有正当业务需要和工作人员查看除前六位和后四位以外的PAN"><span class="toc-text">3.2.3 显示PAN时予以掩盖（最多显示前六位和后四位数字），以便仅限具有正当业务需要和工作人员查看除前六位和后四位以外的PAN</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-通过采取下列任一方法使所有位置（包括便携式数字媒介上，备份媒介上和日志中）存储的PAN均不可读："><span class="toc-text">3.4 通过采取下列任一方法使所有位置（包括便携式数字媒介上，备份媒介上和日志中）存储的PAN均不可读：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-1-如使用磁盘加密（而不是文件级或列级数据库加密），则逻辑访问必须得到单独管理并独立于本地操作系统的验证和访问控制机制-（例如，不使用本地用户账户数据库或通用网络登录凭证）。解密密钥决不能与用户账户关联。"><span class="toc-text">3.4.1 如使用磁盘加密（而不是文件级或列级数据库加密），则逻辑访问必须得到单独管理并独立于本地操作系统的验证和访问控制机制 （例如，不使用本地用户账户数据库或通用网络登录凭证）。解密密钥决不能与用户账户关联。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-记录并实施保护程序，以保护用于防止存储的持卡人数据被泄露和滥用的密钥："><span class="toc-text">3.5 记录并实施保护程序，以保护用于防止存储的持卡人数据被泄露和滥用的密钥：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5-1-仅针对服务商的额外要求：维护包含以下内容的加密架构文档描述："><span class="toc-text">3.5.1 仅针对服务商的额外要求：维护包含以下内容的加密架构文档描述：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5-2-仅极少数必须的保管人有密钥的访问权"><span class="toc-text">3.5.2 仅极少数必须的保管人有密钥的访问权</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5-3-存储用于始终以下面的一种（或多种）形式加密-解密持卡人数据的机密密钥和私人密钥"><span class="toc-text">3.5.3 存储用于始终以下面的一种（或多种）形式加密/解密持卡人数据的机密密钥和私人密钥</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5-4-尽量减少密钥存储的地方"><span class="toc-text">3.5.4 尽量减少密钥存储的地方</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-充分记录并实施用于持卡人数据加密的所有秘钥管理流程和程序"><span class="toc-text">3.6 充分记录并实施用于持卡人数据加密的所有秘钥管理流程和程序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-1-生成强效密钥"><span class="toc-text">3.6.1 生成强效密钥</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-2-安全的密钥分配"><span class="toc-text">3.6.2 安全的密钥分配</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-3-安全的密钥存储"><span class="toc-text">3.6.3 安全的密钥存储</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-4-根据相关应用程序供应商或密钥所有人的规定并基于行业最优方法和指南（例如《NIST特别出版物800-57》），在密钥周期结束时（例如，指定期限过后或给定密钥产生一定量的密文后）对面要进行变更"><span class="toc-text">3.6.4 根据相关应用程序供应商或密钥所有人的规定并基于行业最优方法和指南（例如《NIST特别出版物800-57》），在密钥周期结束时（例如，指定期限过后或给定密钥产生一定量的密文后）对面要进行变更</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-5-密钥的完整性变弱（列入，知道明文密钥部分的员工离职）或怀疑密码遭受威胁时，认为有必要注销或替换（例如，存档、销毁或撤销）密钥。"><span class="toc-text">3.6.5 密钥的完整性变弱（列入，知道明文密钥部分的员工离职）或怀疑密码遭受威胁时，认为有必要注销或替换（例如，存档、销毁或撤销）密钥。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-6-若使用手动明文密钥管理操作，则必须使用分割知识和双重控制来管理这些操作"><span class="toc-text">3.6.6 若使用手动明文密钥管理操作，则必须使用分割知识和双重控制来管理这些操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-7-防止密钥的非授权替换"><span class="toc-text">3.6.7 防止密钥的非授权替换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-8-有关密钥保管人正式确认理解并接受密钥保管责任的要求"><span class="toc-text">3.6.8 有关密钥保管人正式确认理解并接受密钥保管责任的要求</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-确保已记录、正在使用且所有相关方了解用于保护存储持卡人数据的安全政策和操作程序"><span class="toc-text">3.7 确保已记录、正在使用且所有相关方了解用于保护存储持卡人数据的安全政策和操作程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+                </li></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#安全知识" title="安全知识">安全知识</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="https://teazmh.github.io/">Tea_Mh</a></li>
+                        
+                        <li><a href="https://zheng19970225.github.io/">让子弹飞一会</a></li>
+                        
+                        <li><a href="https://luckyjq.github.io/">LuckyQ</a></li>
+                        
+                        <li><a href="https://blog.littleghost.ml">LittleGhost</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/IIGHJH5O4mvbeF9?s=09">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/rao-song-63?utm_source=qq&amp;utm_medium=social">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/u/3870422953?refer_flag=1001030001_&amp;nick=RS丶从徒手开碧根果开始">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://github.com/rliyuqing">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 折戟 2019
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                     Theme by Haojen Ma
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://rliyuqing.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="https://upload-images.jianshu.io/upload_images/6269327-4c7992ea7ad8aea9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+<script type="text/javascript"
+color="0,0,0" opacity='0.4' zIndex="-2" count="66" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+
+
+
+</body>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+</html>
