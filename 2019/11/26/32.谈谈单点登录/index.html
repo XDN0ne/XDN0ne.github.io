@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta name="referrer" content="no-referrer">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+    <meta name="description" content="龅牙晴在 Github 上的个人博客">
+    <meta name="keyword" content="安全，漏洞挖掘，漏洞复现">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://upload-images.jianshu.io/upload_images/6269327-54939abc2f06655f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    <link rel="alternate" type="application/atom+xml" title="折戟" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        谈谈单点登录｜R_song&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="https://rliyuqing.github.io/2019/11/26/32.谈谈单点登录/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+
+<style>
+
+    header.intro-header {
+        background-image: url('https://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    折戟
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+								
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/categories/">categories</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+						<li>
+							<a href="/about">About</a>
+						</li>
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+<meta name="referrer" content="no-referrer">
+<!--only post-->
+
+
+<img class="wechat-title-img" src="https://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('https://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>谈谈单点登录</h1>
+                    
+                    <span class="meta">
+                         作者 折戟
+                        <span>
+                          日期 2019-11-26
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#安全知识" title="安全知识">安全知识</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            谈谈单点登录
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h2 id><a href="#" class="headerlink" title></a><meta name="referrer" content="no-referrer"></h2><h1 id="谈谈单点登录"><a href="#谈谈单点登录" class="headerlink" title="谈谈单点登录"></a>谈谈单点登录</h1><hr>
+<p>寒假学习的小课题，把之前的笔记整理整理记录一下（长文警告）因为当时看到的东西涉及很多，所以有一些地方没有深入去探讨。</p>
+<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><ul>
+<li>围绕“单点登录”，涉及到的概念会有radius jwt oauth openid saml sso等。</li>
+<li>结合场景分析单点登录，并把几个似是而非的场景弄清楚。</li>
+<li>以单点登录这个话题为开端和核心，向相关知识扩展。<h1 id="什么是单点登录（SSO）？"><a href="#什么是单点登录（SSO）？" class="headerlink" title="什么是单点登录（SSO）？"></a>什么是单点登录（SSO）？</h1>百度百科：单点登录（Single Sign On），简称为 SSO，是目前比较流行的企业业务整合的解决方案之一。SSO的定义是在多个应用系统中，用户只需要登录一次就可以访问所有相互信任的应用系统。<br>简而言之就是用户在多个相互信任的应用系统中，只需要登录一次，就可以访问其他相互信任的应用系统。这里的关键是一次登录，以及一次退出，都对所有的系统生效。<h1 id="普通登录"><a href="#普通登录" class="headerlink" title="普通登录"></a>普通登录</h1>在普通的登录中，比如典型的B/S情景，浏览器访问服务器，发送登录请求，在发送完用户名和密码之后，服务器会生成该用户的session来标准该用户的状态，比如已登录还是已注销，并给一个cookie给浏览器，因此，用户继续访问就会带上这个cookies，服务端会根据这个Cookie找到对应的session，通过session来判断这个用户的登录状态。比如php中使用phpsessid。当然也可以自定义session的生命周期，session的生命周期过长的话一旦session被盗用就会出现用户被窃取的情况。同时，生命周期过长的session配置会占用较多的服务器资源。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-47eb73afa35f8fe9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="php sessionid"><h1 id="单点登录的原理以及实现"><a href="#单点登录的原理以及实现" class="headerlink" title="单点登录的原理以及实现"></a>单点登录的原理以及实现</h1>单点登录主要针对同平台下多应用，多系统的情景下多次登录的一种解决方案。单点登录相当于将多个应用的认证体系联通。<br>假设现在一个平台上有3个都带有登录功能的应用，由上面的普通登录的情况可以想到，这3台服务器都会自己的记录session。那么要想达到单点登录，一个最简单的方法就出现了：共享session。<h2 id="共享session"><a href="#共享session" class="headerlink" title="共享session"></a>共享session</h2>共享session的方式来实现单点登录是最方便也是最直接的。在三个子系统中，使用同一个额外的记录session的服务器，比如我们可以使用一个redis服务器来存储三个系统的session。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-77efe1037b91e20d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="共享session"><br>用户登录了应用1，获取了应用1返回的cookies，再次访问应用1的其他功能的候携带了cookie就是已登录的状态了，但是这样又有新的问题，虽然实现了共享session，但是用户登录了应用1，获取了应用1返回的cookie，但是因为cookie是无法跨域的，因此用户无法使用应用1的cookie去访问应用2。这里我们就需要将系统的全局cookie domain的属性设置为顶级域名，比如应用1的域名是1.test.com，应用2的域名是2.test.com。在普通登录的情况下，应用1的cookie domain的属性是1.test.com，指这个cookie只能在该子域名上被使用。我们将系统的全局cookie domain设置为顶级域名，即.test.com，这样就可以实现用户登录了应用1，之后可以以已登录状态访问应用2和3。<br>上面的共享session的情况是三个应用都有登录功能，还有一种类似的情况是应用1和应用2都有登录模块和其他模块，还有一个单独的SSO系统，是仅有登录模块的：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-e9e9d376cc281abc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="共享session"><br>这种情况和上面很类似，同样是共享session的方式，SSO应用只提供登录服务，但是这里有一点不一样，一般情况下是将SSO应用的cookies设为顶级域名下，这样保证用户只有通过登录SSO之后才能访问其他应用，而不是随便登录一个系统就能登录平台内所有其他系统。这种情况的现象就是，通过各应用单独的模块登录只能访问该应用，通过SSO登录可以访问所有的应用。<br>还有一种情况是，所有应用都没有登录模块，而SSO仅提供登录模块。访问其他应用会自动跳转到SSO应用上，但这不是共享session的方式，下面会分析到。<br>共享session的方法虽然简单，但是存在局限性，因为使用了cookie顶域的特性，所以不能做到跨域。一个公司或者一个平台很可能不是所有的域名都在在一个一级域名之下的，所以同域名下的单点登录并不是完整的单点登录。<h2 id="基于openid的单点登录"><a href="#基于openid的单点登录" class="headerlink" title="基于openid的单点登录"></a>基于openid的单点登录</h2>先说说openid，openid是一种认证标准，规定如何认证的标准！即其关注的是登录时身份的认证。官方给出的一个场景，其中一方是一个openid身份服务器，用来存放注册好的openid账号，另一方是受这个openid身份服务器信赖的服务或应用。openid协议就是提供openid身份服务器和被信赖的服务或应用之间的通信的。比如我们在很多网站上可以使用QQ登录，这里的腾讯的QQ就是openid的身份服务器，我们所要登录的网站就是受信赖的服务或应用。<br>在使用openid实现单点登录的方法有很多，可以使用上面共享session的方法，即把openid带在cookie里面，但是这样也会出现一样的cookie跨域的问题。<br>在实际场景中，我们在访问提供服务的应用时检测到未登录就会直接跳转到openid身份服务器，或者没有重定向而是在登录表单附近点击选择使用第三方openid登录，进行账号密码登录（这可以保证我们所登录的服务器无法获取我们的敏感身份认证信息），具体流程如下：w<br><img src="https://upload-images.jianshu.io/upload_images/6269327-7c99347e7e212fc2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="OpenID"><br>上图是一次用户请求应用到完成认证的过程，简单总计一下就是：用户访问应用–&gt;应用重定向到认证服务器–&gt;用户在认证服务器进行登录–&gt;登录成功后携带一个认证信息重定向会原来的应用（如<a href="http://1.test.com?token=123456）--&gt;应用把这个token又发送到认证服务器进行验证--&gt;认证服务器确认信息无误后就响应用户的请求并写入cookie。" target="_blank" rel="noopener">http://1.test.com?token=123456）--&gt;应用把这个token又发送到认证服务器进行验证--&gt;认证服务器确认信息无误后就响应用户的请求并写入cookie。</a><br>这是一个单系统的认证过程，还需要实现多应用的单点认证。原理就很简单，用户访问应用2，然后跳转到认证服务器，因为已经认证过了，直接携带token重定向到应用2，然后应用2向认证服务器确认token的有效性，若有效就响应。<br>上面所说的会涉及到验证信息传递的过程，比如上面说的利用url重定向传递授权信息<a href="http://1.test.com?token=123456，也可以使用POST请求，避免token过长，超过get请求的范围。" target="_blank" rel="noopener">http://1.test.com?token=123456，也可以使用POST请求，避免token过长，超过get请求的范围。</a><h2 id="CAS实现单点登录"><a href="#CAS实现单点登录" class="headerlink" title="CAS实现单点登录"></a>CAS实现单点登录</h2>CAS全称为Central Authentication Service即中央认证服务，是一个企业多语言单点登录的解决方案，并努力去成为一个身份验证和授权需求的综合平台。CAS就是一个现成的单点登录的demo，企业只需要简单修改就可使用。<br>CAS支持各种协议，SAML，OAuth，OpenID，OIDC等等，支持LDAP，Radius，JWTX，509等等进行身份认证和授权，还有各种常用语言的客户端，Java，PHP，C# 等等。反正就是一个十分完整的，兼容性特别好的SSO框架。<br>简单了解CAS是如何实现单点登录的。在官网上可以看到其给出的一个<a href="https://apereo.github.io/cas/4.2.x/protocol/CAS-Protocol.htm" target="_blank" rel="noopener">流程图</a>，。这个图说的特别详细，一下就能看懂，直接原图上进行标注查看：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-4103dd74f47ee196.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="CAS"><h2 id="跨域单点登录"><a href="#跨域单点登录" class="headerlink" title="跨域单点登录"></a>跨域单点登录</h2>学习了上面几种单点登录的知识，结合实际场景可知，跨域单点登录才是真正的单点登录，因为实际情况下很多平台或者域名不可能都在一个一级域名下。在解决跨域单点登录的问题的时候，上面也给说了几种方式，但是究其根本，就是利用一个SSO认证中心来实现认证与授权的。当然，也会有其他的解决跨域单点登录的方案，但是大体流程都与cas类似。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-cdfbe6623e94fd4c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="11"><br>比如在上图的11步骤，也可使用POST包，或者JSONP和iframe方法来跨域发送请求进行重定向。（有待补充）<h1 id="单点登录的认证和授权"><a href="#单点登录的认证和授权" class="headerlink" title="单点登录的认证和授权"></a>单点登录的认证和授权</h1>在学习单点登录的过程中，在其中认证的过程中授权令牌的传递等相关信息没有特别详细的说明，而且在思考单点登录的时候也会有想过一个比较矛盾的问题：单点登录的目标是为了让用户可以在相互信任的系统中一次登录即可，但是如果真的是做到所有用户都可以访问所有系统，岂不是会带来越权的问题，是否需要对不同的用户以不同的授权，甚至限制访问的应用，但是这样是不是就不是原本狭义的单点认证？<h2 id="统一身份认证和单点登录"><a href="#统一身份认证和单点登录" class="headerlink" title="统一身份认证和单点登录"></a>统一身份认证和单点登录</h2>在说单点登录的认证和授权之前，先谈一谈我一直想弄清楚的统一身份认证和单点登录的区别。说起单点登录可能很少听过，但是统一身份认证肯定不陌生，不管是企业还是高校都会有这种统一身份认证的系统。<br>统一身份认证最重要的一方面就是身份认证，另一方面就是和身份认证相关的授权控制，权限控制。而单点登录是多应用一次登录，也可以叫统一登录，可以理解为主要在认证方面。对于统一身份认证来说会有账号管理，如LDAP，认证管理OAuth，SMAL等，因此我觉得，统一身份认证一般是包括狭义的单点登录，狭义的单点登录，即只需要满足多应用一次登录即可。但是现在的单点登录，SSO系统并不仅仅是要求这些，他的范围正在慢慢扩大。<h2 id="单点登录的认证和授权-1"><a href="#单点登录的认证和授权-1" class="headerlink" title="单点登录的认证和授权"></a>单点登录的认证和授权</h2>单点登录的认证和授权，前面说到的CAS实现单点登录里就会看到需要ticket来进行认证，授权。CAS支持多种认证方案，比如OAuth，OpenID，SAML等等，我们可以来比较比较用这些协议的区别，或者说是在哪些场景下使用哪些认证方案较为合适。本身单点登录是没有权限控制的功能的，但是因为这些认证协议的需求，自然支持了权限控制。<br>在使用SAML进行认证的过程中，可以看到下图，其是基本流程都差不多，这里需要注意的就是在用户在认证中心成功登陆之后，重定向的时候返回的是一个SAML token，一个XML节点，这里的token会包括用户的身份信息，用户名等。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-b298b7dc5732b796.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="SAML 2.0 Flow"><br>在OAuth2.0的标准中流程是和上面的基本相同，但是OAuth2因为客户端并没有一点是浏览器，所以token中默认是没有签名的。这里可能没有体现出来，OAuth2的目标是授权，所以token更关注的是权限，token在向认证服务器验证的时候就会有不同的授权，但是既然是授权，就间接实现了认证。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-9372aa0aa3c3eb24.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>OAuth的本意是一个应用允许另一个应用在用户授权的情况下访问自己的数据,OAuth 的设计本意更倾向于授权而非认证。就比如说，一个网站上登录的时候可使用google账号登录，然后可以看到我们登录的时候会让我们选择该网站可以访问的我们的google信息，这里就是使用OAuth的授权，进行信息访问。再看看另一个协议OpenID，OpenID也是经常用于第三方登录的，我们上面说到了OpenID实现的单点登录，其中的认证服务器就可以是第三方的，但是使用OpenID协议的第三方登录，只是一个认证功能，前面也强调过OpenID只是认证的协议，因此使用OpenID协议的第三方登录只是让我们免于注册，只是一个身份而已。<br>在OAuth和SAML中都提到了token来传递授权或者认证信息，而在OpenID协议中可能会使用OpenID，而最终一般都是使用session的机制来实现浏览器和应用直接的访问。另一种基于jwt的。<h2 id="使用JWT进行认证"><a href="#使用JWT进行认证" class="headerlink" title="使用JWT进行认证"></a>使用JWT进行认证</h2>在传统的认证中都是基于session机制的，具体的session模式上面也说了，根据其特性可知session的一些确定：</li>
+<li>session保存在服务器，当注册用户很多，会增加服务器的开销。</li>
+<li>用户认证之后，服务端做认证记录，如果认证的记录被保存在内存中的话，这意味着用户下次请求还必须要请求在这台服务器上,这样才能拿到授权的资源，这样在分布式的应用上，限制了负载均衡的能力。这也意味着限制了应用的扩展能力。</li>
+<li>session是基于cookie来进行用户识别的, cookie如果被截获，用户就会很容易受到跨站请求伪造（CSRF）的攻击。<br>具体的JWT认证相关的信息有文章已经总结的很好了，就不重复说了，<a href="https://juejin.im/post/5d0dbb7e6fb9a07f0420512d" target="_blank" rel="noopener">传送门</a>。<br>概括一下JWT认证的优点：</li>
+<li>因为json的通用性，所以JWT是可以进行跨语言支持的，像JAVA,JavaScript,NodeJS,PHP等很多语言都可以使用；</li>
+<li>因为有了payload部分，所以JWT可以在自身存储一些其他业务逻辑所必要的非敏感信息；</li>
+<li>便于传输，jwt的构成非常简单，字节占用很小，所以它是非常便于传输的；</li>
+<li>它不需要在服务端保存会话信息, 所以它易于应用的扩展。<br>但是因为JWT的性质，在其签证信息三部分中前两部分都是base64加密，攻击者是可以轻易获取并破解的，所以在使用JWT时也会有一些安全性的问题：</li>
+<li>不应该在jwt的payload部分存放敏感信息，因为该部分是客户端可解密的部分;</li>
+<li>保护好secret私钥以及私钥的强度，该私钥非常重要;</li>
+<li>如果可以，请使用https协议；</li>
+<li>JWT要有过期时间，JWT过期后Token的置换问题。<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><a href="https://www.mutuallyhuman.com/blog/choosing-an-sso-strategy-saml-vs-oauth2/" target="_blank" rel="noopener">https://www.mutuallyhuman.com/blog/choosing-an-sso-strategy-saml-vs-oauth2/</a><br><a href="https://yq.aliyun.com/articles/636281" target="_blank" rel="noopener">https://yq.aliyun.com/articles/636281</a><br><a href="https://juejin.im/post/5d0dbb7e6fb9a07f0420512d" target="_blank" rel="noopener">https://juejin.im/post/5d0dbb7e6fb9a07f0420512d</a></li>
+</ul>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2019/11/23/12. 数据库备份拿webshell/" data-toggle="tooltip" data-placement="top" title="数据库备份拿webshell">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text"></span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#谈谈单点登录"><span class="toc-text">谈谈单点登录</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#问题"><span class="toc-text">问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#什么是单点登录（SSO）？"><span class="toc-text">什么是单点登录（SSO）？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#普通登录"><span class="toc-text">普通登录</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#单点登录的原理以及实现"><span class="toc-text">单点登录的原理以及实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#共享session"><span class="toc-text">共享session</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于openid的单点登录"><span class="toc-text">基于openid的单点登录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CAS实现单点登录"><span class="toc-text">CAS实现单点登录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#跨域单点登录"><span class="toc-text">跨域单点登录</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#单点登录的认证和授权"><span class="toc-text">单点登录的认证和授权</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#统一身份认证和单点登录"><span class="toc-text">统一身份认证和单点登录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#单点登录的认证和授权-1"><span class="toc-text">单点登录的认证和授权</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用JWT进行认证"><span class="toc-text">使用JWT进行认证</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a>
+                </li></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#安全知识" title="安全知识">安全知识</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="https://teazmh.github.io/">Tea_Mh</a></li>
+                        
+                        <li><a href="https://zheng19970225.github.io/">让子弹飞一会</a></li>
+                        
+                        <li><a href="https://luckyjq.github.io/">LuckyQ</a></li>
+                        
+                        <li><a href="https://blog.littleghost.ml">LittleGhost</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/IIGHJH5O4mvbeF9?s=09">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/rao-song-63?utm_source=qq&amp;utm_medium=social">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/u/3870422953?refer_flag=1001030001_&amp;nick=RS丶从徒手开碧根果开始">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://github.com/rliyuqing">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 折戟 2019
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                     Theme by Haojen Ma
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://rliyuqing.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="https://upload-images.jianshu.io/upload_images/6269327-4c7992ea7ad8aea9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+<script type="text/javascript"
+color="0,0,0" opacity='0.4' zIndex="-2" count="66" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+
+
+
+</body>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+</html>
