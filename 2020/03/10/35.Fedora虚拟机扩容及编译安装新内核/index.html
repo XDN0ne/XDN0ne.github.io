@@ -227,7 +227,7 @@
 <p><img src="https://upload-images.jianshu.io/upload_images/6269327-b40a8f16c20102b1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
 <p>建议选择以模块方式(M选项)编译。（*号则是以静态方式编译打包进内核文件中，如果新添加的模块较多，会导致内核文件体积增大）<br>并在下面的NTFS write support 那里用y键启用<br><img src="https://upload-images.jianshu.io/upload_images/6269327-f6234764da3b74f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
 <p>保存 并退出<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">make -j 4</span><br></pre></td></tr></table></figure></p>
-<p>很长时间，后面数字代表几核。双核可能三个小时以上把<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">make install</span><br></pre></td></tr></table></figure></p>
+<p>很长时间，后面数字代表几核。双核可能三个小时以上把<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">make modules_install</span><br><span class="line">make install</span><br></pre></td></tr></table></figure></p>
 
                 <hr>
                 
