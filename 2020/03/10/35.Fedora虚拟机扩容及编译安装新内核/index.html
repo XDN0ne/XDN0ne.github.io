@@ -21,11 +21,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        推荐-Google Cloud Shell｜R_song&#39;s blog
+        Fedora虚拟机扩容及编译安装新内核｜R_song&#39;s blog
         
     </title>
 
-    <link rel="canonical" href="https://rliyuqing.github.io/2020/03/05/34.推荐-Google Cloud Shell/">
+    <link rel="canonical" href="https://rliyuqing.github.io/2020/03/10/35.Fedora虚拟机扩容及编译安装新内核/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -166,12 +166,12 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>推荐-Google Cloud Shell</h1>
+                    <h1>Fedora虚拟机扩容及编译安装新内核</h1>
                     
                     <span class="meta">
                          作者 折戟
                         <span>
-                          日期 2020-03-05
+                          日期 2020-03-10
                          </span>
                     </span>
                     <div class="tags text-center">
@@ -185,7 +185,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            推荐-Google Cloud Shell
+            Fedora虚拟机扩容及编译安装新内核
         </span>
     </div>
 </header>
@@ -196,52 +196,47 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h2 id><a href="#" class="headerlink" title></a><meta name="referrer" content="no-referrer"></h2><h1 id="推荐-Google-Cloud-Shell"><a href="#推荐-Google-Cloud-Shell" class="headerlink" title="推荐-Google Cloud Shell"></a>推荐-Google Cloud Shell</h1><hr>
-<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>作为一名安全从业者，服务器从来是不嫌多的，阿里云学生优惠都买到了2022年了。当然国外的服务器需求更是强烈，有时候确实真的除了搭梯子真的没啥用，不过自己搭建的梯子真的不如机场的，不管什么敏感时期照样youtube 4k飞起，虽然很多机场都是按流量卖的，但是IPLC和BGP成本确实高啊。总而言之，国外的服务器在我的日常工作中可以说是很重要但是不紧急的事情，只有在特定情况下才会需要，比如某次项目在一定时间内下一些国外的数据之类的。又不想花钱买，有时候白嫖一些也是放着没用，朋友推荐需要直接腾讯云开计时的（也得花钱）。<br>当然这不是一篇薅羊毛的指导，想薅服务器搭梯子的就算了，只给有需要的朋友分享。</p>
-<h1 id="Cloud-Shell"><a href="#Cloud-Shell" class="headerlink" title="Cloud Shell"></a>Cloud Shell</h1><p>基于前面的需求，反正结果就是碰到了Google Cloud Shell，简单介绍一下。看图：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-6ac228d30f70eb95.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="shell"><br>简而言之google免费提供的一个linux的服务器，并且提供了web浏览器控制和管理：<a href="https://ssh.cloud.google.com/" target="_blank" rel="noopener">https://ssh.cloud.google.com/</a><br><img src="https://upload-images.jianshu.io/upload_images/6269327-9550d3992cb8e726.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1"><br>上面是图形化的文件操作，下面是终端，很舒服的哈，先看看服务器的配置情况：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-07054ac2f665dce7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><img src="https://upload-images.jianshu.io/upload_images/6269327-3086b157b899f905.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="网速"><br>2核2g 50g硬盘，稳定10m/s的网速，这么高的配置，全免费？？？当然是不可能的啦，我们现在具体来看看这东西的限制条件：</p>
-<ol>
-<li>每周只有50h的使用时间<br><img src="https://upload-images.jianshu.io/upload_images/6269327-118edc9aef382732.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1"></li>
-<li>断开连接20分钟之后会清空服务器，但是免费有5G的空间，在$HOME目录，所以重要文件记得保存在该目录下。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-702bb9c51893061d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></li>
-<li>现在免费，不知道啥时候收费<br><img src="https://upload-images.jianshu.io/upload_images/6269327-88777909f292cee2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>除了一些限制条件，google的cloud shell还可以变身，就是性能变得更强<br><img src="https://upload-images.jianshu.io/upload_images/6269327-f76d5945cfc38fee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>这个大概就是增强到2核4g左右，不过不造有没有次数限制之类的。<h1 id="本地ssh-Google-Cloud-Shell"><a href="#本地ssh-Google-Cloud-Shell" class="headerlink" title="本地ssh Google Cloud Shell"></a>本地ssh Google Cloud Shell</h1>大概简单介绍了一下Google的Cloud Shell，现在看看怎么本地ssh这台服务器，真正的把他用起来，而不是得靠浏览器。</li>
-<li>下载google的sdk，链接：<a href="https://cloud.google.com/sdk/" target="_blank" rel="noopener">https://cloud.google.com/sdk/</a>，下载对应系统的就行。</li>
-<li>安装，先大概看看官方文档：<a href="https://cloud.google.com/sdk/docs/quickstart-macos?hl=zh-cn" target="_blank" rel="noopener">https://cloud.google.com/sdk/docs/quickstart-macos?hl=zh-cn</a></li>
-<li>我使用的是mac系统，大概讲一下mac系统安装的过程。</li>
+                <h2 id><a href="#" class="headerlink" title></a><meta name="referrer" content="no-referrer"></h2><h1 id="Fedora虚拟机扩容及编译安装新内核"><a href="#Fedora虚拟机扩容及编译安装新内核" class="headerlink" title="Fedora虚拟机扩容及编译安装新内核"></a>Fedora虚拟机扩容及编译安装新内核</h1><hr>
+<h2 id="虚拟机扩容"><a href="#虚拟机扩容" class="headerlink" title="虚拟机扩容"></a>虚拟机扩容</h2><ol>
+<li>关闭虚拟机，在虚拟机管理软件上分配新的硬盘容量（之前20G，现在40G）。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-3b6a36c094f833f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></li>
+<li>启动虚拟机，进行根目录空间扩容。<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">fdisk -l</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
-<ul>
-<li>进入指定文件夹<br><img src="https://upload-images.jianshu.io/upload_images/6269327-94a9c9b9929b8bba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></li>
-<li>执行安装<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">./install.sh</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>一路回车，会自动添加环境变量。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-2236b40fda561699.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="PATH"></p>
-<ul>
-<li>初始化<br>环境变量自动添加后就可以使用sdk的一些命令了，下面进行初始化<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gcloud init --console-only</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>–console-only是非交互授权，执行时可能会访问不了google的服务器，因为我们的终端没有挂代理，这个时候windows用户可以直接ssr全局代理，这里会提示我们是否使用代理，本地开始ssr，按提示挂上代理就行。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-7e00715a8ebce6ef.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>然后选择一个project就行，没有就创建一个。</p>
-<ul>
-<li>在~文件夹中执行下面命令（在用户的~文件夹中），创建ssh项目<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo gcloud alpha cloud-shell ssh</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>根据提示，这中间会生成ssh的公私钥，并且成功登陆服务器，这个时候提示上会显示从某某域名的某某端口成功登陆服务器，比如我的<br><img src="https://upload-images.jianshu.io/upload_images/6269327-5833488a66ce22f7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>端口是6000，但是没有截图了，注意域名的@之后的且.dev结尾的。登陆之后虽然不是root用户，但是在sudo组里。</p>
-<ul>
-<li>ssh登陆服务器<br>前面的创建ssh服务时，在~/.ssh文件夹中会生成公私钥，前面也知道了域名和端口，直接可以密钥登陆（可以用自己的账号，也可以用root）：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-92efecb2ae485759.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh root@devshell-vm-xxxxxxxxxxxxxxx-be72488c1221.cloudshell.dev -p 6000 -i google_compute_engine</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>优雅一点就在.ssh/config中<br><img src="https://upload-images.jianshu.io/upload_images/6269327-11af47a7710ba38d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="config"><br><img src="https://upload-images.jianshu.io/upload_images/6269327-620254e7ec68ea90.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="优雅"><br>现在就可以啦，我试过重新创建一个项目，域名，公私钥都不会更新的，所以也不需要考虑二次修改的麻烦了。</p>
-<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>最后也没啥好说的把，如果用这服务器整梯子，确实很浪费，人家明显限制了你，所以根据自己需求吧，反正对我来说是很好也是很符合我需求的东西，对于20min的重置，可以找个机器crontab计划任务19分钟ssh一下就行，这样也可以在需要长时间使用时候的需求了。只是不知道他免费会持续多久<del>~</del><br>羊毛虽好，还是得各取所需。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/6269327-a41c394a6aef663d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1"><br>可以看到磁盘是/dev/sda总共为40G，但是下面两个分区一共只有20G，说明还有20G没有分区，需要我们手动进行分区和挂载。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">fdisk /dev/sda</span><br></pre></td></tr></table></figure></p>
+<p>对/dev/sda未分区的空间进行分区<br><img src="https://upload-images.jianshu.io/upload_images/6269327-d30972d7d92c6333.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>输入n进行分区，全选默认创建一个分区号为3，容量为20G的主分区，并输入w保存并退出！<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">fdisk -l</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/6269327-00956860fa881f64.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>可看到新的分区已经有了，但是新的分区的ID是83并不是LVM文件系统的ID，我们需要将其改为文件系统的ID：8e才能挂载到文件系统根目录。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">fdisk /dev/sda</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/6269327-c386cce35b22a374.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><img src="https://upload-images.jianshu.io/upload_images/6269327-2b608e9a32b2a245.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>输入t进行修改分区ID，查看LVM文件系统为8e，修改，然后w保存。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">fdisk -l</span><br></pre></td></tr></table></figure>
+<p>查看修改成功<br><img src="https://upload-images.jianshu.io/upload_images/6269327-ff65f2b39388135d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>接着就行根目录挂载。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkfs.ext4 /dev/sda3</span><br></pre></td></tr></table></figure></p>
+<p>将该分区创建为文件系统<br><img src="https://upload-images.jianshu.io/upload_images/6269327-85a111666af40411.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pvcreate /dev/sda3</span><br></pre></td></tr></table></figure></p>
+<p>将该分区初始化为物理卷<br><img src="https://upload-images.jianshu.io/upload_images/6269327-d8ad0f8a09f42c17.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pvdisplay</span><br></pre></td></tr></table></figure></p>
+<p>查看物理卷<br><img src="https://upload-images.jianshu.io/upload_images/6269327-e344e406a176848e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>sda2是之前的LVM物理卷，sda3是新的我们创建的物理卷。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vgdisplay</span><br></pre></td></tr></table></figure></p>
+<p>查看当前需要扩充的lvm组名，可以通过vgdisplay查看：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-73a526d5b6f80ffd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vgextend fedora_localhost-live /dev/sda3</span><br></pre></td></tr></table></figure></p>
+<p>为需要扩充的lvm添加卷<br><img src="https://upload-images.jianshu.io/upload_images/6269327-b617280b52e87058.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">lvextend -L+19.96G /dev/fedora_localhost-live/root   /dev/sda3</span><br></pre></td></tr></table></figure></p>
+<p>添加容量<br><img src="https://upload-images.jianshu.io/upload_images/6269327-3b9315a003524a51.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">resize2fs /dev/fedora_localhost-live/root</span><br></pre></td></tr></table></figure></p>
+<p>最后使用resize2fs命令，用于扩大或者缩小未挂载的ext2,ext3或者是ext4文件系统。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-8331183f0248b44f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">df -h</span><br></pre></td></tr></table></figure></p>
+<p>查看结果，某些版本需重启生效。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-aa0ef08c1013c98b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h2 id="编译安装内核"><a href="#编译安装内核" class="headerlink" title="编译安装内核"></a>编译安装内核</h2><p>安装所需软件<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dnf install ncurses-devel flex bison openssl-devel binutils gcc make patch libgomp glibc-headers glibc-devel kernel-headers kernel-devel dkms -y</span><br></pre></td></tr></table></figure></p>
+<p>下载内核源码<a href="http://ftp.sjtu.edu.cn/sites/ftp.kernel.org/pub/linux/kernel/v5.x/" target="_blank" rel="noopener">上海交大内核源码库</a><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget http://ftp.sjtu.edu.cn/sites/ftp.kernel.org/pub/linux/kernel/v5.x/linux-5.0.1.tar.gz</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tar xf linux-5.0.1.tar.gz -C /usr/src</span><br></pre></td></tr></table></figure>
+<p>解压到/usr/src目录下。<br>进入解压目录<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd /usr/src/linux-5.0.1/</span><br><span class="line">make menuconfig</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/6269327-e10bf9ac4ca7f29f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>General setup —&gt;local version -append to kernel release<br><img src="https://upload-images.jianshu.io/upload_images/6269327-93b2cee0d450d3ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>新添加NTFS文件系统支持模块：</p>
+<p>File systems —&gt;DOS/FAT/NT Filesystems —&gt;NTFS file system support</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/6269327-b40a8f16c20102b1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>建议选择以模块方式(M选项)编译。（*号则是以静态方式编译打包进内核文件中，如果新添加的模块较多，会导致内核文件体积增大）<br>并在下面的NTFS write support 那里用y键启用<br><img src="https://upload-images.jianshu.io/upload_images/6269327-f6234764da3b74f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>保存 并退出<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">make -j 4</span><br></pre></td></tr></table></figure></p>
+<p>很长时间，后面数字代表几核。双核可能三个小时以上把<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">make install</span><br></pre></td></tr></table></figure></p>
 
                 <hr>
                 
 
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2020/03/10/35.Fedora虚拟机扩容及编译安装新内核/" data-toggle="tooltip" data-placement="top" title="Fedora虚拟机扩容及编译安装新内核">&larr; Previous Post</a>
-                    </li>
-                    
                     
                     <li class="next">
-                        <a href="/2019/12/26/33.ZABBIX企业微信webhook告警踩坑/" data-toggle="tooltip" data-placement="top" title="ZABBIX企业微信webhook告警踩坑">Next Post &rarr;</a>
+                        <a href="/2020/03/05/34.推荐-Google Cloud Shell/" data-toggle="tooltip" data-placement="top" title="推荐-Google Cloud Shell">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -257,7 +252,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text"></span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#推荐-Google-Cloud-Shell"><span class="toc-text">推荐-Google Cloud Shell</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Cloud-Shell"><span class="toc-text">Cloud Shell</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#本地ssh-Google-Cloud-Shell"><span class="toc-text">本地ssh Google Cloud Shell</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#最后"><span class="toc-text">最后</span></a>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text"></span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#Fedora虚拟机扩容及编译安装新内核"><span class="toc-text">Fedora虚拟机扩容及编译安装新内核</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#虚拟机扩容"><span class="toc-text">虚拟机扩容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编译安装内核"><span class="toc-text">编译安装内核</span></a></li></ol>
                 </li></div>
             </div>
         </div>
