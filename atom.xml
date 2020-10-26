@@ -5,9 +5,9 @@
   <subtitle>安全爱好者</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="https://rliyuqing.github.io/"/>
+  <link href="https://XD0ne.github.io/"/>
   <updated>2020-10-26T09:09:05.320Z</updated>
-  <id>https://rliyuqing.github.io/</id>
+  <id>https://XD0ne.github.io/</id>
   
   <author>
     <name>折戟</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>一次服务器被传webshell事件溯源</title>
-    <link href="https://rliyuqing.github.io/2020/10/26/37.%E4%B8%80%E6%AC%A1%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A2%AB%E4%BC%A0webshell%E4%BA%8B%E4%BB%B6%E6%BA%AF%E6%BA%90/"/>
-    <id>https://rliyuqing.github.io/2020/10/26/37.一次服务器被传webshell事件溯源/</id>
+    <link href="https://XD0ne.github.io/2020/10/26/37.%E4%B8%80%E6%AC%A1%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A2%AB%E4%BC%A0webshell%E4%BA%8B%E4%BB%B6%E6%BA%AF%E6%BA%90/"/>
+    <id>https://XD0ne.github.io/2020/10/26/37.一次服务器被传webshell事件溯源/</id>
     <published>2020-10-25T17:00:00.000Z</published>
     <updated>2020-10-26T09:09:05.320Z</updated>
     
@@ -34,17 +34,17 @@
     
     </summary>
     
-      <category term="攻击分析" scheme="https://rliyuqing.github.io/categories/%E6%94%BB%E5%87%BB%E5%88%86%E6%9E%90/"/>
+      <category term="攻击分析" scheme="https://XD0ne.github.io/categories/%E6%94%BB%E5%87%BB%E5%88%86%E6%9E%90/"/>
     
     
-      <category term="攻击分析" scheme="https://rliyuqing.github.io/tags/%E6%94%BB%E5%87%BB%E5%88%86%E6%9E%90/"/>
+      <category term="攻击分析" scheme="https://XD0ne.github.io/tags/%E6%94%BB%E5%87%BB%E5%88%86%E6%9E%90/"/>
     
   </entry>
   
   <entry>
     <title>OVS+Linux Vxlan组网</title>
-    <link href="https://rliyuqing.github.io/2020/08/05/36.OVS+Linux%20Vxlan%E7%BB%84%E7%BD%91/"/>
-    <id>https://rliyuqing.github.io/2020/08/05/36.OVS+Linux Vxlan组网/</id>
+    <link href="https://XD0ne.github.io/2020/08/05/36.OVS+Linux%20Vxlan%E7%BB%84%E7%BD%91/"/>
+    <id>https://XD0ne.github.io/2020/08/05/36.OVS+Linux Vxlan组网/</id>
     <published>2020-08-04T17:00:00.000Z</published>
     <updated>2020-08-05T08:28:32.831Z</updated>
     
@@ -59,17 +59,17 @@
     
     </summary>
     
-      <category term="基础网络" scheme="https://rliyuqing.github.io/categories/%E5%9F%BA%E7%A1%80%E7%BD%91%E7%BB%9C/"/>
+      <category term="基础网络" scheme="https://XD0ne.github.io/categories/%E5%9F%BA%E7%A1%80%E7%BD%91%E7%BB%9C/"/>
     
     
-      <category term="基础网络" scheme="https://rliyuqing.github.io/tags/%E5%9F%BA%E7%A1%80%E7%BD%91%E7%BB%9C/"/>
+      <category term="基础网络" scheme="https://XD0ne.github.io/tags/%E5%9F%BA%E7%A1%80%E7%BD%91%E7%BB%9C/"/>
     
   </entry>
   
   <entry>
     <title>Fedora虚拟机扩容及编译安装新内核</title>
-    <link href="https://rliyuqing.github.io/2020/03/10/35.Fedora%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%89%A9%E5%AE%B9%E5%8F%8A%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85%E6%96%B0%E5%86%85%E6%A0%B8/"/>
-    <id>https://rliyuqing.github.io/2020/03/10/35.Fedora虚拟机扩容及编译安装新内核/</id>
+    <link href="https://XD0ne.github.io/2020/03/10/35.Fedora%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%89%A9%E5%AE%B9%E5%8F%8A%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85%E6%96%B0%E5%86%85%E6%A0%B8/"/>
+    <id>https://XD0ne.github.io/2020/03/10/35.Fedora虚拟机扩容及编译安装新内核/</id>
     <published>2020-03-09T17:00:00.000Z</published>
     <updated>2020-03-09T18:30:49.257Z</updated>
     
@@ -84,17 +84,17 @@
     
     </summary>
     
-      <category term="其他" scheme="https://rliyuqing.github.io/categories/%E5%85%B6%E4%BB%96/"/>
+      <category term="其他" scheme="https://XD0ne.github.io/categories/%E5%85%B6%E4%BB%96/"/>
     
     
-      <category term="其他" scheme="https://rliyuqing.github.io/tags/%E5%85%B6%E4%BB%96/"/>
+      <category term="其他" scheme="https://XD0ne.github.io/tags/%E5%85%B6%E4%BB%96/"/>
     
   </entry>
   
   <entry>
     <title>推荐-Google Cloud Shell</title>
-    <link href="https://rliyuqing.github.io/2020/03/05/34.%E6%8E%A8%E8%8D%90-Google%20Cloud%20Shell/"/>
-    <id>https://rliyuqing.github.io/2020/03/05/34.推荐-Google Cloud Shell/</id>
+    <link href="https://XD0ne.github.io/2020/03/05/34.%E6%8E%A8%E8%8D%90-Google%20Cloud%20Shell/"/>
+    <id>https://XD0ne.github.io/2020/03/05/34.推荐-Google Cloud Shell/</id>
     <published>2020-03-04T17:00:00.000Z</published>
     <updated>2020-03-04T17:00:54.507Z</updated>
     
@@ -109,17 +109,17 @@
     
     </summary>
     
-      <category term="其他" scheme="https://rliyuqing.github.io/categories/%E5%85%B6%E4%BB%96/"/>
+      <category term="其他" scheme="https://XD0ne.github.io/categories/%E5%85%B6%E4%BB%96/"/>
     
     
-      <category term="其他" scheme="https://rliyuqing.github.io/tags/%E5%85%B6%E4%BB%96/"/>
+      <category term="其他" scheme="https://XD0ne.github.io/tags/%E5%85%B6%E4%BB%96/"/>
     
   </entry>
   
   <entry>
     <title>ZABBIX企业微信webhook告警踩坑</title>
-    <link href="https://rliyuqing.github.io/2019/12/26/33.ZABBIX%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1webhook%E5%91%8A%E8%AD%A6%E8%B8%A9%E5%9D%91/"/>
-    <id>https://rliyuqing.github.io/2019/12/26/33.ZABBIX企业微信webhook告警踩坑/</id>
+    <link href="https://XD0ne.github.io/2019/12/26/33.ZABBIX%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1webhook%E5%91%8A%E8%AD%A6%E8%B8%A9%E5%9D%91/"/>
+    <id>https://XD0ne.github.io/2019/12/26/33.ZABBIX企业微信webhook告警踩坑/</id>
     <published>2019-12-26T07:33:00.000Z</published>
     <updated>2020-03-04T17:00:47.720Z</updated>
     
@@ -134,17 +134,17 @@
     
     </summary>
     
-      <category term="安全知识" scheme="https://rliyuqing.github.io/categories/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
+      <category term="安全知识" scheme="https://XD0ne.github.io/categories/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
     
     
-      <category term="安全知识" scheme="https://rliyuqing.github.io/tags/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
+      <category term="安全知识" scheme="https://XD0ne.github.io/tags/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
     
   </entry>
   
   <entry>
     <title>谈谈单点登录</title>
-    <link href="https://rliyuqing.github.io/2019/11/26/32.%E8%B0%88%E8%B0%88%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95/"/>
-    <id>https://rliyuqing.github.io/2019/11/26/32.谈谈单点登录/</id>
+    <link href="https://XD0ne.github.io/2019/11/26/32.%E8%B0%88%E8%B0%88%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95/"/>
+    <id>https://XD0ne.github.io/2019/11/26/32.谈谈单点登录/</id>
     <published>2019-11-26T07:33:00.000Z</published>
     <updated>2019-11-26T07:43:11.313Z</updated>
     
@@ -159,17 +159,17 @@
     
     </summary>
     
-      <category term="安全知识" scheme="https://rliyuqing.github.io/categories/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
+      <category term="安全知识" scheme="https://XD0ne.github.io/categories/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
     
     
-      <category term="安全知识" scheme="https://rliyuqing.github.io/tags/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
+      <category term="安全知识" scheme="https://XD0ne.github.io/tags/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
     
   </entry>
   
   <entry>
     <title>数据库备份拿webshell</title>
-    <link href="https://rliyuqing.github.io/2019/11/23/12.%20%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E6%8B%BFwebshell/"/>
-    <id>https://rliyuqing.github.io/2019/11/23/12. 数据库备份拿webshell/</id>
+    <link href="https://XD0ne.github.io/2019/11/23/12.%20%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E6%8B%BFwebshell/"/>
+    <id>https://XD0ne.github.io/2019/11/23/12. 数据库备份拿webshell/</id>
     <published>2019-11-22T16:31:56.785Z</published>
     <updated>2019-11-22T16:31:56.786Z</updated>
     
@@ -184,17 +184,17 @@
     
     </summary>
     
-      <category term="实战演练" scheme="https://rliyuqing.github.io/categories/%E5%AE%9E%E6%88%98%E6%BC%94%E7%BB%83/"/>
+      <category term="实战演练" scheme="https://XD0ne.github.io/categories/%E5%AE%9E%E6%88%98%E6%BC%94%E7%BB%83/"/>
     
     
-      <category term="数据库备份getshell" scheme="https://rliyuqing.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BDgetshell/"/>
+      <category term="数据库备份getshell" scheme="https://XD0ne.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BDgetshell/"/>
     
   </entry>
   
   <entry>
     <title>服务器socket代理访问darknet</title>
-    <link href="https://rliyuqing.github.io/2019/11/22/31.%E6%9C%8D%E5%8A%A1%E5%99%A8socket%E4%BB%A3%E7%90%86%E8%AE%BF%E9%97%AEdarknet/"/>
-    <id>https://rliyuqing.github.io/2019/11/22/31.服务器socket代理访问darknet/</id>
+    <link href="https://XD0ne.github.io/2019/11/22/31.%E6%9C%8D%E5%8A%A1%E5%99%A8socket%E4%BB%A3%E7%90%86%E8%AE%BF%E9%97%AEdarknet/"/>
+    <id>https://XD0ne.github.io/2019/11/22/31.服务器socket代理访问darknet/</id>
     <published>2019-11-22T04:00:00.000Z</published>
     <updated>2019-11-22T16:31:56.809Z</updated>
     
@@ -209,17 +209,17 @@
     
     </summary>
     
-      <category term="其他" scheme="https://rliyuqing.github.io/categories/%E5%85%B6%E4%BB%96/"/>
+      <category term="其他" scheme="https://XD0ne.github.io/categories/%E5%85%B6%E4%BB%96/"/>
     
     
-      <category term="其他" scheme="https://rliyuqing.github.io/tags/%E5%85%B6%E4%BB%96/"/>
+      <category term="其他" scheme="https://XD0ne.github.io/tags/%E5%85%B6%E4%BB%96/"/>
     
   </entry>
   
   <entry>
     <title>简书文章图片外链403问题</title>
-    <link href="https://rliyuqing.github.io/2019/11/14/30.%E7%AE%80%E4%B9%A6%E6%96%87%E7%AB%A0%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE403%E9%97%AE%E9%A2%98/"/>
-    <id>https://rliyuqing.github.io/2019/11/14/30.简书文章图片外链403问题/</id>
+    <link href="https://XD0ne.github.io/2019/11/14/30.%E7%AE%80%E4%B9%A6%E6%96%87%E7%AB%A0%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE403%E9%97%AE%E9%A2%98/"/>
+    <id>https://XD0ne.github.io/2019/11/14/30.简书文章图片外链403问题/</id>
     <published>2019-11-14T04:00:00.000Z</published>
     <updated>2019-11-22T16:31:56.808Z</updated>
     
@@ -234,17 +234,17 @@
     
     </summary>
     
-      <category term="其他" scheme="https://rliyuqing.github.io/categories/%E5%85%B6%E4%BB%96/"/>
+      <category term="其他" scheme="https://XD0ne.github.io/categories/%E5%85%B6%E4%BB%96/"/>
     
     
-      <category term="其他" scheme="https://rliyuqing.github.io/tags/%E5%85%B6%E4%BB%96/"/>
+      <category term="其他" scheme="https://XD0ne.github.io/tags/%E5%85%B6%E4%BB%96/"/>
     
   </entry>
   
   <entry>
     <title>python3 windows校园网自动拨号</title>
-    <link href="https://rliyuqing.github.io/2019/11/13/29.python3%20windows%E6%A0%A1%E5%9B%AD%E7%BD%91%E8%87%AA%E5%8A%A8%E6%8B%A8%E5%8F%B7/"/>
-    <id>https://rliyuqing.github.io/2019/11/13/29.python3 windows校园网自动拨号/</id>
+    <link href="https://XD0ne.github.io/2019/11/13/29.python3%20windows%E6%A0%A1%E5%9B%AD%E7%BD%91%E8%87%AA%E5%8A%A8%E6%8B%A8%E5%8F%B7/"/>
+    <id>https://XD0ne.github.io/2019/11/13/29.python3 windows校园网自动拨号/</id>
     <published>2019-11-13T04:00:00.000Z</published>
     <updated>2019-11-22T16:31:56.806Z</updated>
     
@@ -259,17 +259,17 @@
     
     </summary>
     
-      <category term="小脚本" scheme="https://rliyuqing.github.io/categories/%E5%B0%8F%E8%84%9A%E6%9C%AC/"/>
+      <category term="小脚本" scheme="https://XD0ne.github.io/categories/%E5%B0%8F%E8%84%9A%E6%9C%AC/"/>
     
     
-      <category term="小脚本" scheme="https://rliyuqing.github.io/tags/%E5%B0%8F%E8%84%9A%E6%9C%AC/"/>
+      <category term="小脚本" scheme="https://XD0ne.github.io/tags/%E5%B0%8F%E8%84%9A%E6%9C%AC/"/>
     
   </entry>
   
   <entry>
     <title>一个过人的小马</title>
-    <link href="https://rliyuqing.github.io/2019/09/20/28.%E4%B8%80%E4%B8%AA%E8%BF%87%E4%BA%BA%E7%9A%84%E5%B0%8F%E9%A9%AC/"/>
-    <id>https://rliyuqing.github.io/2019/09/20/28.一个过人的小马/</id>
+    <link href="https://XD0ne.github.io/2019/09/20/28.%E4%B8%80%E4%B8%AA%E8%BF%87%E4%BA%BA%E7%9A%84%E5%B0%8F%E9%A9%AC/"/>
+    <id>https://XD0ne.github.io/2019/09/20/28.一个过人的小马/</id>
     <published>2019-09-20T04:00:00.000Z</published>
     <updated>2019-11-22T16:31:56.805Z</updated>
     
@@ -284,17 +284,17 @@
     
     </summary>
     
-      <category term="webshell" scheme="https://rliyuqing.github.io/categories/webshell/"/>
+      <category term="webshell" scheme="https://XD0ne.github.io/categories/webshell/"/>
     
     
-      <category term="webshell" scheme="https://rliyuqing.github.io/tags/webshell/"/>
+      <category term="webshell" scheme="https://XD0ne.github.io/tags/webshell/"/>
     
   </entry>
   
   <entry>
     <title>企业微信告警和回调</title>
-    <link href="https://rliyuqing.github.io/2019/08/22/27.%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E5%91%8A%E8%AD%A6%E4%BB%A5%E5%8F%8A%E5%9B%9E%E8%B0%83/"/>
-    <id>https://rliyuqing.github.io/2019/08/22/27.企业微信告警以及回调/</id>
+    <link href="https://XD0ne.github.io/2019/08/22/27.%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E5%91%8A%E8%AD%A6%E4%BB%A5%E5%8F%8A%E5%9B%9E%E8%B0%83/"/>
+    <id>https://XD0ne.github.io/2019/08/22/27.企业微信告警以及回调/</id>
     <published>2019-08-22T04:00:00.000Z</published>
     <updated>2020-03-04T16:59:03.885Z</updated>
     
@@ -309,17 +309,17 @@
     
     </summary>
     
-      <category term="日志/告警" scheme="https://rliyuqing.github.io/categories/%E6%97%A5%E5%BF%97-%E5%91%8A%E8%AD%A6/"/>
+      <category term="日志/告警" scheme="https://XD0ne.github.io/categories/%E6%97%A5%E5%BF%97-%E5%91%8A%E8%AD%A6/"/>
     
     
-      <category term="日志/告警" scheme="https://rliyuqing.github.io/tags/%E6%97%A5%E5%BF%97-%E5%91%8A%E8%AD%A6/"/>
+      <category term="日志/告警" scheme="https://XD0ne.github.io/tags/%E6%97%A5%E5%BF%97-%E5%91%8A%E8%AD%A6/"/>
     
   </entry>
   
   <entry>
     <title>python根据域名获取ip</title>
-    <link href="https://rliyuqing.github.io/2019/06/01/26.python%E6%A0%B9%E6%8D%AE%E5%9F%9F%E5%90%8D%E8%8E%B7%E5%8F%96ip/"/>
-    <id>https://rliyuqing.github.io/2019/06/01/26.python根据域名获取ip/</id>
+    <link href="https://XD0ne.github.io/2019/06/01/26.python%E6%A0%B9%E6%8D%AE%E5%9F%9F%E5%90%8D%E8%8E%B7%E5%8F%96ip/"/>
+    <id>https://XD0ne.github.io/2019/06/01/26.python根据域名获取ip/</id>
     <published>2019-06-01T04:00:00.000Z</published>
     <updated>2019-11-22T16:31:56.803Z</updated>
     
@@ -334,17 +334,17 @@
     
     </summary>
     
-      <category term="小脚本" scheme="https://rliyuqing.github.io/categories/%E5%B0%8F%E8%84%9A%E6%9C%AC/"/>
+      <category term="小脚本" scheme="https://XD0ne.github.io/categories/%E5%B0%8F%E8%84%9A%E6%9C%AC/"/>
     
     
-      <category term="小脚本" scheme="https://rliyuqing.github.io/tags/%E5%B0%8F%E8%84%9A%E6%9C%AC/"/>
+      <category term="小脚本" scheme="https://XD0ne.github.io/tags/%E5%B0%8F%E8%84%9A%E6%9C%AC/"/>
     
   </entry>
   
   <entry>
     <title>内网隔离和纵深防御浅谈</title>
-    <link href="https://rliyuqing.github.io/2019/02/22/25.%E5%86%85%E7%BD%91%E9%9A%94%E7%A6%BB%E5%92%8C%E7%BA%B5%E6%B7%B1%E9%98%B2%E5%BE%A1%E6%B5%85%E8%B0%88/"/>
-    <id>https://rliyuqing.github.io/2019/02/22/25.内网隔离和纵深防御浅谈/</id>
+    <link href="https://XD0ne.github.io/2019/02/22/25.%E5%86%85%E7%BD%91%E9%9A%94%E7%A6%BB%E5%92%8C%E7%BA%B5%E6%B7%B1%E9%98%B2%E5%BE%A1%E6%B5%85%E8%B0%88/"/>
+    <id>https://XD0ne.github.io/2019/02/22/25.内网隔离和纵深防御浅谈/</id>
     <published>2019-02-22T04:00:00.000Z</published>
     <updated>2019-11-22T16:31:56.802Z</updated>
     
@@ -359,17 +359,17 @@
     
     </summary>
     
-      <category term="安全知识" scheme="https://rliyuqing.github.io/categories/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
+      <category term="安全知识" scheme="https://XD0ne.github.io/categories/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
     
     
-      <category term="安全知识" scheme="https://rliyuqing.github.io/tags/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
+      <category term="安全知识" scheme="https://XD0ne.github.io/tags/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
     
   </entry>
   
   <entry>
     <title>一次挖矿病毒攻击分析</title>
-    <link href="https://rliyuqing.github.io/2018/10/15/24.%E4%B8%80%E6%AC%A1%E6%8C%96%E7%9F%BF%E7%97%85%E6%AF%92%E6%94%BB%E5%87%BB%E5%88%86%E6%9E%90/"/>
-    <id>https://rliyuqing.github.io/2018/10/15/24.一次挖矿病毒攻击分析/</id>
+    <link href="https://XD0ne.github.io/2018/10/15/24.%E4%B8%80%E6%AC%A1%E6%8C%96%E7%9F%BF%E7%97%85%E6%AF%92%E6%94%BB%E5%87%BB%E5%88%86%E6%9E%90/"/>
+    <id>https://XD0ne.github.io/2018/10/15/24.一次挖矿病毒攻击分析/</id>
     <published>2018-10-15T04:00:00.000Z</published>
     <updated>2019-11-22T16:31:56.801Z</updated>
     
@@ -384,17 +384,17 @@
     
     </summary>
     
-      <category term="攻击分析" scheme="https://rliyuqing.github.io/categories/%E6%94%BB%E5%87%BB%E5%88%86%E6%9E%90/"/>
+      <category term="攻击分析" scheme="https://XD0ne.github.io/categories/%E6%94%BB%E5%87%BB%E5%88%86%E6%9E%90/"/>
     
     
-      <category term="攻击分析" scheme="https://rliyuqing.github.io/tags/%E6%94%BB%E5%87%BB%E5%88%86%E6%9E%90/"/>
+      <category term="攻击分析" scheme="https://XD0ne.github.io/tags/%E6%94%BB%E5%87%BB%E5%88%86%E6%9E%90/"/>
     
   </entry>
   
   <entry>
     <title>校园提供给第三方的接口信息泄露</title>
-    <link href="https://rliyuqing.github.io/2018/08/02/23.%E6%A0%A1%E5%9B%AD%E6%8F%90%E4%BE%9B%E7%BB%99%E7%AC%AC%E4%B8%89%E6%96%B9%E7%9A%84%E6%8E%A5%E5%8F%A3%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2/"/>
-    <id>https://rliyuqing.github.io/2018/08/02/23.校园提供给第三方的接口信息泄露/</id>
+    <link href="https://XD0ne.github.io/2018/08/02/23.%E6%A0%A1%E5%9B%AD%E6%8F%90%E4%BE%9B%E7%BB%99%E7%AC%AC%E4%B8%89%E6%96%B9%E7%9A%84%E6%8E%A5%E5%8F%A3%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2/"/>
+    <id>https://XD0ne.github.io/2018/08/02/23.校园提供给第三方的接口信息泄露/</id>
     <published>2018-08-02T04:00:00.000Z</published>
     <updated>2019-11-22T16:31:56.800Z</updated>
     
@@ -409,17 +409,17 @@
     
     </summary>
     
-      <category term="水平权限" scheme="https://rliyuqing.github.io/categories/%E6%B0%B4%E5%B9%B3%E6%9D%83%E9%99%90/"/>
+      <category term="水平权限" scheme="https://XD0ne.github.io/categories/%E6%B0%B4%E5%B9%B3%E6%9D%83%E9%99%90/"/>
     
     
-      <category term="水平权限" scheme="https://rliyuqing.github.io/tags/%E6%B0%B4%E5%B9%B3%E6%9D%83%E9%99%90/"/>
+      <category term="水平权限" scheme="https://XD0ne.github.io/tags/%E6%B0%B4%E5%B9%B3%E6%9D%83%E9%99%90/"/>
     
   </entry>
   
   <entry>
     <title>PCI-DSS(V3.2)学习笔记(八)</title>
-    <link href="https://rliyuqing.github.io/2018/06/10/21.%20PCI-DSS(V3.2.1)%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E5%85%AB)/"/>
-    <id>https://rliyuqing.github.io/2018/06/10/21. PCI-DSS(V3.2.1)学习笔记(八)/</id>
+    <link href="https://XD0ne.github.io/2018/06/10/21.%20PCI-DSS(V3.2.1)%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E5%85%AB)/"/>
+    <id>https://XD0ne.github.io/2018/06/10/21. PCI-DSS(V3.2.1)学习笔记(八)/</id>
     <published>2018-06-10T04:00:00.000Z</published>
     <updated>2019-11-22T16:31:56.799Z</updated>
     
@@ -434,17 +434,17 @@
     
     </summary>
     
-      <category term="安全知识" scheme="https://rliyuqing.github.io/categories/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
+      <category term="安全知识" scheme="https://XD0ne.github.io/categories/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
     
     
-      <category term="安全知识" scheme="https://rliyuqing.github.io/tags/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
+      <category term="安全知识" scheme="https://XD0ne.github.io/tags/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
     
   </entry>
   
   <entry>
     <title>PCI-DSS(V3.2)学习笔记(七)</title>
-    <link href="https://rliyuqing.github.io/2018/06/05/20.%20PCI-DSS(V3.2.1)%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%B8%83)/"/>
-    <id>https://rliyuqing.github.io/2018/06/05/20. PCI-DSS(V3.2.1)学习笔记(七)/</id>
+    <link href="https://XD0ne.github.io/2018/06/05/20.%20PCI-DSS(V3.2.1)%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%B8%83)/"/>
+    <id>https://XD0ne.github.io/2018/06/05/20. PCI-DSS(V3.2.1)学习笔记(七)/</id>
     <published>2018-06-05T04:00:00.000Z</published>
     <updated>2019-11-22T16:31:56.798Z</updated>
     
@@ -459,17 +459,17 @@
     
     </summary>
     
-      <category term="安全知识" scheme="https://rliyuqing.github.io/categories/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
+      <category term="安全知识" scheme="https://XD0ne.github.io/categories/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
     
     
-      <category term="安全知识" scheme="https://rliyuqing.github.io/tags/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
+      <category term="安全知识" scheme="https://XD0ne.github.io/tags/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
     
   </entry>
   
   <entry>
     <title>PCI-DSS(V3.2)学习笔记(六)</title>
-    <link href="https://rliyuqing.github.io/2018/05/28/19.%20PCI-DSS(V3.2.1)%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E5%85%AD)/"/>
-    <id>https://rliyuqing.github.io/2018/05/28/19. PCI-DSS(V3.2.1)学习笔记(六)/</id>
+    <link href="https://XD0ne.github.io/2018/05/28/19.%20PCI-DSS(V3.2.1)%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E5%85%AD)/"/>
+    <id>https://XD0ne.github.io/2018/05/28/19. PCI-DSS(V3.2.1)学习笔记(六)/</id>
     <published>2018-05-28T04:00:00.000Z</published>
     <updated>2019-11-22T16:31:56.796Z</updated>
     
@@ -484,17 +484,17 @@
     
     </summary>
     
-      <category term="安全知识" scheme="https://rliyuqing.github.io/categories/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
+      <category term="安全知识" scheme="https://XD0ne.github.io/categories/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
     
     
-      <category term="安全知识" scheme="https://rliyuqing.github.io/tags/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
+      <category term="安全知识" scheme="https://XD0ne.github.io/tags/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
     
   </entry>
   
   <entry>
     <title>PCI-DSS(V3.2)学习笔记(五)</title>
-    <link href="https://rliyuqing.github.io/2018/05/20/18.%20PCI-DSS(V3.2.1)%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%BA%94)/"/>
-    <id>https://rliyuqing.github.io/2018/05/20/18. PCI-DSS(V3.2.1)学习笔记(五)/</id>
+    <link href="https://XD0ne.github.io/2018/05/20/18.%20PCI-DSS(V3.2.1)%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%BA%94)/"/>
+    <id>https://XD0ne.github.io/2018/05/20/18. PCI-DSS(V3.2.1)学习笔记(五)/</id>
     <published>2018-05-20T04:00:00.000Z</published>
     <updated>2019-11-22T16:31:56.794Z</updated>
     
@@ -509,10 +509,10 @@
     
     </summary>
     
-      <category term="安全知识" scheme="https://rliyuqing.github.io/categories/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
+      <category term="安全知识" scheme="https://XD0ne.github.io/categories/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
     
     
-      <category term="安全知识" scheme="https://rliyuqing.github.io/tags/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
+      <category term="安全知识" scheme="https://XD0ne.github.io/tags/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
     
   </entry>
   
