@@ -21,11 +21,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        OVS+Linux Vxlan组网｜R_song&#39;s blog
+        一次服务器被传webshell事件溯源｜R_song&#39;s blog
         
     </title>
 
-    <link rel="canonical" href="https://rliyuqing.github.io/2020/08/05/36.OVS+Linux Vxlan组网/">
+    <link rel="canonical" href="https://rliyuqing.github.io/2020/10/26/37./">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -166,17 +166,17 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>OVS+Linux Vxlan组网</h1>
+                    <h1>一次服务器被传webshell事件溯源</h1>
                     
                     <span class="meta">
                          作者 折戟
                         <span>
-                          日期 2020-08-05
+                          日期 2020-10-26
                          </span>
                     </span>
                     <div class="tags text-center">
                         
-                        <a class="tag" href="/tags/#基础网络" title="基础网络">基础网络</a>
+                        <a class="tag" href="/tags/#攻击分析" title="攻击分析">攻击分析</a>
                         
                     </div>
                 </div>
@@ -185,7 +185,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            OVS+Linux Vxlan组网
+            一次服务器被传webshell事件溯源
         </span>
     </div>
 </header>
@@ -196,40 +196,34 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h2 id><a href="#" class="headerlink" title></a><meta name="referrer" content="no-referrer"></h2><h1 id="OVS-Linux-Vxlan组网"><a href="#OVS-Linux-Vxlan组网" class="headerlink" title="OVS+Linux Vxlan组网"></a>OVS+Linux Vxlan组网</h1><hr>
-<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>因为科研需要做些小实验，涉及到交换机的网口数据的镜像转发。之前疫情在家使用一台本地虚拟机搭建OVS并作为KVM宿主机，OVS搭建网桥，OVS新建虚拟机并使用指定网桥。因为KVM中的虚拟机需要更改内核并重新编译，所以过程确实很繁琐。这次学校内的“私有云”搭建好了，所以准备用OVS+Linux Vxlan组网的形式把实验重新做一遍。<br>我的实验需要将两台实验机和一台测试机，三个服务器进行组网。这里使用了三台2核4G的Centos 7.6的虚拟机</p>
-<h2 id="实验过程"><a href="#实验过程" class="headerlink" title="实验过程"></a>实验过程</h2><p>在前面查资料的时候发现，网上很多教程或者案例要不是两头都是Linux ip link来组网，要不就是两边都是OVS，使用OVS来组网。在我的场景里，两边都使用Linux ip link的话，不能很好地进行流量镜像转发，两头都是OVS的话虽然也可以，但是过于繁重了，所以我们的实验是一边是OVS，另一边是Linux ip link进行点对点的Vxlan组网。测试机作为虚拟交换设备承载OVS，两台实验机分别和测试机进行点对点的Vxlan组网。</p>
-<h3 id="三台机器基础信息"><a href="#三台机器基础信息" class="headerlink" title="三台机器基础信息"></a>三台机器基础信息</h3><figure class="highlight plain"><figcaption><span>ip:10.122.0.22/16</span></figcaption><table><tr><td class="code"><pre><span class="line">```Clinet2```：eth0 ip:10.122.3.152/16</span><br><span class="line">```Test(Server)```：eth0 ip:10.122.1.103/16</span><br><span class="line">```Firewalld Status```：Stop</span><br><span class="line">三台机器的eth0网卡互通</span><br><span class="line">## 基础命令</span><br><span class="line">管理 VXLAN 接口</span><br><span class="line">Linux VXLAN 接口的基本管理如下：</span><br><span class="line">创建点对点的 VXLAN 接口：</span><br></pre></td></tr></table></figure>
-<p>ip link add vxlan0 type vxlan id 4100 remote 10.122.1.103 local 10.122.0.22 dstport 4789 dev eth0<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">上面这条命令创建一个名字为 vxlan0，类型为 vxlan 的网络 interface，后面是 vxlan interface 需要的参数：</span><br><span class="line">```id 4100```：指定 VNI 的值，这个值可以在 1 到 2^24 之间，互联的两端的ID必须保持一致，相当于一根网线的两头</span><br><span class="line">```dstport```：vtep 通信的端口，linux 默认使用 8472（为了保持兼容，默认值一直没有更改），而 IANA 分配的端口是 4789，且OVS默认的Vxlan通信端口也是4789，所以我们这里指定了它的值为4789</span><br><span class="line">```remote 10.122.1.103```：对方 vtep 的地址，类似于点对点协议</span><br><span class="line">```local 10.122.0.22```：当前节点 vtep 要使用的 IP 地址</span><br><span class="line">```dev eth0```：当节点用于 vtep 通信的网卡设备，用来读取 IP 地址。注意这个参数和 local 参数含义是相同的，在这里写出来是为了告诉大家有两个参数存在</span><br><span class="line">创建多播模式的 VXLAN 接口：</span><br></pre></td></tr></table></figure></p>
-<p>ip link add vxlan0 type vxlan id 4100 group 224.1.1.1 dstport 4789 dev eth0<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">多播组主要通过 ARP 泛洪来学习 MAC 地址，即在 Vxlan 子网内广播 ARP 请求，然后对应节点进行响应。group 指定多播组的地址。</span><br><span class="line">查看 VXLAN 接口详细信息：</span><br></pre></td></tr></table></figure></p>
-<p>ip -d link show vxlan0<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">启动/关闭网卡</span><br></pre></td></tr></table></figure></p>
-<p>ip link set vxlan0 up/down<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">给指定网卡分配ip</span><br></pre></td></tr></table></figure></p>
-<p>ip addr add 192.168.0.2/24 dev vxlan0<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">## 实验开始</span><br><span class="line">Client1和Client2分别建立一个Vxlan0的网卡，```remote address```为```Test```机器```eth0```网卡的地址```10.122.1.103```,```local adress```为本地服务器的```eth0```网卡的地址。</span><br></pre></td></tr></table></figure></p>
-<p>#Client1<br>ip link add vxlan0 type vxlan id 4200 remote 10.122.3.152 local 10.122.1.103 dstport 4789 dev eth0</p>
-<p>#Clinet2<br>ip link add vxlan0 type vxlan id 4300 remote 10.122.1.103 local 10.122.3.152 dstport 4789 dev eth0<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">这个时候使用```ip a```命令就可以看到两个新的```vxlan0```的网卡了。</span><br><span class="line">给两个网卡配上IP并启动</span><br></pre></td></tr></table></figure></p>
-<p>#Client1<br>ip addr add 192.168.0.2/24 dev vxlan0<br>ip link set vxlan0 up</p>
-<p>#Client2<br>ip addr add 192.168.0.3/24 dev vxlan0<br>ip link set vxlan0 up<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">到这一步相当于两根网线的一头插在了两台虚拟机上了，接下来就需要把这两个网线的另一头都插到交换机上就可以了。可以使用```ip r```命令看看，在新建网卡的时候，路由也自动加上了。</span><br><span class="line">![Route](https://upload-images.jianshu.io/upload_images/6269327-e6180d6201286939.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</span><br><span class="line">在```Test```服务器上新建两个```vxlan```网卡，```ID```和```remote address```分别和两台```Client```对应。</span><br></pre></td></tr></table></figure></p>
-<p>#vxlan0 对应Client1<br>ip link add vxlan0 type vxlan id 4200 remote 10.122.0.22 local 10.122.1.103 dstport 4789 dev eth0</p>
-<p>#vxlan1 对应Client2<br>ip link add vxlan1 type vxlan id 4300 remote 10.122.3.152 local 10.122.1.103 dstport 4789 dev eth0<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">这个时候先给Test服务器上的vxlan0网卡配上IP并启动就可以了。</span><br></pre></td></tr></table></figure></p>
-<p>ip addr add 192.168.0.4/24 dev vxlan0<br>ip link set vxlan0 up<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">这个时候相当于把一根网线一头插在```Test```的网口上，另一头插在```Client1```的网卡上。看一看```Test```也自动生成了路由，可以进行```ping```命令检测点到点Vxlan是否建立成功。</span><br><span class="line">![Ping](https://upload-images.jianshu.io/upload_images/6269327-e73e9f9936cb0638.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</span><br><span class="line">这个时候把```Test```服务器上的```vxlan1```按照相同的命令也配上```ip```，并启动，```ping```检测，发现不能```ping```通。这个时候我们看一下```Test```服务器上的路由。</span><br><span class="line">![Route](https://upload-images.jianshu.io/upload_images/6269327-4a921163352b727c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</span><br><span class="line">可以看到，因为配的```ip```都是```192.168.0.0/24```段的，明显最后一条走```vxlan1```的路由不会生效，因为会优先匹配他前面走```vxlan0```的路由，这个时候可以选择配不同段的ip或者自己改一改路由策略。</span><br><span class="line">![IP](https://upload-images.jianshu.io/upload_images/6269327-11a1d9b9179294a5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</span><br><span class="line">我这里给```Client2```的```vxlan0```网卡上多配一个```ip```，然后也给```Test```服务器上的```Vxlan1```网卡多配一个```ip```，即可```ping```通。</span><br><span class="line">![ping](https://upload-images.jianshu.io/upload_images/6269327-07558cf3eb185285.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</span><br><span class="line">到这里，基本已经利用Linux的ip link把三个机器通过点到点Vxlan连接起来了，因为我的实验的场景特殊，需要进行二层流量镜像，所以下面加入OVS以便进行底层流量镜像。</span><br><span class="line">## OVS</span><br><span class="line">这里大致思路就是在Test服务器上利用OVS搭建一个网桥，然后把两个vxlan网卡加到这个网桥就可以啦。</span><br></pre></td></tr></table></figure></p>
-<p>#构建一个br0的网桥<br>ovs-vsctl add-br br0</p>
-<h1 id="把两个vxlan网卡加到br0中"><a href="#把两个vxlan网卡加到br0中" class="headerlink" title="把两个vxlan网卡加到br0中"></a>把两个vxlan网卡加到br0中</h1><p>ovs-vsctl add-port br0 vxlan0<br>ovs-vsctl add-port br0 vxlan1</p>
-<h1 id="给br0配上一个ip，并启动"><a href="#给br0配上一个ip，并启动" class="headerlink" title="给br0配上一个ip，并启动"></a>给br0配上一个ip，并启动</h1><p>ifconfig br0 192.168.0.1/24 up<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">这里不要忘记手动更改路由，删除之前vxlan0和vxlan1的路由，把所有192.168.0.0/24的指向br0网桥就可以了。</span><br></pre></td></tr></table></figure></p>
-<p>#删除两个路由<br>ip route del 192.168.0.0/24 dev vxlan0 proto kernel scope link src 192.168.0.4<br>ip route del 192.168.0.0/24 dev vxlan1 proto kernel scope link src 192.168.0.5</p>
-<p>#添加br0的路由，这个会自动添加，没有就手动添加一下<br>ip route add 192.168.0.0/24 dev br0 proto kernel scope link src 192.168.0.1<br><code>`</code><br>到这里就可以进行ping测试了。后面的实验就是对网桥上port的操作，就不多说了。<br>[参考]<a href="https://juejin.im/post/6844904126539628557" target="_blank" rel="noopener">https://juejin.im/post/6844904126539628557</a><br>[参考]<a href="https://cizixs.com/2017/09/28/linux-vxlan/" target="_blank" rel="noopener">https://cizixs.com/2017/09/28/linux-vxlan/</a></p>
+                <h2 id><a href="#" class="headerlink" title></a><meta name="referrer" content="no-referrer"></h2><h1 id="一次服务器被传webshell事件溯源"><a href="#一次服务器被传webshell事件溯源" class="headerlink" title="一次服务器被传webshell事件溯源"></a>一次服务器被传webshell事件溯源</h1><hr>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>web服务器使用SiteServer开源CMS为建站模板，该类cms属于漏洞高发区，频频会爆出高危漏洞。这次的应该是个在野0day。</p>
+<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>阿里云安骑士告警<br><img src="https://upload-images.jianshu.io/upload_images/6269327-55a72cbb1cdde564.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="webshell告警"></p>
+<h2 id="溯源过程"><a href="#溯源过程" class="headerlink" title="溯源过程"></a>溯源过程</h2><ol>
+<li>可以看到阿里云安骑士报了存在服务器存在webshell，访问该链接，显示403，应该是触发了上传目录下可读可写不可执行的安全策略。我们取得了相关服务器的权限之后，在主机上进行漏洞影响范围和攻击溯源。</li>
+<li>登上服务器首先对系统安全进行排查，查看隐藏用户以及计划人物以及登录日志，初步判断攻击者并没有通过webshell提升到系统的权限。</li>
+<li>从服务器dump下机器最近10天的web访问记录到本地进行溯源分析。</li>
+<li>找到攻击payload如下：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-8e8897ba86290e5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="payload"><br>三条payload分别对应获取<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">```</span><br><span class="line">http://www.xxxx.cn/SiteServer/Ajax/ajaxCmsService.aspx?type=GetTitles&amp;publishmentSystemId=1&amp;nodeId=1&amp;title=a%27,0)%20%3E%200%20union%20select%20TOP%202%20Username%20from%20bairong_Administrator--</span><br><span class="line">http://www.xxxx.cn/SiteServer/Ajax/ajaxCmsService.aspx?type=GetTitles&amp;publishmentSystemId=1&amp;nodeId=1&amp;title=a%27,0)%20%3E%200%20union%20select%20TOP%201%20Password%20from%20bairong_Administrator--%20</span><br><span class="line">http://www.xxxx.cn/SiteServer/Ajax/ajaxCmsService.aspx?type=GetTitles&amp;publishmentSystemId=1&amp;nodeId=1&amp;title=a%27,0)%20%3E%200%20union%20select%20TOP%202%20PasswordSalt%20from%20bairong_Administrator--</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>获取了管理员用户的用户名、密码密文以及密钥，解密之后可登陆管理后台。<a href="http://www.xxxx.cn/siteserver/login.aspx" target="_blank" rel="noopener">http://www.xxxx.cn/siteserver/login.aspx</a>。通过日志可以看到，攻击者在登录管理后台后成功上传了木马文件。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-b58f19d92a72c2de.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="upload"><br>上传接口在后台就不展示了。简单的双写绕过文件后缀检测。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-5898c737183ff1a7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="双写绕过"><br>因为触发了之前配置的可读可写不可执行的策略，所以攻击者上传的木马访问是403，无法进一步攻击。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-abd1fbe2ed29ce0f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="403"><br>之后跟进攻击者的使用的ip以及上传木马时间节点之后的日志，并未发现有其他成功的进一步攻击事件。</p>
+<h2 id="攻击过程概述"><a href="#攻击过程概述" class="headerlink" title="攻击过程概述"></a>攻击过程概述</h2><p>此次攻击事件攻击链由一个未授权接口的sql注入以及后台文件上传漏洞构成。以下日志分析的时间为GMT+0，国内时间应该在此基础上加8小时：</p>
+<ul>
+<li>2020-10-19  18:44  IP为128.14.16.23攻击者通过siteserver的一个未授权访问接口的sql注入获取了管理员用户信息。</li>
+<li>2020-10-22 09:33  IP为198.176.51.185的攻击者通过siteserver的一个未授权访问接口的sql注入获取了管理员用户信息。这两次从请求时间间隔特征可以大致判断攻击已经自动化。</li>
+<li>2020-10-22 09:31  IP为128.14.16.23的攻击者通过后台的文件上传漏洞上传了<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- 2020-10-22 09:34  IP为198.176.51.185的攻击者通过后台的文件上传漏洞上传了```avator.aspx```的网站木马文件。</span><br><span class="line">- （北京时间）2020-10-22 17:31 阿里云安骑士预警存在webshell文件。</span><br><span class="line">## 影响范围</span><br><span class="line">攻击者可以获取到该站点siteserver应用管理员</span><br><span class="line">攻击者可以访问到对应的siteserver数据库数据</span><br><span class="line">## 漏洞分析</span><br><span class="line">通过整个攻击溯源分析可知，对应的攻击链为：接口未授权访问--&gt;sql注入--&gt;文件上传突破。其中接口未授权访问是最开始的一点，要在源头切断攻击链是最高效的。因此我们通过对日志的统计，发现该接口并不常用，20天没有正常的访问记录，便临时选择关闭该接口来暂时确保安全。此次主要针对sql注入的漏洞从代码层面看一看。</span><br><span class="line">### 代码分析</span><br><span class="line">从日志可以看到出现问题的是```SiteServer/Ajax/ajaxCmsService.aspx```文件调用的是一个编译好的dll文件。</span><br><span class="line">![aspx](https://upload-images.jianshu.io/upload_images/6269327-ac171ddbdd8061fc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</span><br><span class="line">![dll文件](https://upload-images.jianshu.io/upload_images/6269327-ad58ba2336379c86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</span><br><span class="line">反编译改文件找到对应的代码块：</span><br><span class="line">![get请求](https://upload-images.jianshu.io/upload_images/6269327-70e7e71c6fe3e7d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</span><br><span class="line">可以看到对应的http请求的函数为```GetTitles```出现sql注入的参数是```title```，该参数没有经过任何处理直接传到了执行sql的```GetValueListByStartString```函数中，定位到该函数：</span><br><span class="line">![sql函数](https://upload-images.jianshu.io/upload_images/6269327-0655f2c42280237b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</span><br><span class="line">```title```参数对应这的```startString```参数。该参数也是没有经过任何处理就被传入```GetInStr```函数。查看该函数：</span><br><span class="line">![GetInStr](https://upload-images.jianshu.io/upload_images/6269327-a6e1cb7607f17457.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</span><br><span class="line">这个只是拼接一下两个参数并没有其他处理，所以回到上个执行sql的函数可以看到，参考一条注入日志，他所执行的sql语句为：</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>#SQL注入日志<br><a href="http://www.xxxx.cn/SiteServer/Ajax/ajaxCmsService.aspx?type=GetTitles&amp;publishmentSystemId=1&amp;nodeId=1&amp;title=a&#39;,0" target="_blank" rel="noopener">http://www.xxxx.cn/SiteServer/Ajax/ajaxCmsService.aspx?type=GetTitles&amp;publishmentSystemId=1&amp;nodeId=1&amp;title=a&#39;,0</a>) &gt; 0 union select TOP 2 PasswordSalt from bairong_Administrator–</p>
+<p>#实际执行的SQL语句<br>SELECT xxx FROM *** WHERE NodeID = 1 AND CHARINDEX(‘a’,0) &gt; 0 union select TOP 2 PasswordSalt from bairong_Administrator– ‘, ‘Title’) &gt; 0<br><code>`</code><br>可以看到看一眼源码的话随意就可以成功注入。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>此次攻击可以看到攻击链的源头是未授权访问，对这个接口以及同文件夹下的其他几个接口进行测试可知都存在未授权访问的情况，有可能也存在注入的漏洞。对日志分析也不存在这些接口的正常业务请求，推测是给其他接口内部调用，不应该对外开放。且这次虽然被上传了webshell但是因为之前的安全策略的完备，抵御住了攻击者下一步的攻击，减少了安全事件带来的损失。</p>
 
                 <hr>
                 
 
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2020/10/26/37./" data-toggle="tooltip" data-placement="top" title="一次服务器被传webshell事件溯源">&larr; Previous Post</a>
-                    </li>
-                    
                     
                     <li class="next">
-                        <a href="/2020/03/10/35.Fedora虚拟机扩容及编译安装新内核/" data-toggle="tooltip" data-placement="top" title="Fedora虚拟机扩容及编译安装新内核">Next Post &rarr;</a>
+                        <a href="/2020/08/05/36.OVS+Linux Vxlan组网/" data-toggle="tooltip" data-placement="top" title="OVS+Linux Vxlan组网">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -245,7 +239,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text"></span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#OVS-Linux-Vxlan组网"><span class="toc-text">OVS+Linux Vxlan组网</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实验过程"><span class="toc-text">实验过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#三台机器基础信息"><span class="toc-text">三台机器基础信息</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#把两个vxlan网卡加到br0中"><span class="toc-text">把两个vxlan网卡加到br0中</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#给br0配上一个ip，并启动"><span class="toc-text">给br0配上一个ip，并启动</span></a>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text"></span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#一次服务器被传webshell事件溯源"><span class="toc-text">一次服务器被传webshell事件溯源</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#起因"><span class="toc-text">起因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#溯源过程"><span class="toc-text">溯源过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#攻击过程概述"><span class="toc-text">攻击过程概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
                 </li></div>
             </div>
         </div>
@@ -267,7 +261,7 @@
                     </h5>
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#基础网络" title="基础网络">基础网络</a>
+                        <a class="tag" href="/tags/#攻击分析" title="攻击分析">攻击分析</a>
                         
                     </div>
                 </section>
