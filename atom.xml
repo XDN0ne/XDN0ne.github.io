@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://XD0ne.github.io/"/>
-  <updated>2020-10-26T10:48:34.498Z</updated>
+  <updated>2020-08-05T08:28:32.831Z</updated>
   <id>https://XD0ne.github.io/</id>
   
   <author>
@@ -15,31 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>一次服务器被传webshell事件溯源</title>
-    <link href="https://XD0ne.github.io/2020/10/26/37.%E4%B8%80%E6%AC%A1%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A2%AB%E4%BC%A0webshell%E4%BA%8B%E4%BB%B6%E6%BA%AF%E6%BA%90/"/>
-    <id>https://XD0ne.github.io/2020/10/26/37.一次服务器被传webshell事件溯源/</id>
-    <published>2020-10-25T17:00:00.000Z</published>
-    <updated>2020-10-26T10:48:34.498Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id><a href="#" class="headerlink" title></a><meta name="referrer" content="no-referrer"></h2><h1 id="一次服务器被传webshell事件溯源"><a href="#一次服务器被传webshell事件溯源" class="headerlink" title="一次服务器被传webshell事件溯源"></a>一次服务器被传webshell事件溯源</h1><hr><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>web服务器使用SiteServer开源CMS为建站模板，该类cms属于漏洞高发区，频频会爆出高危漏洞。这次的应该是个在野0day。</p><h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>阿里云安骑士告警<br><img src="https://upload-images.jianshu.io/upload_images/6269327-55a72cbb1cdde564.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="webshell告警"></p><h2 id="溯源过程"><a href="#溯源过程" class="headerlink" title="溯源过程"></a>溯源过程</h2><ol><li>可以看到阿里云安骑士报了存在服务器存在webshell，访问该链接，显示403，应该是触发了上传目录下可读可写不可执行的安全策略。我们取得了相关服务器的权限之后，在主机上进行漏洞影响范围和攻击溯源。</li><li>登上服务器首先对系统安全进行排查，查看隐藏用户以及计划人物以及登录日志，初步判断攻击者并没有通过webshell提升到系统的权限。</li><li>从服务器dump下机器最近10天的web访问记录到本地进行溯源分析。</li><li>找到攻击payload如下：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-8e8897ba86290e5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="payload"><br>三条payload分别对应获取<code>UserName</code>、<code>Password</code>、<code>PasswordSalt</code><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http://www.xxxx.cn/SiteServer/Ajax/ajaxCmsService.aspx?type=GetTitles&amp;publishmentSystemId=1&amp;nodeId=1&amp;title=a%27,0)%20%3E%200%20union%20select%20TOP%202%20Username%20from%20bairong_Administrator--</span><br><span class="line">http://www.xxxx.cn/SiteServer/Ajax/ajaxCmsService.aspx?type=GetTitles&amp;publishmentSystemId=1&amp;nodeId=1&amp;title=a%27,0)%20%3E%200%20union%20select%20TOP%201%20Password%20from%20bairong_Administrator--%20</span><br><span class="line">http://www.xxxx.cn/SiteServer/Ajax/ajaxCmsService.aspx?type=GetTitles&amp;publishmentSystemId=1&amp;nodeId=1&amp;title=a%27,0)%20%3E%200%20union%20select%20TOP%202%20PasswordSalt%20from%20bairong_Administrator--</span><br></pre></td></tr></table></figure></li></ol><p>获取了管理员用户的用户名、密码密文以及密钥，解密之后可登陆管理后台。<a href="http://www.xxxx.cn/siteserver/login.aspx" target="_blank" rel="noopener">http://www.xxxx.cn/siteserver/login.aspx</a>。通过日志可以看到，攻击者在登录管理后台后成功上传了木马文件。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-b58f19d92a72c2de.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="upload"><br>上传接口在后台就不展示了。简单的双写绕过文件后缀检测。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-5898c737183ff1a7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="双写绕过"><br>因为触发了之前配置的可读可写不可执行的策略，所以攻击者上传的木马访问是403，无法进一步攻击。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-abd1fbe2ed29ce0f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="403"><br>之后跟进攻击者的使用的ip以及上传木马时间节点之后的日志，并未发现有其他成功的进一步攻击事件。</p><h2 id="攻击过程概述"><a href="#攻击过程概述" class="headerlink" title="攻击过程概述"></a>攻击过程概述</h2><p>此次攻击事件攻击链由一个未授权接口的sql注入以及后台文件上传漏洞构成。以下日志分析的时间为GMT+0，国内时间应该在此基础上加8小时：</p><ul><li>2020-10-19  18:44  IP为128.14.16.23攻击者通过siteserver的一个未授权访问接口的sql注入获取了管理员用户信息。</li><li>2020-10-22 09:33  IP为198.176.51.185的攻击者通过siteserver的一个未授权访问接口的sql注入获取了管理员用户信息。这两次从请求时间间隔特征可以大致判断攻击已经自动化。</li><li>2020-10-22 09:31  IP为128.14.16.23的攻击者通过后台的文件上传漏洞上传了<code>avator.aspx</code>的网站木马文件。</li><li>2020-10-22 09:34  IP为198.176.51.185的攻击者通过后台的文件上传漏洞上传了<code>avator.aspx</code>的网站木马文件。</li><li>（北京时间）2020-10-22 17:31 阿里云安骑士预警存在webshell文件。<h2 id="影响范围"><a href="#影响范围" class="headerlink" title="影响范围"></a>影响范围</h2>攻击者可以获取到该站点siteserver应用管理员<br>攻击者可以访问到对应的siteserver数据库数据<h2 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h2>通过整个攻击溯源分析可知，对应的攻击链为：接口未授权访问–&gt;sql注入–&gt;文件上传突破。其中接口未授权访问是最开始的一点，要在源头切断攻击链是最高效的。因此我们通过对日志的统计，发现该接口并不常用，20天没有正常的访问记录，便临时选择关闭该接口来暂时确保安全。此次主要针对sql注入的漏洞从代码层面看一看。<h3 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h3>从日志可以看到出现问题的是<code>SiteServer/Ajax/ajaxCmsService.aspx</code>文件调用的是一个编译好的dll文件。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-ac171ddbdd8061fc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="aspx"><br><img src="https://upload-images.jianshu.io/upload_images/6269327-ad58ba2336379c86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="dll文件"><br>反编译改文件找到对应的代码块：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-70e7e71c6fe3e7d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="get请求"><br>可以看到对应的http请求的函数为<code>GetTitles</code>出现sql注入的参数是<code>title</code>，该参数没有经过任何处理直接传到了执行sql的<code>GetValueListByStartString</code>函数中，定位到该函数：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-0655f2c42280237b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="sql函数"><br><code>title</code>参数对应这的<code>startString</code>参数。该参数也是没有经过任何处理就被传入<code>GetInStr</code>函数。查看该函数：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-a6e1cb7607f17457.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="GetInStr"><br>这个只是拼接一下两个参数并没有其他处理，所以回到上个执行sql的函数可以看到，参考一条注入日志，他所执行的sql语句为：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#SQL注入日志</span><br><span class="line">http://www.xxxx.cn/SiteServer/Ajax/ajaxCmsService.aspx?type=GetTitles&amp;publishmentSystemId=1&amp;nodeId=1&amp;title=a&apos;,0) &gt; 0 union select TOP 2 PasswordSalt from bairong_Administrator--</span><br><span class="line">#实际执行的SQL语句</span><br><span class="line">SELECT xxx FROM *** WHERE NodeID = 1 AND CHARINDEX(&apos;a&apos;,0) &gt; 0 union select TOP 2 PasswordSalt from bairong_Administrator-- &apos;, &apos;Title&apos;) &gt; 0</span><br></pre></td></tr></table></figure></li></ul><p>可以看到看一眼源码的话随意就可以成功注入。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>此次攻击可以看到攻击链的源头是未授权访问，对这个接口以及同文件夹下的其他几个接口进行测试可知都存在未授权访问的情况，有可能也存在注入的漏洞。对日志分析也不存在这些接口的正常业务请求，推测是给其他接口内部调用，不应该对外开放。且这次虽然被上传了webshell但是因为之前的安全策略的完备，抵御住了攻击者下一步的攻击，减少了安全事件带来的损失。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id&gt;&lt;a href=&quot;#&quot; class=&quot;headerlink&quot; title&gt;&lt;/a&gt;&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;&lt;/h2&gt;&lt;h1 id=&quot;一次服务器被传webshell事件溯源&quot;&gt;&lt;a href=&quot;#一次服务
-      
-    
-    </summary>
-    
-      <category term="攻击分析" scheme="https://XD0ne.github.io/categories/%E6%94%BB%E5%87%BB%E5%88%86%E6%9E%90/"/>
-    
-    
-      <category term="攻击分析" scheme="https://XD0ne.github.io/tags/%E6%94%BB%E5%87%BB%E5%88%86%E6%9E%90/"/>
-    
-  </entry>
   
   <entry>
     <title>OVS+Linux Vxlan组网</title>
@@ -505,6 +480,31 @@
       
       
         &lt;h2 id&gt;&lt;a href=&quot;#&quot; class=&quot;headerlink&quot; title&gt;&lt;/a&gt;&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;&lt;/h2&gt;&lt;h1 id=&quot;PCI-DSS-V3-2-学习笔记-五&quot;&gt;&lt;a href=&quot;#PCI-
+      
+    
+    </summary>
+    
+      <category term="安全知识" scheme="https://XD0ne.github.io/categories/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
+    
+    
+      <category term="安全知识" scheme="https://XD0ne.github.io/tags/%E5%AE%89%E5%85%A8%E7%9F%A5%E8%AF%86/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PCI-DSS(V3.2)学习笔记(四)</title>
+    <link href="https://XD0ne.github.io/2018/05/14/17.%20PCI-DSS(V3.2.1)%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E5%9B%9B)/"/>
+    <id>https://XD0ne.github.io/2018/05/14/17. PCI-DSS(V3.2.1)学习笔记(四)/</id>
+    <published>2018-05-14T04:00:00.000Z</published>
+    <updated>2019-11-22T16:31:56.793Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id><a href="#" class="headerlink" title></a><meta name="referrer" content="no-referrer"></h2><h1 id="PCI-DSS-V3-2-学习笔记-四"><a href="#PCI-DSS-V3-2-学习笔记-四" class="headerlink" title="PCI-DSS(V3.2)学习笔记(四)"></a>PCI-DSS(V3.2)学习笔记(四)</h1><hr><h1 id="二、保护持卡人数据"><a href="#二、保护持卡人数据" class="headerlink" title="二、保护持卡人数据"></a>二、保护持卡人数据</h1><h2 id="要求4：加密持卡人数据在开放式公共网络中的传输"><a href="#要求4：加密持卡人数据在开放式公共网络中的传输" class="headerlink" title="要求4：加密持卡人数据在开放式公共网络中的传输"></a>要求4：加密持卡人数据在开放式公共网络中的传输</h2><p>要求3针对的是存储的持卡人数据的保护措施，要求4则是持卡人数据传输过程中的安全措施。<br>如何保护传输中的持卡人数据呢，在我看来主要有两个方向，一个是建立一个安全的传输信道，或者利用第三方安全的传输信道传输持卡人数据，另一个就是对持卡人数据进行强效加密，保证就算攻击者拿到持卡人数据也无法翻译成明文。<br>我们具体来看看要求4中说的都有哪些吧。</p><h3 id="4-1-使用强效加密法和安全协议来保护经由公开、公共网络传输的敏感持卡人数据。"><a href="#4-1-使用强效加密法和安全协议来保护经由公开、公共网络传输的敏感持卡人数据。" class="headerlink" title="4.1 使用强效加密法和安全协议来保护经由公开、公共网络传输的敏感持卡人数据。"></a>4.1 使用强效加密法和安全协议来保护经由公开、公共网络传输的敏感持卡人数据。</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-816f73268922fb45.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.1-1"><br><img src="https://upload-images.jianshu.io/upload_images/6269327-83bb7ab2738254b5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.1-2"><br>包括：<br>1、只接受可信任的密钥和证书<br>2、使用的协议只支持安全的版本或配置<br>3、加密强度适合所有的加密方法<br>开放式网络就是不安全的网络，这里泛指互联网，GSM，GPRS等。<br>这里就是围绕安全的信道和持卡人数据的加密来说的。我们通过一系列的方法，例如安全的协议等来构造安全的通信通道，且确保我们的配置正确，安全以及所支持的版本没有问题。<br>我们也会通过提前测试通话传输，确保传输被强效加密。强效加密我们前面也说了很多次了，但是注意我们要选取最优的加密方式，并不是加密效果越强越好，我们必须根据具体业务需要进行选择，如果一个加解密耗费三四秒，在很多地方及其影响用户体验。<br>这里特别针对TLS来说了说，最近google chrome已经对所有未加密的网站都会在地址栏上明确标记为“Not Secure”（不安全）。也就是说，如果你的网站没有采用HTTPS协议，当使用谷歌新版浏览器的用户访问网站时就会出现不安全提示。<br>另一点我们使用https的时候也要注意SSL协议的版本的安全性，确保使用安全的SSL协议的版本，使用存在漏洞版本的SSL也是极不安全的。</p><h4 id="4-1-1-确保传输持卡人数据或连接到持卡人数据环境的无线网络使用行业最优方法，以及验证和传输实施强效加密"><a href="#4-1-1-确保传输持卡人数据或连接到持卡人数据环境的无线网络使用行业最优方法，以及验证和传输实施强效加密" class="headerlink" title="4.1.1 确保传输持卡人数据或连接到持卡人数据环境的无线网络使用行业最优方法，以及验证和传输实施强效加密"></a>4.1.1 确保传输持卡人数据或连接到持卡人数据环境的无线网络使用行业最优方法，以及验证和传输实施强效加密</h4><p><img src="https://upload-images.jianshu.io/upload_images/6269327-72a507c6349bc050.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.1.1"><br>针对持卡人数据可能流通的网络来说，尤其是无线网络，我们确保在这个无线环境内使用了传输的验证和强效加密。<br>为什么这里要特别说一下持卡人数据环境所连接的无线网络呢，前面已经针对在开放式网络中的安全传输的要求了。很多时候我们只注意了外部不安全网络的防护，却忽略了内部的无线网络的安全，这也是我们需要注意的。如果攻击者混入内网，或者办公网，则任科员嗅探捕获我们的持卡人数据。</p><h3 id="4-2-不要使用终端用户通讯技术（例如，电子邮件、即使通讯、短信、聊天等）来传送不受保护的PAN"><a href="#4-2-不要使用终端用户通讯技术（例如，电子邮件、即使通讯、短信、聊天等）来传送不受保护的PAN" class="headerlink" title="4.2 不要使用终端用户通讯技术（例如，电子邮件、即使通讯、短信、聊天等）来传送不受保护的PAN"></a>4.2 不要使用终端用户通讯技术（例如，电子邮件、即使通讯、短信、聊天等）来传送不受保护的PAN</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-8d3c093e07bb9c9f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.2"><br>结合前面的我们知道，我们必须确保在开放式网络中通过安全的信道传输未加密，未受保护的敏感数据，我们如果通过终端用户通讯技术，我们无法保证我们通讯没有被监听，捕获。<br>如果我们使用这些终端用户通讯技术，我们确保我们传输的敏感数据，比如PAN是强效加密的，以及密钥是提前安全共享的，或确保他不可读。</p><h3 id="4-3-确保已记录、正在使用且所有相关方了解用于加密持卡人数据传输的安全政策和操作程序"><a href="#4-3-确保已记录、正在使用且所有相关方了解用于加密持卡人数据传输的安全政策和操作程序" class="headerlink" title="4.3 确保已记录、正在使用且所有相关方了解用于加密持卡人数据传输的安全政策和操作程序"></a>4.3 确保已记录、正在使用且所有相关方了解用于加密持卡人数据传输的安全政策和操作程序</h3><p><img src="https://upload-images.jianshu.io/upload_images/6269327-7bdc0fa98040fe6a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="4.3"><br>和之前的要求一样，我们有这样的保护策略，就得有详细的文件记录，并确保我们所实施的和文件的统一，以及更新保护策略时即使更新文件。并且确保和此相关的所有工作人员都已经理解并学习了整个安全政策和操作流程。</p><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>第四点要求不是很多，但是总结来说我们就是要确保我们传输的敏感数据必须在安全的信道中传输（通过安全的服务或者协议比如https），如果不能确保信道的安全，则必须使用强效的加密措施。<br>具体的第二个区域（保护持卡人数据）的两个要点也就结束了。对已存储的持卡人数据进行保护，对传输中的持卡人数据进行保护，虽然只有两个重要的环节，但是需要做的工作有很多。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id&gt;&lt;a href=&quot;#&quot; class=&quot;headerlink&quot; title&gt;&lt;/a&gt;&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;&lt;/h2&gt;&lt;h1 id=&quot;PCI-DSS-V3-2-学习笔记-四&quot;&gt;&lt;a href=&quot;#PCI-
       
     
     </summary>
