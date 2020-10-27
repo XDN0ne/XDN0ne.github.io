@@ -1,593 +1,220 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<!-- Head tag -->
-<head><meta name="generator" content="Hexo 3.8.0">
-    <meta name="referrer" content="no-referrer">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
-    <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
-    <meta name="description" content="龅牙晴在 Github 上的个人博客">
-    <meta name="keyword" content="安全，漏洞挖掘，漏洞复现">
-    <meta name="theme-color" content="#600090">
-    <meta name="msapplication-navbutton-color" content="#600090">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
-    <link rel="shortcut icon" href="https://upload-images.jianshu.io/upload_images/6269327-54939abc2f06655f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-    <link rel="alternate" type="application/atom+xml" title="折戟" href="/atom.xml">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
-    <title>
-        
-        R_song&#39;s blog
-        
-    </title>
-
-    <link rel="canonical" href="https://XD0ne.github.io/">
-
-    <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/blog-style.css">
-
-    <!-- Pygments Github CSS -->
-    <link rel="stylesheet" href="/css/syntax.css">
-</head>
-
-
-<style>
-
-    header.intro-header {
-        background-image: url('https://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
-    }
-</style>
-<!-- hack iOS CSS :active style -->
-<body ontouchstart="" class="animated fadeIn">
-<!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="false" data-istags="false
-" data-ishome="true">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand animated pulse" href="/">
-                <span class="brand-logo">
-                    折戟
-                </span>
-                's Blog
-            </a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <!-- Known Issue, found by Hux:
-            <nav>'s height woule be hold on by its content.
-            so, when navbar scale out, the <nav> will cover tags.
-            also mask any touch event of tags, unfortunately.
-        -->
-        <!-- /.navbar-collapse -->
-        <div id="huxblog_navbar">
-            <div class="navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/">Home</a>
-                    </li>
-					
-                    
-                        
-							
-								
-							
-						
-                    
-                        
-							
-                        <li>
-                            <a href="/categories/">categories</a>
-                        </li>
-							
-						
-                    
-                        
-							
-                        <li>
-                            <a href="/tags/">tags</a>
-                        </li>
-							
-						
-                    
-					
-					
-						<li>
-							<a href="/about">About</a>
-						</li>
-					
-                </ul>
-            </div>
-        </div>
-    </div>
-    <!-- /.container -->
-</nav>
-<script>
-    // Drop Bootstarp low-performance Navbar
-    // Use customize navbar with high-quality material design animation
-    // in high-perf jank-free CSS3 implementation
-//    var $body   = document.body;
-    var $toggle = document.querySelector('.navbar-toggle');
-    var $navbar = document.querySelector('#huxblog_navbar');
-    var $collapse = document.querySelector('.navbar-collapse');
-
-    $toggle.addEventListener('click', handleMagic)
-    function handleMagic(e){
-        if ($navbar.className.indexOf('in') > 0) {
-        // CLOSE
-            $navbar.className = " ";
-            // wait until animation end.
-            setTimeout(function(){
-                // prevent frequently toggle
-                if($navbar.className.indexOf('in') < 0) {
-                    $collapse.style.height = "0px"
-                }
-            },400)
-        }else{
-        // OPEN
-            $collapse.style.height = "auto"
-            $navbar.className += " in";
-        }
-    }
-</script>
-
 <!-- Main Content -->
 
 
-<style>
 
-    .custom-haojen-container .post-preview:nth-of-type(1),
-    .custom-haojen-container .post-preview-poetry:nth-of-type(1) {
-        text-align: center;
-        background-repeat: no-repeat;
-        border-radius: 3px;
-        background-size: cover;
-        padding: 0;
-        height: 300px;
-        display: table;
-        width: 100%;
-        background-color: rgba(0, 0, 0, 0.16);
-    }
 
-    /*去掉诗歌的背景图片*/
-    .custom-haojen-container .post-preview-poetry:nth-of-type(1) {
-        background-image: none !important;
-        background-color: rgba(255, 248, 220, 0.5);
-    }
-
-    .custom-haojen-container .post-preview:nth-child(1) h2,
-    .custom-haojen-container .post-preview:nth-child(1) .post-meta,
-    .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
-        text-shadow: 0 0 40px rgba(0, 0, 0, 1);
-        letter-spacing: 1px;
-        color: #fff;
-        margin-top: 0;
-        padding-left: 60px;
-        padding-right: 60px;
-    }
-
-    .custom-haojen-container .post-preview:nth-child(1) .post-meta {
-        font-size: .9em;
-        font-weight: 300;
-        margin-top: 0;
-    }
-
-    .custom-haojen-container .post-preview-poetry:nth-child(1) .post-subtitle {
-        letter-spacing: 6px;
-        font-size: 18px;
-        font-family: unset;
-        font-weight: 400;
-        color: rgba(0, 0, 0, .75)
-    }
-
-    /*不显示摘要*/
-    .custom-haojen-container .post-preview:nth-child(1) .post-content-preview {
-        display: none
-    }
-
-    /*只第一个显示背景图片*/
-    .custom-haojen-container .post-preview:not(:nth-child(1)) {
-        background-image: none !important;
-    }
-
-    /*第一个分界线去掉*/
-    .custom-haojen-container hr:nth-of-type(1) {
-        display: none;
-    }
-
-    /*主题*/
-    .custom-haojen-container .post-preview:nth-of-type(1) > a {
-        display: table-cell;
-        vertical-align: middle;
-    }
-
-    /*诗词标题*/
-    .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
-        font-size: 35px;
-        font-family: STKaiti;
-        color: rgba(0, 0, 0, .8);
-    }
-
-    .custom-haojen-container .post-preview-poetry:nth-of-type(1) .post-meta {
-        color: #0e2231;
-    }
-
-    @media (max-width: 768px) {
-        .custom-haojen-container .post-preview:nth-child(1) {
-            height: 240px;
-        }
-
-        .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
-            font-size: 28px !important;
-            margin-top: 0;
-        }
-
-        .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
-            font-size: 18px;
-            font-weight: 400;
-            padding-left: 0;
-            padding-right: 0;
-        }
-
-        .custom-haojen-container .post-preview:nth-of-type(1) > a {
-            padding: 20px
-        }
-    }
-
-    /*手机屏幕*/
-    @media (max-width: 400px) {
-        .custom-haojen-container .post-preview:nth-child(1) {
-            height: 195px;
-        }
-
-        .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
-            font-size: 20px !important;
-        }
-
-        .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
-            font-size: 16px;
-        }
-
-        .custom-haojen-container .post-preview:nth-child(1) a {
-            padding: 30px 20px;
-        }
-    }
-</style>
-
-<!-- Page Header -->
-<meta name="referrer" content="no-referrer">
-<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 visible-xs-block visible-sm-block">
-    <div class="row">
-        <header class="intro-header">
-            <div class="container">
-                <div class="site-heading text-center">
-                    <div class="about-me">
-                        <!--移动端头部显示-->
-                        <img src="https://upload-images.jianshu.io/upload_images/6269327-4c7992ea7ad8aea9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-                        <h5><a href="/about/">折戟</a></h5>
-                        <p>龅牙晴的爸爸</p>
-                    </div>
-                </div>
-            </div>
-        </header>
-    </div>
-</div>
-<!-- Main Content -->
-<div class="container custom-haojen-container">
-    <!-- Post Container -->
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1 col-sm-12 col-xs-12 post-container">
-            
-
+<div class="post-preview " style="background-image: url('https://upload-images.jianshu.io/upload_images/6269327-a2809a004f14c7ad.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')">
+    <a href="/2020/10/26/37.一次服务器被传webshell事件溯源/">
+        <h2 class="post-title">
+            一次服务器被传webshell事件溯源
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2020-10-26
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                一次服务器被传webshell事件溯源
+背景web服务器使用SiteServer开源CMS为建站模板，该类cms属于漏洞高发区，频频会爆出高危漏洞。这次的应该是个在野0day。
+起因阿里云安骑士告警
+溯源过程
+可以看到阿里云安骑士报了存在服务器存在webshell，访问该链接，显示403，应该是..
+            </p>
         </div>
-        <!-- Sidebar Container -->
-        <div class="
-                col-lg-3 col-lg-offset-0
-                col-md-3 col-md-offset-0
-                col-sm-12
-                col-xs-12
-                sidebar-container
-            ">
+    </a>
 
-            <!-- About Me -->
-            <section class="visible-md visible-lg" style="padding: 0 18px">
-                <div class="short-about">
-                    <!--侧边栏头像-->
-                    
-                    <img src="https://upload-images.jianshu.io/upload_images/6269327-4c7992ea7ad8aea9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-                    
-                    <h5><a href="/about/">折戟</a></h5>
-                    
-                    <p>龅牙晴的爸爸</p>
-                    
-                    <hr>
-                    <!-- SNS Link 社交 -->
-                    <ul class="list-inline">
-                        
-                        
-                        <li>
-                            <a target="_blank" href="https://twitter.com/IIGHJH5O4mvbeF9?s=09">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                                        </span>
-                            </a>
-                        </li>
-                        
-                        
-                        <li>
-                            <a target="_blank" href="https://www.zhihu.com/people/rao-song-63?utm_source=qq&amp;utm_medium=social">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa  fa-stack-1x fa-inverse">知</i>
-                                        </span>
-                            </a>
-                        </li>
-                        
-
-                        
-                        <li>
-                            <a target="_blank" href="http://weibo.com/u/3870422953?refer_flag=1001030001_&amp;nick=RS丶从徒手开碧根果开始">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-                                        </span>
-                            </a>
-                        </li>
-                        
-
-                        
-
-                        
-                        <li>
-                            <a target="_blank" href="https://github.com/XD0ne">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                        </span>
-                            </a>
-                        </li>
-                        
-
-                        
-                    </ul>
-                </div>
-            </section>
-
-            <!-- Featured Tags  标签 -->
-            
-            <section>
-                <div class="tags">
-                    
-                    
-                    
-                    
-                    <a href="/tags/#水平权限" title="水平权限" rel="2">水平权限</a>
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    <a href="/tags/#安全知识" title="安全知识" rel="11">安全知识</a>
-                    
-                    
-                    
-                    <a href="/tags/#攻击分析" title="攻击分析" rel="2">攻击分析</a>
-                    
-                    
-                    
-                    <a href="/tags/#小脚本" title="小脚本" rel="2">小脚本</a>
-                    
-                    
-                    
-                    
-                    
-                    <a href="/tags/#其他" title="其他" rel="4">其他</a>
-                    
-                    
-                    
-                    <a href="/tags/#sqli-labs" title="sqli-labs" rel="4">sqli-labs</a>
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                </div>
-            </section>
-            
-
-            
-            <hr>
-            <h5 style="text-align: center;">Friends</h5>
-            <ul class="list-inline" style="text-align: center;">
-                
-                <li><a href="https://teazmh.github.io/" target="_blank">Tea_Mh</a></li>
-                
-                <li><a href="https://zheng19970225.github.io/" target="_blank">让子弹飞一会</a></li>
-                
-                <li><a href="https://luckyjq.github.io/" target="_blank">LuckyQ</a></li>
-                
-                <li><a href="https://blog.littleghost.ml" target="_blank">LittleGhost</a></li>
-                
-                <li><a href="https://ai-sewell.me" target="_blank">老锥</a></li>
-                
-                <li><a href="https://canbaoafeizai.github.io" target="_blank">T1ger</a></li>
-                
-            </ul>
-            
-
-        </div>
-    </div>
 </div>
 
-<!-- Footer -->
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
-                <br>
-                <ul class="list-inline text-center">
-                
-                
-                    <li>
-                        <a target="_blank" href="https://twitter.com/IIGHJH5O4mvbeF9?s=09">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                            </span>
-                        </a>
-                    </li>
-                
-                
-                    <li>
-                        <a target="_blank" href="https://www.zhihu.com/people/rao-song-63?utm_source=qq&amp;utm_medium=social">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa  fa-stack-1x fa-inverse">知</i>
-                            </span>
-                        </a>
-                    </li>
-                
+<hr>
 
-                
-                    <li>
-                        <a target="_blank" href="http://weibo.com/u/3870422953?refer_flag=1001030001_&amp;nick=RS丶从徒手开碧根果开始">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-                            </span>
-                        </a>
-                    </li>
-                
 
-                
 
-                
-                    <li>
-                        <a target="_blank" href="https://github.com/XD0ne">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                            </span>
-                        </a>
-                    </li>
-                
 
-                
-
-                </ul>
-                <p class="copyright text-muted">
-                    Copyright &copy; 折戟 2020
-                    <br>
-                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
-                    <br>
-                     Theme by Haojen Ma
-                </p>
-
-            </div>
+<div class="post-preview " style="background-image: url('https://upload-images.jianshu.io/upload_images/6269327-a2809a004f14c7ad.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')">
+    <a href="/2020/08/05/36.OVS+Linux Vxlan组网/">
+        <h2 class="post-title">
+            OVS+Linux Vxlan组网
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2020-08-05
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                OVS+Linux Vxlan组网
+背景因为科研需要做些小实验，涉及到交换机的网口数据的镜像转发。之前疫情在家使用一台本地虚拟机搭建OVS并作为KVM宿主机，OVS搭建网桥，OVS新建虚拟机并使用指定网桥。因为KVM中的虚拟机需要更改内核并重新编译，所以过程确实很繁琐。这次学校内的“私有云”搭建..
+            </p>
         </div>
-    </div>
-</footer>
+    </a>
 
-<!-- jQuery -->
-<script src="/js/jquery.min.js"></script>
+</div>
 
-<!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js"></script>
-
-<!-- Custom Theme JavaScript -->
-<script src="/js/blog.js"></script>
-
-<!-- async load function -->
-<script>
-    function async(u, c) {
-      var d = document, t = 'script',
-          o = d.createElement(t),
-          s = d.getElementsByTagName(t)[0];
-      o.src = u;
-      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
-      s.parentNode.insertBefore(o, s);
-    }
-</script>
-
-<!-- jquery.tagcloud.js -->
-<script>
-    // only load tagcloud.js in tag.html
-    if($('#tag_cloud').length !== 0){
-        async("https://XD0ne.github.io/js/jquery.tagcloud.js",function(){
-            $.fn.tagcloud.defaults = {
-                //size: {start: 1, end: 1, unit: 'em'},
-                color: {start: '#bbbbee', end: '#0085a1'},
-            };
-            $('#tag_cloud a').tagcloud();
-        })
-    }
-</script>
-
-<!--fastClick.js -->
-<script>
-    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
-        var $nav = document.querySelector("nav");
-        if($nav) FastClick.attach($nav);
-    })
-</script>
-
-<!-- Google Analytics -->
-
-
-
-<!-- Baidu Tongji -->
-
-
-<!-- swiftype -->
-<script type="text/javascript">
-  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
-  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
-  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
-  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
-
-  _st('install','','2.0.0');
-</script>
-
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-<!--wechat title img-->
-<img class="wechat-title-img" src="https://upload-images.jianshu.io/upload_images/6269327-4c7992ea7ad8aea9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-
-<script type="text/javascript"
-color="0,0,0" opacity='0.4' zIndex="-2" count="66" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+<hr>
 
 
 
 
-</body>
-<!-- 页面点击小红心 -->
-<script type="text/javascript" src="/js/love.js"></script>
-</html>
+<div class="post-preview " style="background-image: url('https://upload-images.jianshu.io/upload_images/6269327-a2809a004f14c7ad.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')">
+    <a href="/2020/03/10/35.Fedora虚拟机扩容及编译安装新内核/">
+        <h2 class="post-title">
+            Fedora虚拟机扩容及编译安装新内核
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2020-03-10
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                Fedora虚拟机扩容及编译安装新内核
+虚拟机扩容
+关闭虚拟机，在虚拟机管理软件上分配新的硬盘容量（之前20G，现在40G）。
+启动虚拟机，进行根目录空间扩容。fdisk -l
+
+
+可以看到磁盘是/dev/sda总共为40G，但是下面两个分区一共只有20G，说明还有20G没有分区，需要我们手动进..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+
+<div class="post-preview " style="background-image: url('https://upload-images.jianshu.io/upload_images/6269327-a2809a004f14c7ad.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')">
+    <a href="/2020/03/05/34.推荐-Google Cloud Shell/">
+        <h2 class="post-title">
+            推荐-Google Cloud Shell
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2020-03-05
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                推荐-Google Cloud Shell
+背景作为一名安全从业者，服务器从来是不嫌多的，阿里云学生优惠都买到了2022年了。当然国外的服务器需求更是强烈，有时候确实真的除了搭梯子真的没啥用，不过自己搭建的梯子真的不如机场的，不管什么敏感时期照样youtube 4k飞起，虽然很多机场都是按流量卖..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+
+<div class="post-preview " style="background-image: url('https://upload-images.jianshu.io/upload_images/6269327-a2809a004f14c7ad.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')">
+    <a href="/2019/12/26/33.ZABBIX企业微信webhook告警踩坑/">
+        <h2 class="post-title">
+            ZABBIX企业微信webhook告警踩坑
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2019-12-26
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                ZABBIX企业微信webhook告警踩坑
+原教程连接链接教程不够完善，有点坑，害我调试了好久。这里用户群组原教程设为：WHLAIX_IT，我这里设置的是Zabbix的管理用户，上面CSDN的教程中缺少了在用户组中添加告警媒介的一步。用户–&gt;报警媒介加上就行
+
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+
+<div class="post-preview " style="background-image: url('https://upload-images.jianshu.io/upload_images/6269327-a2809a004f14c7ad.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')">
+    <a href="/2019/11/26/32.谈谈单点登录/">
+        <h2 class="post-title">
+            谈谈单点登录
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2019-11-26
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                谈谈单点登录
+寒假学习的小课题，把之前的笔记整理整理记录一下（长文警告）因为当时看到的东西涉及很多，所以有一些地方没有深入去探讨。
+问题
+围绕“单点登录”，涉及到的概念会有radius jwt oauth openid saml sso等。
+结合场景分析单点登录，并把几个似是而非的场景弄清楚。
+..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+
+<div class="post-preview " style="background-image: url('https://upload-images.jianshu.io/upload_images/6269327-a2809a004f14c7ad.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')">
+    <a href="/2019/11/22/31.服务器socket代理访问darknet/">
+        <h2 class="post-title">
+            服务器socket代理访问darknet
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2019-11-22
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                服务器socket代理访问darknet
+[转] 原文chrome挂tor代理从darknet上下载东西是十分的慢，而且动不动就会断，速度还慢，十分难受。决定在服务器上使用wget挂代理下载，但是wget是不支持socket5的代理的，所以不能直接使用wget指定代理参数进行代理下载darkwe..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+
+<div class="post-preview " style="background-image: url('https://upload-images.jianshu.io/upload_images/6269327-a2809a004f14c7ad.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')">
+    <a href="/2019/11/14/30.简书文章图片外链403问题/">
+        <h2 class="post-title">
+            简书文章图片外链403问题
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2019-11-14
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                简书文章图片外链403问题
+最近刚上研，所以事情比较多，一直没有注意到自己博客的图片都无法访问了，都是403，后面了解才发现是简书对图片外链设置了限制，简单来说就是做了个根据http请求头中的referrer的值来验证请求是不是来自本站，如果不是就返回403或者重定向之类的。可以看到简书这么做很..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+
+<!-- 翻页 pager -->
+
+<ul class="pager">
+    
+    
+    <li class="next">
+        <a href="/page/2/">Older Posts &rarr;</a>
+    </li>
+    
+</ul>
