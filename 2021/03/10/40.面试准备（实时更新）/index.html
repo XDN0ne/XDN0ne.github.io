@@ -262,9 +262,11 @@
 </ul>
 <p>在这种情况下使用#程序会报错，新手程序员就把#号改成了$,这样如果java代码层面没有对用户输入的内容做处理势必会产生SQL注入漏洞。<br>正确写法：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select * from news where tile like concat(‘%’,#&#123;title&#125;, ‘%’)</span><br></pre></td></tr></table></figure>
+<p>*</p>
 <pre><code>* in之后的多个参数
 </code></pre><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Select * from news where id in (#&#123;ids&#125;)</span><br></pre></td></tr></table></figure>
 <p>正确用法为使用foreach，而不是将#替换为$<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">id in&lt;foreach collection=&quot;ids&quot; item=&quot;item&quot; open=&quot;(&quot;separatosr=&quot;,&quot; close=&quot;)&quot;&gt;#&#123;ids&#125; &lt;/foreach&gt;</span><br></pre></td></tr></table></figure></p>
+<p>*</p>
 <pre><code>* order by 之后
 </code></pre><p>SQL语句中的一些部分，例如order by字段、表名等，是无法使用预编译语句的。这种场景极易产生SQL注入。这种场景应当在Java层面做映射，设置一个字段/表名数组，仅允许用户传入索引值。这样保证传入的字段或者表名都在白名单里面。需要注意的是在mybatis-generator自动生成的SQL语句中，order by使用的也是$，而like和in没有问题。</p>
 <ol start="2">
